@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Programmierspiel</title>
+    <link rel="stylesheet" type="text/css" href="{% static "core/styles.css" %}" />
+    <link rel="stylesheet" href="{% static "core/highlight.js/styles/agate.css" %}" />
+    <script src="{% static "core/highlight.js/highlight.pack.js" %}"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <h1>Schlangenprogrammiernacht</h1>
+    <ul>
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li>Rules</li>
+      <li>Code Examples</li>
+      <li>Scoreboard</li>
+      {% if user.is_authenticated %}
+        <li>Profile</li>
+        <li><a href="{% url 'logout' %}">logout</a></li>
+      {% else %}
+        <li><a href="{% url 'login' %}">login</a> | <a href="{% url 'signup' %}">signup</a></li>
+      {% endif %}
+    </ul>
+
+{% block content %}
+{% endblock %}
+
+  </body>
+</html>

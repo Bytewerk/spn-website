@@ -1,0 +1,20 @@
+body {
+    background-color: #000020;
+    background-image: url("mamba.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: bottom left;
+    color:white;
+    font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+    font-size:1.2em;
+}
+
+pre {
+    width:750px;
+}
+
+code.lua.hljs {
+    padding:2em;
+    background-color:rgba(50, 50, 50, 0.85);
+    font-size:150%;
+}
