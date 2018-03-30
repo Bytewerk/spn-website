@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+  <h1>Watch</h1>
+  <canvas id="canvas" style="width:800px;height:400px;border:1px solid #333;background-color:#000"></canvas>
+  <script>
+  $(function(){
+    var canvas = $("#canvas").get(0);
+    var ctx = canvas.getContext("2d");
+
+    var worm = [];
+    for (var i=0; i<100; i++)
+    {
+        worm.push([2*i,i]);
+    }
+
+    // Create gradient
+    var grd = ctx.createRadialGradient(20,20,0,20,20,10);
+    grd.addColorStop(0,"red");
+    grd.addColorStop(1,"black");
+    ctx.fillStyle = 'green';
+
+    for (var i=0; i<100; i++)
+    {
+        ctx.arc(i*2, i*2, 10, 0, 2*Math.PI);
+        ctx.fill();
+    }
+  });
+  </script>
+{% endblock %}

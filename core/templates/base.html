@@ -6,26 +6,32 @@
     <title>Programmierspiel</title>
     <link rel="stylesheet" type="text/css" href="{% static "core/styles.css" %}" />
     <link rel="stylesheet" href="{% static "core/highlight.js/styles/agate.css" %}" />
+{% block css %}
+{% endblock %}
+    <script src="{% static "core/jquery-3.3.1.min.js" %}"></script>
     <script src="{% static "core/highlight.js/highlight.pack.js" %}"></script>
     <script>hljs.initHighlightingOnLoad();</script>
   </head>
   <body>
-    <h1>Schlangenprogrammiernacht</h1>
-    <ul>
+    <div class="head">
+      <h1>Schlangenprogrammiernacht</h1>
+    </div>
+    <ul class="nav">
       <li><a href="{% url 'home' %}">Home</a></li>
-      <li>Rules</li>
-      <li>Code Examples</li>
-      <li>Scoreboard</li>
+      <li><a href="{% url 'watch' %}">Watch</a></li>
       {% if user.is_authenticated %}
-        <li>Profile</li>
-        <li><a href="{% url 'logout' %}">logout</a></li>
+        <li><a href="{% url 'snake' %}">My Snakes</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
       {% else %}
-        <li><a href="{% url 'login' %}">login</a> | <a href="{% url 'signup' %}">signup</a></li>
+        <li><a href="{% url 'login' %}">Login</a></li>
+        <li><a href="{% url 'signup' %}">Signup</a></li>
       {% endif %}
     </ul>
 
+    <div class="content">
 {% block content %}
 {% endblock %}
+    </div>
 
   </body>
 </html>

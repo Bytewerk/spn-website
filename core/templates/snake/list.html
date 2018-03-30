@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+
+  <h1>My Snakes</h1>
+  <table>
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Versions</th>
+    <th>Last Changed</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for snake in snakes %}
+    <tr>
+      <td><a href="{% url 'snake_edit' snake.id %}">{{ snake.name }}</a></td>
+      <td>{{ snake.snakeversion_set.count }}</td>
+      <td>{{ snake.snakeversion_set.latest.created }}</td>
+    </tr>
+  {% empty %}
+    no snakes defined yet.
+  {% endfor %}
+  </tbody>
+  </table>
+
+  <div>
+    <a href="{% url 'snake_create' %}">create a new snake</a>
+  </div>
+{% endblock %}

@@ -7,6 +7,8 @@ body {
     color:white;
     font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
     font-size:1.2em;
+    margin:0;
+    padding:0;
 }
 
 pre {
@@ -17,4 +19,46 @@ code.lua.hljs {
     padding:2em;
     background-color:rgba(50, 50, 50, 0.85);
     font-size:150%;
+}
+
+div.head {
+    position: fixed;
+    top:0;
+    left: 10em;
+    right:0;
+    height: 5em;
+    padding-right:2em;
+}
+
+div.head h1 {
+    width:100%;
+    text-align:right;
+}
+
+ul.nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    position:fixed;
+    top:0;
+    width: 10em;
+    height:100%;
+    overflow:auto;
+    background-color:rgba(0,0,0,0.8);
+}
+
+ul.nav li a {
+    display:block;
+    color: #FFF;
+    padding: 6px 12px;
+    text-decoration: none;
+}
+
+ul.nav li a:hover {
+    background-color: #333;
+}
+
+div.content {
+    position:relative;
+    margin: 7em 0 0 12em;
 }

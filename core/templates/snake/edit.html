@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block css %}
+<style type="text/css" media="screen">
+  #editor {
+    position: relative;
+    top: 0;
+    left: 0;
+    width:50em;
+    height:20em;
+    font-size:16px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<h1>Edit Snake</h1>
+<form id="snake_edit_form" method="post">
+  {% csrf_token %}
+  {{ form.name }}
+  <textarea id="code" name="code">{{ code }}</textarea>
+  <div id="editor"></div>
+  <input type="submit" value="Submit" />
+</form>
+
+
+<script src="/static/core/ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/twilight");
+    editor.session.setMode("ace/mode/lua");
+    editor.setShowPrintMargin(false);
+
+    var textarea = $('#code').hide();
+    editor.getSession().setValue(textarea.val());
+
+    $("#snake_edit_form").submit( function(event) {
+        textarea.val(editor.getSession().getValue());
+    })
+</script>
+{% endblock %}
