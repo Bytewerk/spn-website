@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Programmierspiel</title>
     <link rel="stylesheet" type="text/css" href="{% static "core/styles.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "highscore/highscore.css" %}" />
     <link rel="stylesheet" href="{% static "core/highlight.js/styles/agate.css" %}" />
 {% block css %}
 {% endblock %}
@@ -19,6 +20,7 @@
     <ul class="nav">
       <li><a href="{% url 'home' %}">Home</a></li>
       <li><a href="{% url 'watch' %}">Watch</a></li>
+      <li><a href="{% url 'highscore_table' %}">Highscores</a></li>
       {% if user.is_authenticated %}
         <li><a href="{% url 'snake' %}">My Snakes</a></li>
         <li><a href="{% url 'logout' %}">Logout</a></li>

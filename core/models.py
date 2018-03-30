@@ -32,7 +32,7 @@ class SnakeVersion(models.Model):
 
 class SnakeGame(models.Model):
     snake_version = models.ForeignKey(SnakeVersion, on_delete=models.CASCADE)
-    team = models.ForeignKey(Team, null=True, blank=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     start_date = models.DateTimeField(blank=True, null=True)
     end_date = models.DateTimeField(blank=True, null=True)
     score = models.IntegerField()
@@ -41,3 +41,4 @@ class SnakeGame(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     current_team = models.ForeignKey(Team, blank=True, null=True, on_delete=models.SET_NULL)
+
