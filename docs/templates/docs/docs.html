@@ -1,31 +1,101 @@
+
 {% extends 'base.html' %}
+
+{% load static %}
+
+{% block earlycss %}
+    <link rel="stylesheet" type="text/css" href="{% static "docs/github-markdown.css" %}" />
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static "docs/docs.css" %}" />
+{% endblock %}
 
 {% block content %}
 
-<div class="docs-title">Documentation</div>
-
-<div class="editor">function foo(items) {
-    var x = "All this is syntax highlighted";
-    return x;
-}</div>
-
-<div class="editor">function foo(items) {
-    var x = "All this is syntax highlighted";
-    return x;
-}</div>
+<div class="docs_container markdown-body">
 
 
-<script src="/static/core/ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-<script>
-    var editors = document.getElementsByClassName("editor");
-    for(var element of editors) {
-        console.log(element);
-        var editor = ace.edit(element);
-        editor.setTheme("ace/theme/twilight");
-        editor.session.setMode("ace/mode/lua");
-        editor.setShowPrintMargin(false);
-        editor.setReadOnly(true);
-    }
-</script>
+<h1>Bot Documentation</h1>
+
+<div id="docs_content">
+
+<p>This is a brief overview of all usable functions within the bot logic.</p>
+<p></p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#run">run (current_heading)</a></td>
+	<td class="summary">Main cycle
+ Run is executed each frame.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#api:get_rotation_speed">api:get_rotation_speed ()</a></td>
+	<td class="summary">API #1</td>
+	</tr>
+</table>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "run"></a>
+    <strong>run (current_heading)</strong>
+    </dt>
+    <dd>
+    Main cycle
+ Run is executed each frame.
+
+
+    <h4>Parameters:</h4>
+    <ul>
+        <li><code>current_heading</code>
+         first parameter
+        </li>
+    </ul>
+
+
+
+
+    <h4>Usage:</h4>
+    <ul>
+        <pre class="usage"><code class="lua"> <span class="keyword">function</span> run(current_heading)
+   <span class="keyword">return</span> (current_heading + <span class="number">45</span>) % <span class="number">360</span>
+ <span class="keyword">end</span></code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "api:get_rotation_speed"></a>
+    <strong>api:get_rotation_speed ()</strong>
+    </dt>
+    <dd>
+    API #1
+
+
+
+    <h4>Returns:</h4>
+    <ol>
+
+        allowed rotation speed by the game engine
+    </ol>
+
+
+
+    <h4>Usage:</h4>
+    <ul>
+        <pre class="usage"><code class="lua"><span class="keyword">local</span> x = current_heading + api:get_rotation_speed()</code></pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+</div> <!-- id="container" -->
 
 {% endblock %}

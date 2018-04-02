@@ -1,0 +1,17 @@
+.editor {
+  width: 50em;
+  min-height: 5em;
+}
+
+.docs_container {
+    background-color: #1a2632;
+    color: #fff;
+    min-width: 400px;
+    width: 80%;
+    padding: 14px;
+}
+
+.markdown-body pre.usage {
+  padding: 0px;
+  border: none;
+}
