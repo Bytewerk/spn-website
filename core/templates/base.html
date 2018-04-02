@@ -21,6 +21,7 @@
       <li><a href="{% url 'home' %}">Home</a></li>
       <li><a href="{% url 'watch' %}">Watch</a></li>
       <li><a href="{% url 'highscore_table' %}">Highscores</a></li>
+      <li><a href="{% url 'docs' %}">Documentation</a></li>
       {% if user.is_authenticated %}
         <li><a href="{% url 'snake' %}">My Snakes</a></li>
         <li><a href="{% url 'logout' %}">Logout</a></li>

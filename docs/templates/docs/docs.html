@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="docs-title">Documentation</div>
+
+<div class="editor">function foo(items) {
+    var x = "All this is syntax highlighted";
+    return x;
+}</div>
+
+<div class="editor">function foo(items) {
+    var x = "All this is syntax highlighted";
+    return x;
+}</div>
+
+
+<script src="/static/core/ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editors = document.getElementsByClassName("editor");
+    for(var element of editors) {
+        console.log(element);
+        var editor = ace.edit(element);
+        editor.setTheme("ace/theme/twilight");
+        editor.session.setMode("ace/mode/lua");
+        editor.setShowPrintMargin(false);
+        editor.setReadOnly(true);
+    }
+</script>
+
+{% endblock %}
