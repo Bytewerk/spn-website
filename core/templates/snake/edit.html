@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
-
+{% load widget_tweaks %}
 {% load static %}
+
 {% block css %}
 <style type="text/css" media="screen">
   #editor {
@@ -17,12 +18,21 @@
 {% block content %}
 
 <h1>Edit Snake</h1>
-<form id="snake_edit_form" method="post">
+<form id="snake_edit_form" method="post" class="ui inverted form">
   {% csrf_token %}
-  {{ form.name }}
-  <textarea id="code" name="code">{{ code }}</textarea>
-  <div id="editor"></div>
-  <input type="submit" value="Submit" />
+  <div class="field">
+    {{ form.code.label_tag }}
+    <textarea id="code" name="code">{{ snake.code }}</textarea>
+    <div id="editor"></div>
+  </div>
+  
+  <div class="field">{{ form.comment.label_tag }}{{ form.comment }}</div>
+
+  <div class="ui buttons">
+    <button class="ui positive button" type="submit">Save</button>
+    <div class="or"></div>
+    <a class="ui button" href="{% url 'snake' %}">Cancel</a>
+  </div>
 </form>
 
 

@@ -4,28 +4,41 @@
 {% block content %}
 
   <h1>My Snakes</h1>
-  <table>
-  <thead>
-  <tr>
-    <th>Name</th>
-    <th>Versions</th>
-    <th>Last Changed</th>
-  </tr>
-  </thead>
-  <tbody>
-  {% for snake in snakes %}
+  
+  {% if snakes|length == 0 %}
+    <p>no snakes defined yet.</p>
+    <p>
+      <a href="{% url 'snake_create' %}" class="ui secondary button">Create your snake</a>
+    </p>
+  {% else %}
+    <p>
+      <a href="{% url 'snake_create' %}" class="ui secondary button">Start with a clean snake</a>
+    </p>
+    <table class="ui inverted table snake-list">
+    <thead>
     <tr>
-      <td><a href="{% url 'snake_edit' snake.id %}">{{ snake.name }}</a></td>
-      <td>{{ snake.snakeversion_set.count }}</td>
-      <td>{{ snake.snakeversion_set.latest.created }}</td>
+      <th>Version</th>
+      <th>Last Changed</th>
+      <th>Comment</th>
     </tr>
-  {% empty %}
-    no snakes defined yet.
-  {% endfor %}
-  </tbody>
-  </table>
+    </thead>
+    <tbody>
+    {% for snake in snakes %}
+      <tr>
+        <td>{{ snake.version }}&nbsp;
+          <a href="{% url 'snake_edit' snake.id %}" class="tiny ui labeled icon button">
+            <i class="icon external alternate"></i>
+          Improve it</a>&nbsp;
+          <a href="{% url 'snake_edit' snake.id %}" class="tiny ui labeled icon button">
+            <i class="icon trash alternate"></i>
+          Delete it</a>
+        </td>
+        <td>{{ snake.created }}</td>
+        <td>{{ snake.comment }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+  {% endif %}
 
-  <div>
-    <a href="{% url 'snake_create' %}">create a new snake</a>
-  </div>
 {% endblock %}

@@ -62,3 +62,11 @@ div.content {
     position:relative;
     margin: 7em 0 0 12em;
 }
+
+table.snake-list {
+    font-size: 0.8em !important;
+}
+
+#snake_edit_form #id_comment {
+    width: 48em;
+}

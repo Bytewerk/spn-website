@@ -2,8 +2,9 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import PermissionDenied
-from core.models import Snake, SnakeVersion
+from core.models import SnakeVersion
 from django.forms import ModelForm, TextInput
+from django.db.models import Max
 
 
 def signup(request):
@@ -20,48 +21,46 @@ def signup(request):
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
 
+def snake_list(request):
+    return render(request, 'snake/list.html', {
+        'snakes': SnakeVersion.objects.filter(user=request.user).order_by('-version')
+    })
 
 class CreateSnakeForm(ModelForm):
     class Meta:
-        model = Snake
-        fields = ['name']
-
-
-def snake_list(request):
-    return render(request, 'snake/list.html', {
-        'snakes': Snake.objects.filter(user=request.user)
-    })
-
+        model = SnakeVersion
+        fields = ['code', 'comment']
 
 def snake_create(request, template_name='snake/create.html'):
-    form = CreateSnakeForm(request.POST or None)
-    if form.is_valid():
-        snake = form.save(commit=False)
-        snake.user = request.user
-        snake.save()
+    #form = CreateSnakeForm(request.POST or None)
+    #if form.is_valid():
+    #    snake = form.save(commit=False)
+    #    snake.user = request.user
+    #    snake.save()
         return redirect('snake')
-    return render(request, template_name, {'form': form})
+    #return render(request, template_name, {'form': form})
 
 
 def snake_edit(request, snake_id):
-    snake = get_object_or_404(Snake, pk=snake_id)
+    snake = get_object_or_404(SnakeVersion, pk=snake_id)
+    
     if snake.user != request.user:
         raise PermissionDenied
 
-    try:
-        version = snake.snakeversion_set.latest('created')
-        code = version.code
-    except SnakeVersion.DoesNotExist:
-        code = ''
-
-    form = CreateSnakeForm(request.POST or None, instance=snake)
+    form = CreateSnakeForm(request.POST or None)
     if form.is_valid():
-        snake = form.save()
 
-        posted_code = request.POST['code']
-        if posted_code != code:
-            new_version = SnakeVersion(snake=snake, code=request.POST['code'])
+        posted_code = form.cleaned_data.get('code')
+        if posted_code != snake.code:
+            posted_comment = form.cleaned_data.get('comment', '')
+            last_version = SnakeVersion.objects.filter(user=request.user).aggregate(Max('version'))['version__max']
+            
+            new_version = SnakeVersion(user=request.user,
+                                       prev_version=snake.version, 
+                                       version=last_version+1,
+                                       code=posted_code, 
+                                       comment=posted_comment)
             new_version.save()
         return redirect('snake')
 
-    return render(request, 'snake/edit.html', {'form': form, 'snake': snake, 'code': code})
+    return render(request, 'snake/edit.html', {'form': form, 'snake': snake})

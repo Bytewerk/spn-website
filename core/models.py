@@ -16,18 +16,15 @@ class TeamMembership(models.Model):
     end_date = models.DateTimeField(null=True, blank=True)
 
 
-class Snake(models.Model):
-    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
-    name = models.CharField(max_length=255)
-
-
 class SnakeVersion(models.Model):
     class Meta:
         get_latest_by = "created"
-    snake = models.ForeignKey(Snake, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     created = models.DateTimeField(default=now, blank=True)
     code = models.TextField()
-
+    comment = models.CharField(max_length=1000, blank=True, null=True)
+    version = models.IntegerField()
+    prev_version = models.IntegerField(blank=True, null=True)
 
 
 class SnakeGame(models.Model):
