@@ -13,7 +13,7 @@
     <tbody>
     {% for score in highscores %}
         <tr>
-            <td>{{score.username}}</td>
+            <td>{{score.user__username}}</td>
             <td>{{score.score}}</td>
         </tr>
     {% endfor %}

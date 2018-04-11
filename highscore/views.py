@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from .models import Highscore
+from django.db.models import Max
+from core.models import SnakeGame
 
 def table(request):
-    output = Highscore.objects.all()
+    data = SnakeGame.objects.values('user__username').annotate(score=Max('score')).order_by('-score')
+    return render(request, 'highscore/table.html', context={'highscores': data})
 
-    # listing macro
-    #return render(request, 'highscore/outputtable.html', {'object': output, 'model_table_attrs': ['user_id', 'score']})
 
-    return render(request, 'highscore/table.html', context={'highscores': output})
+

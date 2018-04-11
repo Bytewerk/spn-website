@@ -37,6 +37,9 @@ class SnakeGame(models.Model):
     end_date = models.DateTimeField(blank=True, null=True)
     score = models.IntegerField()
 
+    def __str__(self):
+        return self.user.username + " " + str(self.start_date)
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
