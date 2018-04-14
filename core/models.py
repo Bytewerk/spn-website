@@ -19,8 +19,9 @@ class TeamMembership(models.Model):
 class SnakeVersion(models.Model):
     class Meta:
         get_latest_by = "created"
+        unique_together = ('user', 'version')
 
-    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(default=now, blank=True)
     code = models.TextField()
     comment = models.CharField(max_length=1000, blank=True, null=True)

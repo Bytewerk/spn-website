@@ -37,21 +37,15 @@ class CreateSnakeForm(ModelForm):
         model = SnakeVersion
         fields = ['code', 'comment']
 
-def snake_create(request, template_name='snake/create.html'):
-    # update or create active snake
+def snake_create(request):
+    return snake_edit(request)
 
-    #form = CreateSnakeForm(request.POST or None)
-    #if form.is_valid():
-    #    snake = form.save(commit=False)
-    #    snake.user = request.user
-    #    snake.save()
-        return redirect('snake')
-    #return render(request, template_name, {'form': form})
+def snake_edit(request, snake_id=-1):
+    try:
+        snake = SnakeVersion.objects.get(pk=snake_id)
+    except SnakeVersion.DoesNotExist:
+        snake = SnakeVersion(version=0, user=request.user)
 
-
-def snake_edit(request, snake_id):
-    snake = get_object_or_404(SnakeVersion, pk=snake_id)
-    
     if snake.user != request.user:
         raise PermissionDenied
 
@@ -65,10 +59,23 @@ def snake_edit(request, snake_id):
             
             new_version = SnakeVersion(user=request.user,
                                        prev_version=snake.version, 
-                                       version=last_version+1,
+                                       version=(last_version or 0)+1,
                                        code=posted_code, 
                                        comment=posted_comment)
             new_version.save()
         return redirect('snake')
 
     return render(request, 'snake/edit.html', {'form': form, 'snake': snake})
+
+def snake_delete(request, snake_id=-1):
+    try:
+        snake = SnakeVersion.objects.get(pk=snake_id)
+    except SnakeVersion.DoesNotExist:
+        raise PermissionDenied
+
+    if snake.user != request.user:
+        raise PermissionDenied
+
+    snake.delete()
+
+    return redirect('snake')
