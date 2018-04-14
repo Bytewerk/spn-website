@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import PermissionDenied
 from core.models import SnakeVersion
 from django.forms import ModelForm, TextInput
-from django.db.models import Max
+from django.db.models import Max, BooleanField, Case, When, Value
 
 
 def signup(request):
@@ -23,7 +23,13 @@ def signup(request):
 
 def snake_list(request):
     return render(request, 'snake/list.html', {
-        'snakes': SnakeVersion.objects.filter(user=request.user).order_by('-version')
+        'snakes': SnakeVersion.objects.filter(user=request.user).annotate(
+                active=Case(
+                    When(activesnake__version_id__isnull=False, then=Value(1)),
+                    default=Value(0),
+                    output_field=BooleanField(),
+                ),
+            ).order_by('-version')
     })
 
 class CreateSnakeForm(ModelForm):
@@ -32,6 +38,8 @@ class CreateSnakeForm(ModelForm):
         fields = ['code', 'comment']
 
 def snake_create(request, template_name='snake/create.html'):
+    # update or create active snake
+
     #form = CreateSnakeForm(request.POST or None)
     #if form.is_valid():
     #    snake = form.save(commit=False)

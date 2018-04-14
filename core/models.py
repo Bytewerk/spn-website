@@ -19,12 +19,18 @@ class TeamMembership(models.Model):
 class SnakeVersion(models.Model):
     class Meta:
         get_latest_by = "created"
+
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     created = models.DateTimeField(default=now, blank=True)
     code = models.TextField()
     comment = models.CharField(max_length=1000, blank=True, null=True)
     version = models.IntegerField()
     prev_version = models.IntegerField(blank=True, null=True)
+
+
+class ActiveSnake(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    version = models.ForeignKey(SnakeVersion, on_delete=models.CASCADE)
 
 
 class SnakeGame(models.Model):
