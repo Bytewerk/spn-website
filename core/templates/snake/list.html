@@ -28,11 +28,9 @@
       <tr>
         <td>{{ snake.version }}&nbsp;
           <a href="{% url 'snake_edit' snake.id %}" class="tiny ui labeled icon button">
-            <i class="icon external alternate"></i>
-          Improve this snake</a>&nbsp;
+            <i class="icon external alternate"></i>Improve</a>&nbsp;
           <a href="{% url 'snake_delete' snake.id %}" class="tiny ui labeled icon button">
-            <i class="icon trash alternate"></i>
-          Delete this snake</a>
+            <i class="icon trash alternate"></i>Delete</a>
         </td>
         <td>{{ snake.created|date:"d.m.Y H:i:s" }}</td>
         <td>{{ snake.comment }}</td>
