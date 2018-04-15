@@ -6,4 +6,5 @@ urlpatterns = [
     path('create', core_views.snake_create, name='snake_create'),
     path('delete/<int:snake_id>', core_views.snake_delete, name='snake_delete'),
     path('edit/<int:snake_id>', core_views.snake_edit, name='snake_edit'),
+    path('activate/<int:snake_id>', core_views.snake_activate, name='snake_activate'),
 ]

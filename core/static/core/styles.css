@@ -70,3 +70,12 @@ table.snake-list {
 #snake_edit_form #id_comment {
     width: 48em;
 }
+
+.growl {
+    opacity: 1;
+    filter: alpha(opacity=100);
+}
+
+.growl .growl-title {
+    display: none; 
+}

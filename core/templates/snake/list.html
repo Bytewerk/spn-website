@@ -17,7 +17,7 @@
     <table class="ui inverted table snake-list">
     <thead>
     <tr>
-      <th>Version</th>
+      <th>Snake Version</th>
       <th>Last Changed</th>
       <th>Comment</th>
       <th>Active</th>
@@ -29,18 +29,46 @@
         <td>{{ snake.version }}&nbsp;
           <a href="{% url 'snake_edit' snake.id %}" class="tiny ui labeled icon button">
             <i class="icon external alternate"></i>
-          Improve it</a>&nbsp;
+          Improve this snake</a>&nbsp;
           <a href="{% url 'snake_delete' snake.id %}" class="tiny ui labeled icon button">
             <i class="icon trash alternate"></i>
-          Delete it</a>
+          Delete this snake</a>
         </td>
-        <td>{{ snake.created }}</td>
+        <td>{{ snake.created|date:"d.m.Y H:i:s" }}</td>
         <td>{{ snake.comment }}</td>
-        <td>{{ snake.active }}</td>
+        <td class="collapsing">
+          <div class="ui fitted toggle checkbox">
+            <input type="radio" name="activesnake" data-snake="{{ snake.id }}"
+            {% if snake.active %}
+              checked="checked"
+            {% endif %}> <label></label>
+          </div>
+        </td>
       </tr>
     {% endfor %}
     </tbody>
     </table>
   {% endif %}
+  
+{% endblock %}
 
+{% block js %}
+
+<script>
+  $('.ui.checkbox').checkbox({
+    onChecked: function() {
+      let id = $(this).data('snake');
+
+      $.ajax({
+        url: "{% url 'snake_activate' 1 %}".replace('1', id),
+        success: function(data) {
+          $.growl.notice({ message: data.message });
+        },
+        error: function(data) {
+          $.growl.error({ message: data.message });
+        }
+      });
+    }
+  });
+</script>
 {% endblock %}

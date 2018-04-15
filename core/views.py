@@ -2,9 +2,10 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import PermissionDenied
-from core.models import SnakeVersion
+from core.models import SnakeVersion, ActiveSnake
 from django.forms import ModelForm, TextInput
 from django.db.models import Max, BooleanField, Case, When, Value
+from django.http import HttpResponse, JsonResponse
 
 
 def signup(request):
@@ -79,3 +80,21 @@ def snake_delete(request, snake_id=-1):
     snake.delete()
 
     return redirect('snake')
+
+def snake_activate(request, snake_id=-1):
+    if not request.is_ajax():
+        return JsonResponse({'message': 'ohh'}, status=500)
+
+    try:
+        snake = SnakeVersion.objects.get(pk=snake_id)
+    except SnakeVersion.DoesNotExist:
+        return JsonResponse({'message': 'Snake could not activated'}, status=500)
+
+    if snake.user != request.user:
+        return JsonResponse({'message': 'Snake could not activated'}, status=500)
+
+    obj, created = ActiveSnake.objects.get_or_create(defaults={'user': snake.user, 'version': snake})
+    obj.version = snake
+    obj.save()
+
+    return JsonResponse({'message': 'Snake {} was activated'.format(snake.version)})
