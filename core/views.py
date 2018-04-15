@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import PermissionDenied
 from core.models import SnakeVersion, ActiveSnake
 from django.forms import ModelForm, TextInput
-from django.db.models import Max, BooleanField, Case, When, Value
+from django.db.models import BooleanField, Case, Max, Value, When
 from django.http import HttpResponse, JsonResponse
 
 

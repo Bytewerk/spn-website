@@ -28,10 +28,14 @@ class SnakeVersion(models.Model):
     version = models.IntegerField()
     prev_version = models.IntegerField(blank=True, null=True)
 
+    objects = models.Manager()
+
 
 class ActiveSnake(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     version = models.ForeignKey(SnakeVersion, on_delete=models.CASCADE)
+
+    objects = models.Manager()
 
 
 class SnakeGame(models.Model):
