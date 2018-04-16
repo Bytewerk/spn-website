@@ -17,13 +17,30 @@
 
 {% block content %}
 
-<h1>Edit Snake</h1>
+<div class="ui left floated inverted header">
+  Edit Snake
+</div>
+
+<div class="ui left floated inverted header">
+  <div class="ui toggle checkbox">
+    <input type="checkbox" name="livemode">
+    <label>Live mode</label>
+  </div>
+</div>
+
 <form id="snake_edit_form" method="post" class="ui inverted form">
   {% csrf_token %}
-  <div class="field">
-    {{ form.code.label_tag }}
-    <textarea id="code" name="code">{{ snake.code }}</textarea>
-    <div id="editor"></div>
+  <div class="equal width fields">
+    <div class="field">
+      {{ form.code.label_tag }}
+      <textarea id="code" name="code">{{ snake.code }}</textarea>
+      <div id="editor"></div>
+    </div>
+
+    <div class="field" id="game" style="display: none">
+        <label>Preview</label>
+        <canvas style="background: #111"></canvas>
+      </div>
   </div>
   
   <div class="field">{{ form.comment.label_tag }}{{ form.comment }}</div>
@@ -50,5 +67,18 @@
     $("#snake_edit_form").submit( function(event) {
         textarea.val(editor.getSession().getValue());
     })
+</script>
+
+<script>
+    $('.ui.checkbox').checkbox({
+      onChecked: function() {
+        $('#editor').css('width', '35em');
+        $('#game').show()
+      },
+      onUnchecked: function() {
+        $('#editor').css('width', '');
+        $('#game').hide()
+      },
+    });
 </script>
 {% endblock %}
