@@ -4,3 +4,4 @@ venv
 db.sqlite3
 Programmierspiel/local_settings.py
 .vscode/tags
+.history
