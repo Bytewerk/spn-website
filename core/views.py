@@ -1,11 +1,13 @@
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import PermissionDenied
-from core.models import SnakeVersion, ActiveSnake
-from django.forms import ModelForm, TextInput
 from django.db.models import BooleanField, Case, Max, Value, When
+from django.forms import ModelForm, TextInput
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+
+from core.models import SnakeVersion, ActiveSnake
 
 
 def signup(request):
@@ -22,6 +24,7 @@ def signup(request):
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
 
+@login_required
 def snake_list(request):
     return render(request, 'snake/list.html', {
         'snakes': SnakeVersion.objects.filter(user=request.user).annotate(
@@ -39,9 +42,11 @@ class CreateSnakeForm(ModelForm):
         model = SnakeVersion
         fields = ['code', 'comment']
 
+@login_required
 def snake_create(request):
     return snake_edit(request)
 
+@login_required
 def snake_edit(request, snake_id=-1):
     try:
         snake = SnakeVersion.objects.get(pk=snake_id)
@@ -69,6 +74,7 @@ def snake_edit(request, snake_id=-1):
 
     return render(request, 'snake/edit.html', {'form': form, 'snake': snake})
 
+@login_required
 def snake_delete(request, snake_id=-1):
     try:
         snake = SnakeVersion.objects.get(pk=snake_id)
@@ -82,6 +88,7 @@ def snake_delete(request, snake_id=-1):
 
     return snake_list(request)
 
+@login_required
 def snake_activate(request, snake_id=-1):
     if not request.is_ajax():
         return JsonResponse({'message': 'ohh'}, status=500)
@@ -100,6 +107,7 @@ def snake_activate(request, snake_id=-1):
 
     return JsonResponse({'message': 'Snake {} was activated'.format(snake.version)})
 
+@login_required
 def snake_disable(request):
     obj = ActiveSnake.objects.filter(user=request.user)
     if obj:
