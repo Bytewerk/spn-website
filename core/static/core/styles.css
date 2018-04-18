@@ -102,3 +102,7 @@ table.snake-list {
     width: 450px;
     height: 320px;
 }
+
+#login_form div.segment {
+    width: 350px;
+}

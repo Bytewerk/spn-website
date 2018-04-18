@@ -5,22 +5,32 @@
   {% if form.errors %}
     <p style="color: red">Your username and password didn't match. Please try again.</p>
   {% endif %}
-  <form method="post">
-    {% csrf_token %}
-    <input type="hidden" name="next" value="{{ next }}" />
-    {% for field in form %}
-      <p>
-        {{ field.label_tag }}<br>
-        {{ field }}<br>
-        {% for error in field.errors %}
-          <p style="color: red">{{ error }}</p>
+  <form method="post" id="login_form">
+    <div class="ui inverted segment">
+      <div class="ui inverted mini form">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}" />
+        {% for field in form %}
+          <div class="fifteen wide field">
+            {{ field.label_tag }}
+            {{ field }}
+            {% for error in field.errors %}
+              <p style="color: red">{{ error }}</p>
+            {% endfor %}
+            {% if field.help_text %}
+              <p><small style="color: grey">{{ field.help_text }}</small></p>
+            {% endif %}
+          </div>
         {% endfor %}
-        {% if field.help_text %}
-          <p><small style="color: grey">{{ field.help_text }}</small></p>
-        {% endif %}
-      </p>
-    {% endfor %}
-    <button type="submit">Log in</button>
-    <a href="{% url 'signup' %}">No account yet? Sign up</a>
+        
+        <div class="field">
+          <div class="ui buttons">
+            <button type="submit" class="ui small positive button">Log in</button>
+            <div class="or"></div>
+            <a href="{% url 'signup' %}" class="ui small button">No account yet? Sign up</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </form>
 {% endblock %}
