@@ -30,7 +30,8 @@ def snake_list(request):
                     default=Value(0),
                     output_field=BooleanField(),
                 ),
-            ).order_by('-version')
+            ).order_by('-version'),
+        'has_active': bool(len(ActiveSnake.objects.filter(user=request.user)))
     })
 
 class CreateSnakeForm(ModelForm):
@@ -64,7 +65,7 @@ def snake_edit(request, snake_id=-1):
                                        code=posted_code, 
                                        comment=posted_comment)
             new_version.save()
-        return redirect('snake')
+        return snake_list(request)
 
     return render(request, 'snake/edit.html', {'form': form, 'snake': snake})
 
@@ -79,7 +80,7 @@ def snake_delete(request, snake_id=-1):
 
     snake.delete()
 
-    return redirect('snake')
+    return snake_list(request)
 
 def snake_activate(request, snake_id=-1):
     if not request.is_ajax():
@@ -93,8 +94,20 @@ def snake_activate(request, snake_id=-1):
     if snake.user != request.user:
         return JsonResponse({'message': 'Snake could not activated'}, status=500)
 
-    obj, created = ActiveSnake.objects.get_or_create(defaults={'user': snake.user, 'version': snake})
+    obj, _ = ActiveSnake.objects.get_or_create(defaults={'user': snake.user, 'version': snake})
     obj.version = snake
     obj.save()
 
     return JsonResponse({'message': 'Snake {} was activated'.format(snake.version)})
+
+def snake_disable(request):
+    obj = ActiveSnake.objects.filter(user=request.user)
+    if obj:
+        response = {'message': 'Snake {} was disabled'.format(obj[0].version.version)}
+        obj.delete()
+
+    if request.is_ajax():
+        return JsonResponse(response)
+    else:
+        return snake_list(request)
+

@@ -43,3 +43,18 @@ class RestTestCase(TestCase):
 
         self.client.post('/snake/delete/{}'.format(1))
         self.assertEqual(len(SnakeVersion.objects.all()), 0)
+
+    def test_disable_snake(self):
+        """Disable a snake"""
+        self.client.post('/snake/create', {'code': 'test code'})
+        self.assertEqual(len(SnakeVersion.objects.all()), 1)
+        response = self.client.post('/snake/activate/{}'.format(1), HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(len(ActiveSnake.objects.all()), 1)
+
+        response = self.client.post('/snake/disable', HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['message'], 'Snake 1 was disabled')
+        self.assertEqual(len(ActiveSnake.objects.all()), 0)
+        self.assertEqual(len(SnakeVersion.objects.all()), 1)
+
+        
