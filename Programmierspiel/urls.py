@@ -15,4 +15,5 @@ urlpatterns = [
     path('accounts/profile/', RedirectView.as_view(url='/', permanent=False)),
     path('snake/', include('core.urls')),
     path('highscore/', include('highscore.urls')),
+    path('docs/', include('docs.urls')),
 ]

@@ -4,6 +4,9 @@
   <head>
     <meta charset="UTF-8">
     <title>Programmierspiel</title>
+
+{% block earlycss %}
+{% endblock %}   
     <link rel="stylesheet" type="text/css" href="{% static "core/jquery.growl.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "core/checkbox.min.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "core/header.min.css" %}" />
@@ -18,6 +21,7 @@
     <link rel="stylesheet" type="text/css" href="{% static "core/form.min.css" %}" />
 {% block css %}
 {% endblock %}
+
   </head>
   <body>
     <div class="head">
@@ -27,6 +31,7 @@
       <li><a href="{% url 'home' %}">Home</a></li>
       <li><a href="{% url 'watch' %}">Watch</a></li>
       <li><a href="{% url 'highscore_table' %}">Highscores</a></li>
+      <li><a href="{% url 'docs' %}">Documentation</a></li>
       {% if user.is_authenticated %}
         <li><a href="{% url 'snake' %}">My Snakes</a></li>
         <li><a href="{% url 'logout' %}">Logout</a></li>
