@@ -94,14 +94,14 @@ def snake_activate(request, snake_id=-1):
         return JsonResponse({'message': 'ohh'}, status=500)
 
     try:
-        snake = SnakeVersion.objects.get(pk=snake_id)
+        snake = SnakeVersion.objects.filter(user=request.user).get(pk=snake_id)
     except SnakeVersion.DoesNotExist:
         return JsonResponse({'message': 'Snake could not activated'}, status=500)
 
     if snake.user != request.user:
         return JsonResponse({'message': 'Snake could not activated'}, status=500)
 
-    obj, _ = ActiveSnake.objects.get_or_create(defaults={'user': snake.user, 'version': snake})
+    obj, _ = ActiveSnake.objects.filter(user=request.user).get_or_create(defaults={'user': snake.user, 'version': snake})
     obj.version = snake
     obj.save()
 
