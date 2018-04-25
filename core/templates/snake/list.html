@@ -13,6 +13,7 @@
   {% else %}
     <p>
       <a href="{% url 'snake_create' %}" class="ui secondary button">Start with a clean snake</a>
+      <a href="{% url 'snake_restart' %}" class="ui secondary {% if not has_active %}disabled {% endif %}button" id="restart_snake">Restart your snake</a>
       <a href="{% url 'snake_disable' %}" class="ui secondary {% if not has_active %}disabled {% endif %}button" id="disable_snake">Disable your snake</a>
     </p>
     <table class="ui inverted table snake-list">
@@ -61,13 +62,28 @@
         url: "{% url 'snake_activate' 1 %}".replace('1', id),
         success: function(data) {
           $.growl.notice({ message: data.message });
-          $('#disable_snake').removeClass('disabled');
+          $('#disable_snake, #restart_snake').removeClass('disabled');
         },
         error: function(data) {
           $.growl.error({ message: data.message });
         }
       });
     }
+  });
+
+  $('#restart_snake').click(function(e) {
+    let button_url = $(this).attr('href');
+    $.ajax({
+      url: button_url,
+      success: function(data) {
+        $.growl.notice({ message: data.message });
+      },
+      error: function(data) {
+        $.growl.error({ message: data.message });
+      }
+    });
+
+    e.preventDefault();
   });
 </script>
 {% endblock %}
