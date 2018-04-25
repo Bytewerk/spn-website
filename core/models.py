@@ -43,7 +43,10 @@ class SnakeGame(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     start_date = models.DateTimeField(blank=True, null=True)
     end_date = models.DateTimeField(blank=True, null=True)
-    score = models.IntegerField()
+    start_frame = models.IntegerField(blank=True, null=True)
+    end_frame = models.IntegerField(blank=True, null=True)
+    killer = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="games_won")
+    final_mass = models.FloatField(blank=True, null=True)
 
     def __str__(self):
         return self.user.username + " " + str(self.start_date)

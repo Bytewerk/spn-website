@@ -1,7 +1,9 @@
 from django.contrib import admin
 
-from core.models import SnakeGame, ServerCommand
+from core.models import SnakeVersion, ActiveSnake, SnakeGame, ServerCommand
 
+admin.site.register(SnakeVersion)
+admin.site.register(ActiveSnake)
 admin.site.register(SnakeGame)
 
 
