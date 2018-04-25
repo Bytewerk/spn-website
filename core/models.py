@@ -53,3 +53,12 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     current_team = models.ForeignKey(Team, blank=True, null=True, on_delete=models.SET_NULL)
 
+
+class ServerCommand(models.Model):
+    COMMAND_CHOICES = (('kill', 'kill'),)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    dt_created = models.DateTimeField(auto_now_add=True, blank=True)
+    dt_processed = models.DateTimeField(null=True, blank=True, editable=False)
+    command = models.CharField(max_length=255, choices=COMMAND_CHOICES)
+    result = models.NullBooleanField(editable=False)
+    result_msg = models.TextField(blank=True, null=True, editable=False)
