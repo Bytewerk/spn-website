@@ -8,4 +8,5 @@ urlpatterns = [
     path('edit/<int:snake_id>', core_views.snake_edit, name='snake_edit'),
     path('activate/<int:snake_id>', core_views.snake_activate, name='snake_activate'),
     path('disable', core_views.snake_disable, name='snake_disable'),
+    path('restart', core_views.snake_restart, name='snake_restart'),
 ]

@@ -7,7 +7,7 @@ from django.forms import ModelForm, TextInput
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from core.models import SnakeVersion, ActiveSnake
+from core.models import SnakeVersion, ActiveSnake, ServerCommand
 
 
 def signup(request):
@@ -86,7 +86,7 @@ def snake_delete(request, snake_id=-1):
 
     snake.delete()
 
-    return snake_list(request)
+    return redirect('snake')
 
 @login_required
 def snake_activate(request, snake_id=-1):
@@ -117,5 +117,21 @@ def snake_disable(request):
     if request.is_ajax():
         return JsonResponse(response)
     else:
-        return snake_list(request)
+        return redirect('snake')
 
+@login_required
+def snake_restart(request):
+    obj = ActiveSnake.objects.filter(user=request.user)
+    if obj:
+        response = {'message': 'Restart signal send for Snake {}'.format(obj[0].version.version)}
+        
+        cmd = ServerCommand(
+            user=request.user,
+            command='kill'
+        )
+        cmd.save()
+
+    if request.is_ajax():
+        return JsonResponse(response)
+    else:
+        return snake_list(request)
