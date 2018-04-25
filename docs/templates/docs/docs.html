@@ -27,13 +27,16 @@
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#run">run (current_heading)</a></td>
-	<td class="summary">Main cycle
- Run is executed each frame.</td>
+	<td class="name" nowrap><a href="#step">step ()</a></td>
+	<td class="summary">That method is called each frame.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#api:get_rotation_speed">api:get_rotation_speed ()</a></td>
-	<td class="summary">API #1</td>
+	<td class="name" nowrap><a href="#findFood">findFood (max_distance, minimum_food_value)</a></td>
+	<td class="summary">That method returns all food as list.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#findSegments">findSegments (max_distance, include_own)</a></td>
+	<td class="summary">That method returns all segments of all snakes within a certain radius as list.</td>
 	</tr>
 </table>
 
@@ -42,18 +45,48 @@
 
     <dl class="function">
     <dt>
-    <a name = "run"></a>
-    <strong>run (current_heading)</strong>
+    <a name = "step"></a>
+    <strong>step ()</strong>
     </dt>
     <dd>
-    Main cycle
- Run is executed each frame.
+    That method is called each frame.
+ Here you can implement you bot logic. The return value must be an radiant angle.
+ A negative angle means turn left and a positive angle
+ means turn right. With 0, the snake keeps its direction.
+
+
+
+    <h4>Returns:</h4>
+    <ol>
+
+        new angle relative to the head direction
+    </ol>
+
+
+
+    <h4>Usage:</h4>
+    <ul>
+        <pre class="usage"><code class="lua"> <span class="keyword">function</span> step()
+   <span class="keyword">return</span> <span class="number">45</span>
+ <span class="keyword">end</span></code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "findFood"></a>
+    <strong>findFood (max_distance, minimum_food_value)</strong>
+    </dt>
+    <dd>
+    That method returns all food as list.
 
 
     <h4>Parameters:</h4>
     <ul>
-        <li><code>current_heading</code>
-         first parameter
+        <li><code>max_distance</code>
+         all food within the distance is included
+        </li>
+        <li><code>minimum_food_value</code>
+         all lower food values are filtered (min: 0, max: unknown)
         </li>
     </ul>
 
@@ -62,32 +95,45 @@
 
     <h4>Usage:</h4>
     <ul>
-        <pre class="usage"><code class="lua"> <span class="keyword">function</span> run(current_heading)
-   <span class="keyword">return</span> (current_heading + <span class="number">45</span>) % <span class="number">360</span>
- <span class="keyword">end</span></code></pre>
+        <pre class="usage"><code class="lua"> <span class="keyword">local</span> food = findFood(max_distance, <span class="number">0.8</span>)
+ <span class="keyword">for</span> i, item <span class="keyword">in</span> food:<span class="global">pairs</span>() <span class="keyword">do</span>
+   item.d <span class="comment">-- angle in radian
+</span>   item.dist <span class="comment">-- distance
+</span> <span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
     <dt>
-    <a name = "api:get_rotation_speed"></a>
-    <strong>api:get_rotation_speed ()</strong>
+    <a name = "findSegments"></a>
+    <strong>findSegments (max_distance, include_own)</strong>
     </dt>
     <dd>
-    API #1
+    That method returns all segments of all snakes within a certain radius as list.
+ All attributes of each item in the segments list are measured between the center of your head the the center of the item center.
 
 
+    <h4>Parameters:</h4>
+    <ul>
+        <li><code>max_distance</code>
+         all segements within that distance are included
+        </li>
+        <li><code>include_own</code>
+         If true, your snake segments are included. Otherwise you get only enemy segments
+        </li>
+    </ul>
 
-    <h4>Returns:</h4>
-    <ol>
-
-        allowed rotation speed by the game engine
-    </ol>
 
 
 
     <h4>Usage:</h4>
     <ul>
-        <pre class="usage"><code class="lua"><span class="keyword">local</span> x = current_heading + api:get_rotation_speed()</code></pre>
+        <pre class="usage"><code class="lua"> <span class="keyword">local</span> segments = findSegments(<span class="number">50.0</span>, <span class="keyword">false</span>)
+ <span class="keyword">for</span> i, item <span class="keyword">in</span> segments:<span class="global">pairs</span>() <span class="keyword">do</span>
+   item.d <span class="comment">-- angle in radian
+</span>   item.r <span class="comment">-- radius of the item
+</span>   item.dist <span class="comment">-- distance
+</span>   item.bot <span class="comment">-- id of the other snake
+</span> <span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
