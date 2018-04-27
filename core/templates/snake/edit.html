@@ -3,22 +3,40 @@
 {% load static %}
 
 {% block css %}
+<script src="/static/core/ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <style type="text/css" media="screen">
   #editor {
-    position: relative;
-    top: 0;
-    left: 0;
-    width:50em;
-    height:20em;
+    width:100%;
+    height:30em;
     font-size:16px;
+    background-color: #00000080;
   }
+
+  #editor .ace_gutter {
+    background-color: #FFFFFF20;
+  }
+
+  #editor .ace_scroller {
+    background-color: transparent;
+  }
+
+  #editor .ace_active-line {
+    background: #FFFFFF10;
+  }
+
+  #log {
+    width:100%;
+    height:10em;
+    background-color:#00000080;
+  }
+
 </style>
 {% endblock %}
 
 {% block content %}
 
 <div class="ui left floated inverted header">
-  Edit Snake
+  Edit Bot
 </div>
 
 <div class="ui left floated inverted header">
@@ -41,8 +59,16 @@
         <label>Preview</label>
         <canvas style="background: #111"></canvas>
       </div>
+
   </div>
   
+  <div class="field">
+    <label>Debug output:</label>
+    <div id="log">
+
+    </div>
+  </div>
+
   <div class="field">{{ form.comment.label_tag }}{{ form.comment }}</div>
 
   <div class="ui buttons">
@@ -54,10 +80,9 @@
 {% endblock %}
 
 {% block js %}
-<script src="/static/core/ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
     var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/twilight");
+    editor.setTheme("ace/theme/idle_fingers");
     editor.session.setMode("ace/mode/lua");
     editor.setShowPrintMargin(false);
 
