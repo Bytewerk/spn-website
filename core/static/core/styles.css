@@ -1,14 +1,67 @@
 body {
-    background-color: #000020;
-    background-image: url("mamba.png");
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: bottom left;
+    background-color:#321700;
     color:white;
-    font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
-    font-size:1.2em;
+    font-family: Verdana, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+    font-size:16pt;
     margin:0;
     padding:0;
+    background-image: url("/static/core/brain.png");
+    background-repeat: no-repeat;
+    background-position: top 50px right -60px;
+}
+
+a {
+    color: beige;
+}
+
+ul.nav {
+    background-color:#613600;
+    text-align: center;
+    padding: 4px 0;
+    margin:0;
+}
+
+ul.nav li {
+    display:inline;
+    padding: 4px 10px 10px 10px;
+}
+
+ul.nav li a, .footer a {
+    color:white;
+    text-decoration: none;
+}
+
+ul.nav li:hover {
+    background-color: #804600;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+h1 {
+    padding-top:0;
+    margin-top:0;
+    font-weight: bolder;
+}
+
+div.content {
+    padding:10px;
+}
+
+div.footer {
+    text-align:center;
+    position:fixed;
+    bottom:0;
+    width:100%;
+    padding:3px;
+    background-color:#613600;
+}
+
+#snake
+{
+    position:absolute;
+    left:0px;
+    bottom:0px;
 }
 
 pre.home {
@@ -19,48 +72,6 @@ pre.home code.lua.hljs {
     padding:2em;
     background-color:rgba(50, 50, 50, 0.85);
     font-size:150%;
-}
-
-div.head {
-    position: fixed;
-    top:0;
-    left: 10em;
-    right:0;
-    height: 5em;
-    padding-right:2em;
-}
-
-div.head h1 {
-    width:100%;
-    text-align:right;
-}
-
-ul.nav {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    position:fixed;
-    top:0;
-    width: 10em;
-    height:100%;
-    overflow:auto;
-    background-color:rgba(0,0,0,0.8);
-}
-
-ul.nav li a {
-    display:block;
-    color: #FFF;
-    padding: 6px 12px;
-    text-decoration: none;
-}
-
-ul.nav li a:hover {
-    background-color: #333;
-}
-
-div.content {
-    position:relative;
-    margin: 5em 0 0 12em;
 }
 
 table.snake-list {

@@ -16,7 +16,6 @@
     <link rel="stylesheet" type="text/css" href="{% static "core/styles.css" %}" />
     
     <link rel="stylesheet" type="text/css" href="{% static "highscore/highscore.css" %}" />
-    <link rel="stylesheet" href="{% static "core/highlight.js/styles/agate.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "core/button.min.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "core/table.min.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "core/icon.min.css" %}" />
@@ -25,16 +24,15 @@
 
   </head>
   <body>
-    <div class="head">
-      <h1>Schlangenprogrammiernacht</h1>
-    </div>
     <ul class="nav">
       <li><a href="{% url 'home' %}">Home</a></li>
       <li><a href="{% url 'watch' %}">Watch</a></li>
-      <li><a href="{% url 'highscore_table' %}">Highscores</a></li>
-      <li><a href="{% url 'docs' %}">Documentation</a></li>
       {% if user.is_authenticated %}
-        <li><a href="{% url 'snake' %}">My Snakes</a></li>
+        <li><a href="{% url 'snake' %}">Code</a></li>
+      {% endif %}
+      <li><a href="{% url 'docs' %}">API</a></li>
+      <li><a href="{% url 'highscore_table' %}">Highscores</a></li>
+      {% if user.is_authenticated %}
         <li><a href="{% url 'logout' %}">Logout</a></li>
       {% else %}
         <li><a href="{% url 'login' %}">Login</a></li>
@@ -47,11 +45,14 @@
 {% endblock %}
     </div>
 
+    <div class="footer">
+      <img id="snake" src="{% static "core/snake200.png" %}">
+      (c) 2018 <a href="https://www.bytewerk.org/">bytewerk.org</a>
+    </div>
+
     <script src="{% static "core/jquery-3.3.1.min.js" %}"></script>
-    <script src="{% static "core/highlight.js/highlight.pack.js" %}"></script>
     <script src="{% static "core/checkbox.min.js" %}"></script>
     <script src="{% static "core/jquery.growl.js" %}"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
     {% block js %}
     {% endblock %}
   </body>
