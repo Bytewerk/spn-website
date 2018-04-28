@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'core',
     'visualization',
+    'ide',
     'highscore',
     'docs'
 ]
