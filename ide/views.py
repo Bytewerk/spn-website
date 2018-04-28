@@ -47,17 +47,27 @@ def snake_edit(request, snake_id=-1):
     if form.is_valid():
 
         posted_code = form.cleaned_data.get('code')
-        if posted_code != snake.code:
-            posted_comment = form.cleaned_data.get('comment', '')
-            last_version = SnakeVersion.objects.filter(user=request.user).aggregate(Max('version'))['version__max']
+        posted_comment = form.cleaned_data.get('comment', '')
+        last_version = SnakeVersion.objects.filter(user=request.user).aggregate(Max('version'))['version__max']
 
-            new_version = SnakeVersion(user=request.user,
-                                       prev_version=snake.version,
-                                       version=(last_version or 0) + 1,
-                                       code=posted_code,
-                                       comment=posted_comment)
-            new_version.save()
-        return snake_list(request)
+        new_version = SnakeVersion(user=request.user,
+                                   prev_version=snake.version,
+                                   version=(last_version or 0) + 1,
+                                   code=posted_code,
+                                   comment=posted_comment)
+        new_version.save()
+
+        obj, _ = ActiveSnake.objects.filter(user=request.user).get_or_create(defaults={'user': request.user, 'version': new_version})
+        obj.version = new_version
+        obj.save()
+
+        cmd = ServerCommand(
+            user=request.user,
+            command='kill'
+        )
+        cmd.save()
+
+        return redirect('snake_edit', snake_id=new_version.id)
 
     return render(request, 'ide/edit2.html', {'form': form, 'snake': snake})
 
