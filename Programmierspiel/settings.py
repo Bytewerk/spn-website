@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'widget_tweaks',
     'core',
+    'visualization',
     'highscore',
     'docs'
 ]
