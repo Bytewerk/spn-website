@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+  <div id="stage" style="background-color:#00000080;position:absolute;left:50px;right:50px;top:50px;bottom:50px"></div>
+{% endblock %}
+
+{%  block js %}
+  <script src="{% static "visualization/lib/pixi.min.js" %}"></script>
+  <script src="{% static "visualization/lib/notepack.js" %}"></script>
+  <script src="{% static "visualization/keyboard.js" %}"></script>
+  <script src="{% static "visualization/MsgpackProtocol.js" %}"></script>
+  <script src="{% static "visualization/JsonProtocol.js" %}"></script>
+  <script src="{% static "visualization/ParticleGeoMap.js" %}"></script>
+  <script src="{% static "visualization/Snake.js" %}"></script>
+  <script src="{% static "visualization/FoodSprite.js" %}"></script>
+  <script src="{% static "visualization/SimpleDirectionSnakeMoveStrategy.js" %}"></script>
+  <script src="{% static "visualization/ImpulseSnakeMoveStrategy.js" %}"></script>
+  <script src="{% static "visualization/TwoPredecessorSnakeMoveStrategy.js" %}"></script>
+  <script src="{% static "visualization/GameVisualization.js" %}"></script>
+  <script src="{% static "visualization/Game.js" %}"></script>
+  <script src="{% static "visualization/DynamicSegmentCountSnakeMoveStrategy.js" %}"></script>
+
+  <script>
+
+  let assets = {
+      'body.png': '{% static "visualization/assets/body.png" %}',
+      'food.png': '{% static "visualization/assets/food.png" %}',
+      'head.png': '{% static "visualization/assets/head.png" %}',
+      'background.png': '{% static "visualization/assets/background.png" %}'
+  };
+  let strategy = new SimpleDirectionSnakeMoveStrategy();
+  //let strategy = new ImpulseSnakeMoveStrategy();
+  //let strategy = new TwoPredecessorSnakeMoveStrategy();
+  //let strategy = new DynamicSegmentCountSnakeMoveStrategy();
+  let game = new Game(assets, strategy);
+
+
+  function resize()
+  {
+      let renderer = game.vis.GetRenderer();
+      renderer.view.style.position = "absolute";
+      renderer.view.style.display = "block";
+      renderer.view.style.left = "25px";
+      renderer.view.style.top = "25px";
+      renderer.autoResize = true;
+      renderer.resize(100, 100);
+  }
+
+  window.onload = function()
+  {
+      //resize();
+      game.Run(document.getElementById('stage'));
+  };
+
+  //window.onresize = resize;
+  </script>
+{% endblock %}
