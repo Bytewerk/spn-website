@@ -2,7 +2,7 @@
 
 {% load static %}
 {% block content %}
-  <div id="stage" style="background-color:#00000080;position:absolute;left:50px;right:50px;top:50px;bottom:50px"></div>
+  <div id="stage" style="background-color:#00000080;position:absolute;left:15px;right:15px;top:50px;bottom:50px"></div>
 {% endblock %}
 
 {%  block js %}
@@ -27,32 +27,23 @@
       'body.png': '{% static "visualization/assets/body.png" %}',
       'food.png': '{% static "visualization/assets/food.png" %}',
       'head.png': '{% static "visualization/assets/head.png" %}',
-      'background.png': '{% static "visualization/assets/background.png" %}'
   };
   let strategy = new SimpleDirectionSnakeMoveStrategy();
   //let strategy = new ImpulseSnakeMoveStrategy();
   //let strategy = new TwoPredecessorSnakeMoveStrategy();
   //let strategy = new DynamicSegmentCountSnakeMoveStrategy();
-  let game = new Game(assets, strategy);
+  let game = new Game(assets, strategy, document.getElementById('stage'));
 
-
-  function resize()
-  {
-      let renderer = game.vis.GetRenderer();
-      renderer.view.style.position = "absolute";
-      renderer.view.style.display = "block";
-      renderer.view.style.left = "25px";
-      renderer.view.style.top = "25px";
-      renderer.autoResize = true;
-      renderer.resize(100, 100);
-  }
 
   window.onload = function()
   {
-      //resize();
-      game.Run(document.getElementById('stage'));
+      game.Run();
   };
 
-  //window.onresize = resize;
+  window.onresize = function()
+  {
+      game.vis.Resize();
+  };
+
   </script>
 {% endblock %}
