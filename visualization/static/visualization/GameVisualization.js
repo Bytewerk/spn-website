@@ -5,7 +5,7 @@ function GameVisualization(assets, snakeMoveStrategy, container)
     this.container = container;
     this.snakeMoveStrategy = snakeMoveStrategy;
     this.snakes = {};
-    this.ego = { id: 0, interactive:false };
+    this.ego_id = 0;
     this.nextFoodDecayRow = 0;
     this.world_size_x = 1024;
     this.world_size_y = 1024;
@@ -32,14 +32,6 @@ function GameVisualization(assets, snakeMoveStrategy, container)
     this.mainStage = new PIXI.Container();
     this.app.stage.addChild(this.mainStage);
 }
-
-GameVisualization.prototype.GetEgoSnake = function()
-{
-    if (this.ego.id in this.snakes)
-    {
-        return this.snakes[this.ego.id];
-    }
-};
 
 GameVisualization.prototype.Run = function()
 {
@@ -109,9 +101,6 @@ GameVisualization.prototype.HandleTickMessage = function(frame_id)
 
 GameVisualization.prototype.HandlePlayerInfoMessage = function(player_id)
 {
-    this.ego.id = player_id;
-    //this.ego.interactive = true;
-    console.log("EGO Id: ", this.ego.id);
 };
 
 GameVisualization.prototype.HandleWorldUpdateMessage = function(data)
@@ -197,22 +186,17 @@ GameVisualization.prototype.HandleBotMovedMessagesDone = function(data)
 
 GameVisualization.prototype.UpdateStagePosition = function()
 {
-    if (this.ego.interactive)
+    if (this.ego_id in this.snakes)
     {
-        let egoX = 0;
-        let egoY = 0;
-
-        if (this.ego.id in this.snakes)
-        {
-            let egoSnake = this.snakes[this.ego.id];
-            egoX = egoSnake.GetHeadX();
-            egoY = egoSnake.GetHeadY();
-        }
+        let egoSnake = this.snakes[this.ego_id];
+        let egoX = egoSnake.GetHeadX();
+        let egoY = egoSnake.GetHeadY();
 
         let transX = (this.app.renderer.width/2) - egoX;
         let transY = (this.app.renderer.height/2) - egoY;
         this.app.stage.setTransform(transX, transY);
-        if (this.foodMap) {
+        if (this.foodMap)
+        {
             this.foodMap.Update(egoX, egoY, this.app.renderer.width, this.app.renderer.height);
         }
     } else {
