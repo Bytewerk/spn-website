@@ -7,13 +7,15 @@
 {% endblock %}
 
 {% block content %}
+<form id="snake_edit_form" method="post">
+
 <div id="ide" class="fullwindow">
   <div id="editor"></div>
   <div id="preview"></div>
   <div id="log"></div>
   <div id="tools">
     <div id="toolbar">
-      <button>save & run</button>
+      <button type="submit">save & run</button>
       <button>restart</button>
       <button>save as</button>
       <button>load</button>
@@ -22,7 +24,6 @@
   </div>
 </div>
 
-<form id="snake_edit_form" method="post">
   {% csrf_token %}
   <textarea id="code" name="code">{{ snake.code }}</textarea>
 </form>
