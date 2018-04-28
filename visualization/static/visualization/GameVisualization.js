@@ -1,7 +1,8 @@
 "use strict";
 
-function GameVisualization(assets, snakeMoveStrategy)
+function GameVisualization(assets, snakeMoveStrategy, container)
 {
+    this.container = container;
     this.snakeMoveStrategy = snakeMoveStrategy;
     this.snakes = {};
     this.ego = { id: 0, interactive:false };
@@ -21,20 +22,12 @@ function GameVisualization(assets, snakeMoveStrategy)
         [ 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,  ],
     ];
 
-    this.app = new PIXI.Application();
+    this.app = new PIXI.Application({'transparent':true});
     this.app.stage.interactiveChildren = false;
 
     this.txHead = PIXI.Texture.fromImage(assets['head.png']);
     this.txBody = PIXI.Texture.fromImage(assets['body.png']);
     this.txFood = PIXI.Texture.fromImage(assets['food.png']);
-    let txBackground = PIXI.Texture.fromImage(assets['background.png']);
-
-    let backgroundStage = new PIXI.Container();
-    this.app.stage.addChild(backgroundStage);
-
-    let backgroundLogo = new PIXI.Sprite(txBackground);
-    backgroundLogo.anchor.set(0.5);
-    backgroundStage.addChild(backgroundLogo);
 
     this.mainStage = new PIXI.Container();
     this.app.stage.addChild(this.mainStage);
@@ -48,27 +41,27 @@ GameVisualization.prototype.GetEgoSnake = function()
     }
 };
 
-GameVisualization.prototype.Run = function(container)
+GameVisualization.prototype.Run = function()
 {
-    container.appendChild(this.app.view);
-    this.GetRenderer().resize(container.clientWidth, container.clientHeight);
+    this.container.appendChild(this.app.view);
+    this.Resize();
     this.app.ticker.add(this.GameTick, this);
 };
 
-GameVisualization.prototype.GameTick = function(delta)
+GameVisualization.prototype.Resize = function()
 {
-    this.UpdateStagePosition();
-};
-
-GameVisualization.prototype.Resize = function (width, height)
-{
-    this.app.renderer.resize(width, height);
+    this.GetRenderer().resize(this.container.clientWidth, this.container.clientHeight);
 };
 
 GameVisualization.prototype.GetRenderer = function()
 {
     return this.app.renderer;
 }
+
+GameVisualization.prototype.GameTick = function(delta)
+{
+    this.UpdateStagePosition();
+};
 
 GameVisualization.prototype.CreateSnake = function(id)
 {

@@ -1,6 +1,6 @@
 "use strict";
 
-function Game(assets, snakeMoveStrategy)
+function Game(assets, snakeMoveStrategy, container)
 {
     this.ws = null;
     this.heading = 0;
@@ -8,7 +8,7 @@ function Game(assets, snakeMoveStrategy)
     this.last_heading = null;
     this.mouse_x = null;
     this.mouse_y = null;
-    this.vis = new GameVisualization(assets, snakeMoveStrategy);
+    this.vis = new GameVisualization(assets, snakeMoveStrategy, container);
 
     this.keys = {
         cursorLeft: keyboard(37),
@@ -30,12 +30,12 @@ function Game(assets, snakeMoveStrategy)
     this.protocol.AddEventHandler('BotsMovedDone', this.vis.HandleBotMovedMessagesDone, this.vis);
 }
 
-Game.prototype.Run = function(container)
+Game.prototype.Run = function()
 {
     let self = this;
     this.ConnectWebsocket();
     window.setInterval(function() { self.OnInterval(); }, 10);
-    this.vis.Run(container);
+    this.vis.Run();
 };
 
 Game.prototype.ConnectWebsocket = function()
