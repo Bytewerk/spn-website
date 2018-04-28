@@ -51,8 +51,9 @@
 <script>
   let game = new Game(assets, strategy, document.getElementById('preview'));
   window.onload = function()
-  {
+  { 
       game.Run();
+      game.vis.FollowDbId({{ snake.id }});
   };
 
   window.onresize = function()

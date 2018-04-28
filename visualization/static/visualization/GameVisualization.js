@@ -6,6 +6,7 @@ function GameVisualization(assets, snakeMoveStrategy, container)
     this.snakeMoveStrategy = snakeMoveStrategy;
     this.snakes = {};
     this.ego_id = 0;
+    this.follow_db_id = null;
     this.nextFoodDecayRow = 0;
     this.world_size_x = 1024;
     this.world_size_y = 1024;
@@ -55,11 +56,16 @@ GameVisualization.prototype.GameTick = function(delta)
     this.UpdateStagePosition();
 };
 
-GameVisualization.prototype.CreateSnake = function(id)
+GameVisualization.prototype.CreateSnake = function(id, db_id)
 {
+    if (db_id == this.follow_db_id)
+    {
+        this.ego_id = id;
+    }
     let tint = this.colorSchemes[id % this.colorSchemes.length];
     let snake = new Snake(this.txHead, this.txBody, tint, this.world_size_x, this.world_size_y);
     snake.snake_id = id;
+    snake.db_id = db_id;
     this.snakes[id] = snake;
     this.mainStage.addChild(snake.Container);
     return snake;
@@ -110,7 +116,7 @@ GameVisualization.prototype.HandleWorldUpdateMessage = function(data)
         let bot = data.bots[id];
         if (!(bot.id in this.snakes))
         {
-            this.CreateSnake(bot.id);
+            this.CreateSnake(bot.id, bot.db_id);
         }
         this.snakes[bot.id].SetData(bot);
     }
@@ -132,7 +138,7 @@ GameVisualization.prototype.HandleWorldUpdateMessage = function(data)
 
 GameVisualization.prototype.HandleBotSpawnMessage = function(bot)
 {
-    let snake = this.CreateSnake(bot.id);
+    let snake = this.CreateSnake(bot.id, bot.db_id);
     snake.SetData(bot);
 };
 
@@ -183,6 +189,18 @@ GameVisualization.prototype.HandleBotMovedMessagesDone = function(data)
     this.HandleTickMessage();
     this.UpdateStagePosition();
 };
+
+GameVisualization.prototype.FollowDbId = function(db_id)
+{
+    this.follow_db_id = db_id;
+    for (let id in this.snakes)
+    {
+        if (this.snakes[id].db_id == db_id)
+        {
+            this.ego_id = id;
+        }
+    }
+}
 
 GameVisualization.prototype.UpdateStagePosition = function()
 {
