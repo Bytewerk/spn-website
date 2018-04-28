@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{% static "ide/ide.css" %}" />
+{% endblock %}
+
+{% block content %}
+<div id="ide" class="fullwindow">
+  <div id="editor"></div>
+  <div id="preview"></div>
+  <div id="log"></div>
+  <div id="tools">
+    <div id="toolbar">
+      <button>save & run</button>
+      <button>restart</button>
+      <button>save as</button>
+      <button>load</button>
+      <button>preferences</button>
+    </div>
+  </div>
+</div>
+
+<form id="snake_edit_form" method="post">
+  {% csrf_token %}
+  <textarea id="code" name="code">{{ snake.code }}</textarea>
+</form>
+{% endblock %}
+
+{% block js %}
+<script src="{% static "ide/ace/src-noconflict/ace.js" %}" type="text/javascript" charset="utf-8"></script>
+{% include "visualization/js.html" %}
+
+<script>
+  let editor = ace.edit("editor");
+  editor.setTheme("ace/theme/idle_fingers");
+  editor.session.setMode("ace/mode/lua");
+  editor.setShowPrintMargin(false);
+
+  let textarea = $('#code').hide();
+  editor.getSession().setValue(textarea.val());
+
+  $("#snake_edit_form").submit( function(event) {
+    textarea.val(editor.getSession().getValue());
+  })
+</script>
+
+
+<script>
+  let game = new Game(assets, strategy, document.getElementById('preview'));
+  window.onload = function()
+  {
+      game.Run();
+  };
+
+  window.onresize = function()
+  {
+      game.vis.Resize();
+  };
+</script>
+
+{% endblock %}

@@ -59,7 +59,7 @@ def snake_edit(request, snake_id=-1):
             new_version.save()
         return snake_list(request)
 
-    return render(request, 'ide/edit.html', {'form': form, 'snake': snake})
+    return render(request, 'ide/edit2.html', {'form': form, 'snake': snake})
 
 
 @login_required

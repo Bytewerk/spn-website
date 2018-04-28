@@ -1,0 +1,60 @@
+#ide {
+    display:grid;
+
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 4fr 1fr;
+    grid-template-areas:
+        "editor preview"
+        "log preview"
+        "log tools";
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+}
+
+#editor {
+    grid-area: editor;
+    font-size:18px;
+    background-color: #00000080;
+}
+
+#preview {
+    grid-area: preview;
+    background-color: #00000080;
+    overflow:hidden;
+}
+
+#log {
+    grid-area: log;
+    background-color: #00000080;
+}
+
+#tools
+{
+    grid-area: tools;
+    background-color: #00000080;
+}
+
+#toolbar
+{
+}
+
+button {
+    background-color:#321700;
+    border:2px solid #613600;
+    margin:5px 5px;
+    padding:3px 10px;
+    font-size:18pt;
+    color:white;
+}
+
+#editor .ace_gutter {
+    background-color: #FFFFFF20;
+}
+
+#editor .ace_scroller {
+    background-color: transparent;
+}
+
+#editor .ace_active-line {
+    background: #FFFFFF10;
+}

@@ -2,48 +2,22 @@
 
 {% load static %}
 {% block content %}
-  <div id="stage" style="background-color:#00000080;position:absolute;left:15px;right:15px;top:50px;bottom:50px"></div>
+  <div id="stage" class="fullwindow" style="background-color:#00000080"></div>
 {% endblock %}
 
 {%  block js %}
-  <script src="{% static "visualization/lib/pixi.min.js" %}"></script>
-  <script src="{% static "visualization/lib/notepack.js" %}"></script>
-  <script src="{% static "visualization/keyboard.js" %}"></script>
-  <script src="{% static "visualization/MsgpackProtocol.js" %}"></script>
-  <script src="{% static "visualization/JsonProtocol.js" %}"></script>
-  <script src="{% static "visualization/ParticleGeoMap.js" %}"></script>
-  <script src="{% static "visualization/Snake.js" %}"></script>
-  <script src="{% static "visualization/FoodSprite.js" %}"></script>
-  <script src="{% static "visualization/SimpleDirectionSnakeMoveStrategy.js" %}"></script>
-  <script src="{% static "visualization/ImpulseSnakeMoveStrategy.js" %}"></script>
-  <script src="{% static "visualization/TwoPredecessorSnakeMoveStrategy.js" %}"></script>
-  <script src="{% static "visualization/GameVisualization.js" %}"></script>
-  <script src="{% static "visualization/Game.js" %}"></script>
-  <script src="{% static "visualization/DynamicSegmentCountSnakeMoveStrategy.js" %}"></script>
+  {% include "visualization/js.html" %}
 
   <script>
+    let game = new Game(assets, strategy, document.getElementById('stage'));
+    window.onload = function()
+    {
+        game.Run();
+    };
 
-  let assets = {
-      'body.png': '{% static "visualization/assets/body.png" %}',
-      'food.png': '{% static "visualization/assets/food.png" %}',
-      'head.png': '{% static "visualization/assets/head.png" %}',
-  };
-  let strategy = new SimpleDirectionSnakeMoveStrategy();
-  //let strategy = new ImpulseSnakeMoveStrategy();
-  //let strategy = new TwoPredecessorSnakeMoveStrategy();
-  //let strategy = new DynamicSegmentCountSnakeMoveStrategy();
-  let game = new Game(assets, strategy, document.getElementById('stage'));
-
-
-  window.onload = function()
-  {
-      game.Run();
-  };
-
-  window.onresize = function()
-  {
-      game.vis.Resize();
-  };
-
+    window.onresize = function()
+    {
+        game.vis.Resize();
+    };
   </script>
 {% endblock %}
