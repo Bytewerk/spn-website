@@ -64,6 +64,14 @@ div.footer {
     bottom:0px;
 }
 
+.fullwindow {
+    position:absolute;
+    left:15px;
+    right:15px;
+    top:50px;
+    bottom:50px;
+}
+
 pre.home {
     width:750px;
 }
