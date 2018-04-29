@@ -24,6 +24,7 @@ class SnakeVersion(models.Model):
     comment = models.CharField(max_length=1000, blank=True, null=True)
     version = models.IntegerField()
     prev_version = models.IntegerField(blank=True, null=True)
+    server_error_message = models.TextField(blank=True, null=True)
 
     objects = models.Manager()
 
