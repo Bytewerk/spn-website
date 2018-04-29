@@ -6,7 +6,7 @@ function SnakeSegment(snake)
     this.world_size_y = snake.world_size_y;
     this._sprite = new PIXI.Sprite(snake.GetBodyTexture());
     this._sprite.anchor.set(0.5);
-    this._sprite.alpha = 0.5;
+    this._sprite.alpha = 0.8;
     this.SetScale(snake.GetCurrentSnakeScale());
 }
 
