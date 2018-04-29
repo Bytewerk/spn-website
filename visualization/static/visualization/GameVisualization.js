@@ -56,17 +56,16 @@ GameVisualization.prototype.GameTick = function(delta)
     this.UpdateStagePosition();
 };
 
-GameVisualization.prototype.CreateSnake = function(id, db_id)
+GameVisualization.prototype.CreateSnake = function(bot)
 {
-    if (db_id == this.follow_db_id)
+    if (bot.db_id == this.follow_db_id)
     {
-        this.ego_id = id;
+        this.ego_id = bot.id;
     }
-    let tint = this.colorSchemes[id % this.colorSchemes.length];
-    let snake = new Snake(this.txHead, this.txBody, tint, this.world_size_x, this.world_size_y);
-    snake.snake_id = id;
-    snake.db_id = db_id;
-    this.snakes[id] = snake;
+    let snake = new Snake(this.txHead, this.txBody, bot.color, this.world_size_x, this.world_size_y);
+    snake.snake_id = bot.id;
+    snake.db_id = bot.db_id;
+    this.snakes[bot.id] = snake;
     this.mainStage.addChild(snake.Container);
     return snake;
 };
@@ -116,7 +115,7 @@ GameVisualization.prototype.HandleWorldUpdateMessage = function(data)
         let bot = data.bots[id];
         if (!(bot.id in this.snakes))
         {
-            this.CreateSnake(bot.id, bot.db_id);
+            this.CreateSnake(bot);
         }
         this.snakes[bot.id].SetData(bot);
     }
@@ -138,8 +137,7 @@ GameVisualization.prototype.HandleWorldUpdateMessage = function(data)
 
 GameVisualization.prototype.HandleBotSpawnMessage = function(bot)
 {
-    let snake = this.CreateSnake(bot.id, bot.db_id);
-    snake.SetData(bot);
+    this.CreateSnake(bot);
 };
 
 GameVisualization.prototype.HandleBotKilledMessage = function(killer_id, victim_id)
