@@ -5,7 +5,12 @@ from django.forms import ModelForm
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
-from core.models import SnakeVersion, ActiveSnake, ServerCommand
+from core.models import SnakeVersion, ActiveSnake, ServerCommand, UserProfile
+
+
+def get_user_profile(user):
+    profile, _ = UserProfile.objects.get_or_create(user=user)
+    return profile
 
 
 @login_required
@@ -69,7 +74,7 @@ def snake_edit(request, snake_id=-1):
 
         return redirect('snake_edit', snake_id=new_version.id)
 
-    return render(request, 'ide/edit2.html', {'form': form, 'snake': snake})
+    return render(request, 'ide/edit2.html', {'form': form, 'snake': snake, 'profile': get_user_profile(request.user)})
 
 
 @login_required

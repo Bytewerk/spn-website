@@ -1,10 +1,17 @@
+import random
 from django.db import models
 from django.utils.timezone import now
 from django.contrib.auth.models import User
 
 
+def create_viewer_key():
+    return random.getrandbits(63)
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    viewer_key = models.BigIntegerField(default=create_viewer_key, unique=True)
+
 
 class SnakeVersion(models.Model):
     class Meta:

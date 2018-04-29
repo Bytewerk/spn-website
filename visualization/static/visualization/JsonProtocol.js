@@ -13,6 +13,7 @@ function JsonProtocol()
     this.FoodSpawnMessageHandlers = [];
     this.FoodConsumedMessageHandlers = [];
     this.FoodDecayedMessageHandlers = [];
+    this.LogMessageHandlers = [];
 
     this.AddEventHandler = function(messageName, func, thisArg)
     {
@@ -82,6 +83,12 @@ function JsonProtocol()
                     this.CallHandlers(this.BotMovedMessageHandlers, b.bot_id, b.segment_data, b.length, b.segment_radius);
                 }
                 this.CallHandlers(this.BotsMovedDoneMessageHandlers);
+                return;
+            }
+
+            case "Log":
+            {
+                this.CallHandlers(this.LogMessageHandlers, data.frame, data.msg);
                 return;
             }
 

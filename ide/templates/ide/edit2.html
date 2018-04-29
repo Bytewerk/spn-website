@@ -52,6 +52,9 @@
   let game = new Game(assets, strategy, document.getElementById('preview'));
   window.onload = function()
   {
+      game.protocol.AddEventHandler("Log", function(frame, msg) {
+          console.log(msg);
+      });
       game.Run();
       game.vis.FollowDbId({{ snake.id }});
   };
