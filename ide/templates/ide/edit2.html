@@ -49,12 +49,36 @@
 
 
 <script>
+  let logWindow = null;
+
+  function addLogLine(frame, msg)
+  {
+      if (logWindow==null) { return; }
+
+      let auto_scroll = (logWindow.scrollTop > (logWindow.scrollHeight - logWindow.clientHeight - 10));
+
+
+      while (logWindow.childElementCount > 100)
+      {
+          logWindow.removeChild(logWindow.getElementsByTagName('div')[0]);
+      }
+
+      let div = document.createElement('div');
+      div.appendChild(document.createTextNode(frame + ": " + msg));
+      logWindow.appendChild(div);
+
+      if (auto_scroll)
+      {
+        logWindow.scrollTop = logWindow.scrollHeight - logWindow.clientHeight;
+      }
+  }
+
   let game = new Game(assets, strategy, document.getElementById('preview'));
+  game.SetViewerKey("{{ profile.viewer_key }}");
   window.onload = function()
   {
-      game.protocol.AddEventHandler("Log", function(frame, msg) {
-          console.log(msg);
-      });
+      logWindow = document.getElementById('log');
+      game.protocol.AddEventHandler('Log', addLogLine);
       game.Run();
       game.vis.FollowDbId({{ snake.id }});
   };

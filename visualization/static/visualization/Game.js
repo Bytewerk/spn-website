@@ -5,6 +5,7 @@ function Game(assets, snakeMoveStrategy, container)
     this.ws = null;
     this.heading = 0;
     this.speed = 2;
+    this.viewer_key = 0;
     this.vis = new GameVisualization(assets, snakeMoveStrategy, container);
 
     this.protocol = new JsonProtocol();
@@ -34,6 +35,10 @@ Game.prototype.ConnectWebsocket = function()
     let self = this;
     this.ws.addEventListener('open', function(event) {
        console.log("websocket connected");
+       if (self.viewer_key != 0)
+       {
+           self.SetViewerKey(self.viewer_key);
+       }
     });
     this.ws.addEventListener('message', function(event) {
         self.protocol.HandleMessage(event);
@@ -44,4 +49,15 @@ Game.prototype.GetWebsocketURL = function()
 {
     let port = 80;
     return (window.location.protocol == "https:" ? "wss://" : "ws://") + window.location.hostname + ":" + port + "/websocket";
+};
+
+Game.prototype.SetViewerKey = function(key)
+{
+    this.viewer_key = key;
+    if (this.ws)
+    {
+        let msg = {viewer_key: this.viewer_key };
+        let s = JSON.stringify(msg);
+        this.ws.send(s);
+    }
 };
