@@ -31,8 +31,22 @@
     grid-area: log;
     background-color: #00000080;
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-    font-size:11pt;
-    overflow:scroll;
+    font-size: 11pt;
+    overflow: scroll;
+}
+
+#log div {
+}
+
+#log div div {
+    display:inline-block;
+    width:120px;
+    text-align:right;
+}
+
+#log div pre {
+    display:inline;
+    padding-left:10px;
 }
 
 #tools
