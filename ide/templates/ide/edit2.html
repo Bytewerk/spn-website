@@ -58,13 +58,19 @@
       let auto_scroll = (logWindow.scrollTop > (logWindow.scrollHeight - logWindow.clientHeight - 10));
 
 
-      while (logWindow.childElementCount > 100)
+      while (logWindow.childNodes.length > 100)
       {
-          logWindow.removeChild(logWindow.getElementsByTagName('div')[0]);
+          logWindow.removeChild(logWindow.childNodes[0]);
       }
 
       let div = document.createElement('div');
-      div.appendChild(document.createTextNode(frame + ": " + msg));
+      let frameDiv = document.createElement('div');
+      frameDiv.appendChild(document.createTextNode("Frame " + frame + ":"));
+      div.appendChild(frameDiv);
+      let msgDiv = document.createElement('pre');
+      msgDiv.appendChild(document.createTextNode(msg));
+      div.appendChild(msgDiv);
+
       logWindow.appendChild(div);
 
       if (auto_scroll)
