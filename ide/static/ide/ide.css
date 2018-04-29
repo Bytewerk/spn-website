@@ -1,3 +1,7 @@
+#snake {
+    width:120px;
+}
+
 #ide {
     display:grid;
 
@@ -26,6 +30,9 @@
 #log {
     grid-area: log;
     background-color: #00000080;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size:11pt;
+    overflow:scroll;
 }
 
 #tools
