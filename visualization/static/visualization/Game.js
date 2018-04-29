@@ -47,8 +47,7 @@ Game.prototype.ConnectWebsocket = function()
 
 Game.prototype.GetWebsocketURL = function()
 {
-    let port = 80;
-    return (window.location.protocol == "https:" ? "wss://" : "ws://") + window.location.hostname + ":" + port + "/websocket";
+    return (window.location.protocol == "https:" ? "wss://" : "ws://") + window.location.hostname + "/websocket";
 };
 
 Game.prototype.SetViewerKey = function(key)
