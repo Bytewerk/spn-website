@@ -6,10 +6,17 @@
 -- means turn right. With 0, the snake keeps its direction.
 -- @return new angle relative to the head direction
 -- @usage function step()
---   return 45 
+--   return 0.005
 -- end
 function step()
-    return 45
+    return 0.005
+end
+
+--- This method is called upon creation of a bot
+-- Initialialize your environment here.
+-- you can also access the "self" object here and, e.g. set your snake's colors
+function init()
+    self.colors = { 0xFF0000, 0xFFBF00, 0x80FF00, 0x00FF40, 0x00FFFF, 0x0015FF, 0x8000FF }
 end
 
 --- That method returns all food as list.
