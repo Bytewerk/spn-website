@@ -4,6 +4,7 @@ from django.db.models import BooleanField, Case, Max, Value, When
 from django.forms import ModelForm
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 
 from core.models import SnakeVersion, ActiveSnake, ServerCommand, UserProfile
 
@@ -44,6 +45,7 @@ def snake_edit(request, snake_id=-1):
         snake = SnakeVersion.objects.get(pk=snake_id)
     except SnakeVersion.DoesNotExist:
         snake = SnakeVersion(version=0, user=request.user)
+        snake.code = render_to_string('ide/initial-bot.lua')
 
     if snake.user != request.user:
         raise PermissionDenied
