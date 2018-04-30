@@ -2,10 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import BooleanField, Case, Max, Value, When
 from django.forms import ModelForm
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseNotAllowed, HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
-
+import json
 from core.models import SnakeVersion, ActiveSnake, ServerCommand, UserProfile
 
 
@@ -36,23 +36,71 @@ class CreateSnakeForm(ModelForm):
 
 @login_required
 def snake_create(request):
-    return snake_edit(request)
+    snake = SnakeVersion(version=0, user=request.user)
+    snake.code = render_to_string('ide/initial-bot.lua')
+    return snake_edit(request, snake)
 
 
 @login_required
-def snake_edit(request, snake_id=-1):
+def snake_edit_latest(request):
     try:
-        snake = SnakeVersion.objects.get(pk=snake_id)
+        snake = SnakeVersion.objects.filter(user=request.user).latest('created')
+        return snake_edit(request, snake)
     except SnakeVersion.DoesNotExist:
-        snake = SnakeVersion(version=0, user=request.user)
-        snake.code = render_to_string('ide/initial-bot.lua')
+        return snake_create(request)
 
+
+@login_required
+def snake_edit_version(request, snake_version_id):
+    snake = SnakeVersion.objects.get(pk=snake_version_id)
     if snake.user != request.user:
         raise PermissionDenied
+    return snake_edit(request, snake)
 
+
+@login_required
+def snake_save(request):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    json_req = json.loads(request.body)
+    allowed_actions = ['run', 'save']
+    action = json_req['action']
+    if action not in allowed_actions:
+        return HttpResponseBadRequest('unknown or undefined action')
+
+    if 'code' not in json_req:
+        return HttpResponseBadRequest('code not defined')
+
+    code = json_req['code']
+    # TODO syntax check lua code?
+
+    if 'comment' in json_req:
+        comment = json_req['comment']
+    else:
+        comment = None
+
+    new_version_numer = (SnakeVersion.objects.filter(user=request.user).aggregate(Max('version'))['version__max'] or 0) + 1
+    snake = SnakeVersion(user=request.user, code=code, comment=comment, version=new_version_numer)
+    snake.save()
+
+    obj, _ = ActiveSnake.objects.filter(user=request.user).get_or_create(defaults={'user': request.user, 'version': snake})
+    obj.version = snake
+
+    obj.save()
+    send_kill_command(request.user)
+
+    return JsonResponse({'success': True, 'snake_id': snake.id})
+
+
+def send_kill_command(user):
+    cmd = ServerCommand(user=user, command='kill')
+    cmd.save()
+
+
+def snake_edit(request, snake):
     form = CreateSnakeForm(request.POST or None)
     if form.is_valid():
-
         posted_code = form.cleaned_data.get('code')
         posted_comment = form.cleaned_data.get('comment', '')
         last_version = SnakeVersion.objects.filter(user=request.user).aggregate(Max('version'))['version__max']
@@ -68,12 +116,7 @@ def snake_edit(request, snake_id=-1):
         obj.version = new_version
         obj.save()
 
-        cmd = ServerCommand(
-            user=request.user,
-            command='kill'
-        )
-        cmd.save()
-
+        send_kill_command(request.user)
         return redirect('snake_edit', snake_id=new_version.id)
 
     return render(request, 'ide/edit2.html', {'form': form, 'snake': snake, 'profile': get_user_profile(request.user)})

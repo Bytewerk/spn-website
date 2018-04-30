@@ -28,7 +28,7 @@
       <li><a href="{% url 'home' %}">Home</a></li>
       <li><a href="{% url 'watch' %}">Watch</a></li>
       {% if user.is_authenticated %}
-        <li><a href="{% url 'snake' %}">Code</a></li>
+        <li><a href="{% url 'snake_edit_latest' %}">Code</a></li>
       {% endif %}
       <li><a href="{% url 'docs' %}">API</a></li>
       <li><a href="{% url 'highscore_table' %}">Highscores</a></li>
