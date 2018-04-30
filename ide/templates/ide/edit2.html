@@ -8,6 +8,9 @@
 
 {% block content %}
 <form id="snake_edit_form" method="post">
+  {% csrf_token %}
+  <textarea id="code" name="code">{{ snake.code }}</textarea>
+</form>
 
 <div id="ide" class="fullwindow">
   <div id="editor"></div>
@@ -15,7 +18,7 @@
   <div id="log"></div>
   <div id="tools">
     <div id="toolbar">
-      <button type="submit">save & run</button>
+      <button id="bt_run">save & run</button>
       <button>restart</button>
       <button>save as</button>
       <button>load</button>
@@ -24,75 +27,15 @@
   </div>
 </div>
 
-  {% csrf_token %}
-  <textarea id="code" name="code">{{ snake.code }}</textarea>
-</form>
 {% endblock %}
 
 {% block js %}
+  <script type="text/javascript">
+    let snake_id = {{ snake.id }};
+    let viewer_key = "{{ profile.viewer_key }}";
+    let csrftoken = $("[name=csrfmiddlewaretoken]").val();
+  </script>
 <script src="{% static "ide/ace/src-noconflict/ace.js" %}" type="text/javascript" charset="utf-8"></script>
+<script src="{% static "ide/ide.js" %}" type="text/javascript" charset="utf-8"></script>
 {% include "visualization/js.html" %}
-
-<script>
-  let editor = ace.edit("editor");
-  editor.setTheme("ace/theme/idle_fingers");
-  editor.session.setMode("ace/mode/lua");
-  editor.setShowPrintMargin(false);
-
-  let textarea = $('#code').hide();
-  editor.getSession().setValue(textarea.val());
-
-  $("#snake_edit_form").submit( function(event) {
-    textarea.val(editor.getSession().getValue());
-  })
-</script>
-
-
-<script>
-  let logWindow = null;
-
-  function addLogLine(frame, msg)
-  {
-      if (logWindow==null) { return; }
-
-      let auto_scroll = (logWindow.scrollTop > (logWindow.scrollHeight - logWindow.clientHeight - 10));
-
-
-      while (logWindow.childNodes.length > 100)
-      {
-          logWindow.removeChild(logWindow.childNodes[0]);
-      }
-
-      let div = document.createElement('div');
-      let frameDiv = document.createElement('div');
-      frameDiv.appendChild(document.createTextNode("Frame " + frame + ":"));
-      div.appendChild(frameDiv);
-      let msgDiv = document.createElement('pre');
-      msgDiv.appendChild(document.createTextNode(msg));
-      div.appendChild(msgDiv);
-
-      logWindow.appendChild(div);
-
-      if (auto_scroll)
-      {
-        logWindow.scrollTop = logWindow.scrollHeight - logWindow.clientHeight;
-      }
-  }
-
-  let game = new Game(assets, strategy, document.getElementById('preview'));
-  game.SetViewerKey("{{ profile.viewer_key }}");
-  window.onload = function()
-  {
-      logWindow = document.getElementById('log');
-      game.protocol.AddEventHandler('Log', addLogLine);
-      game.Run();
-      game.vis.FollowDbId({{ snake.id }});
-  };
-
-  window.onresize = function()
-  {
-      game.vis.Resize();
-  };
-</script>
-
 {% endblock %}
