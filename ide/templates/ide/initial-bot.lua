@@ -17,12 +17,14 @@ end
 -- a negative angle means turn left and a positive angle means turn right.
 -- with 0, the snake keeps its current direction.
 function step()
+    -- there is some info in the "self" object, e.g. your current head/segment radius
+    local own_radius = self.r
 
     -- your snake needs food to grow
     -- to find food in your head's surroundings, call something like that:
     local food = findFood(100, 0.8)
     -- this will give you all food in maximum distance of 100 around your head,
-    -- with a value of at least 0.8
+    -- with a mass of at least 0.8
 
     -- you can iterate over the result:
     for i, item in food:pairs() do
@@ -30,9 +32,13 @@ function step()
         -- distance of the food item, relative to the center of your head
         local distance = item.dist
 
-        -- direction to the food item, in radiens.
+        -- direction to the food item, in radiens (0..2*math.pi)
         -- 0 means "straight ahead", math.pi means "right behind you"
         local direction = item.d
+
+        -- mass of the food item. you will grow this amount if you eat it.
+        -- realistic values are 0 - 4
+        local value = item.v
 
 	end
 
@@ -52,7 +58,7 @@ function step()
         -- distance to the center of the segment
         local distance = item.dist
 
-        -- direction to the segment
+        -- direction to the segment, in radiens (0..2*math.pi)
         local direction = item.d
 
         -- radius of the segment
@@ -60,7 +66,7 @@ function step()
 
         if distance<10 then
             -- you can send some log output to the web IDE, but it's rate limited.
-            log("oh no, i'm going to die!")
+            log(string.format("oh no, i'm going to die. distance: %.4f!", distance))
         end
 	end
 
