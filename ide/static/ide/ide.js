@@ -63,6 +63,10 @@ function setupToolbar()
         });
     });
 
+    $('#bt_save').click(function() {
+       save('save', snake_title);
+    });
+
     $('#bt_save_as').click(function() {
         showModal($('#safe_as_dialog'), function() {
             save('save', $('#save_as_title').val());
