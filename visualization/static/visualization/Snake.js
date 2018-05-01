@@ -75,7 +75,7 @@ function Snake(headTexture, bodyTexture, name, colorScheme, world_size_x, world_
     this._nameText = new PIXI.Text(name, {fill:'white'});
     this._nameText.updateText();
     this._nameSprite = new PIXI.Sprite(this._nameText.texture);
-    this._nameSprite.anchor.set(1.5);
+    this._nameSprite.anchor.set(1.0, 0.5);
 
     this._headSprite = new PIXI.Sprite(headTexture);
     this._headSprite.anchor.set(0.5);
