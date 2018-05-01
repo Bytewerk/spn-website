@@ -68,14 +68,19 @@ def snake_save(request):
 
     comment = json_req.get('comment')
 
-    snake = SnakeVersion(user=request.user, code=code, comment=comment)
+    try:
+        parent = SnakeVersion.objects.get(pk=json_req.get('parent'), user=request.user)
+    except SnakeVersion.DoesNotExist:
+        parent = None
+
+    snake = SnakeVersion(user=request.user, code=code, comment=comment, parent=parent)
     snake.save()
 
     if action == "run":
         snake.activate()
         send_kill_command(snake.user)
 
-    return JsonResponse({'success': True, 'snake_id': snake.id})
+    return JsonResponse({'success': True, 'snake_id': snake.id, 'comment': snake.comment})
 
 
 def send_kill_command(user):

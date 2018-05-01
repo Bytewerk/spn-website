@@ -15,12 +15,14 @@ $(function() {
             }
         }
     });
+
+    $('div.modal .bt_cancel').click(hideModal);
+    $('div.modal .bt_ok').click(hideModal);
 });
 
-window.onresize = function()
-{
+$(window).resize(function() {
     game.vis.Resize();
-};
+});
 
 function setupEditor()
 {
@@ -46,7 +48,9 @@ function setupPreview()
 
 function setupToolbar()
 {
-    $('#bt_run').click(ajaxRun);
+    $('#bt_run').click(function() {
+        save('run', null);
+    });
 
     $('#bt_restart').click(function() {
         $.post('/snake/restart', '', function(data) {
@@ -54,20 +58,58 @@ function setupToolbar()
             console.log(data.message)
         });
     });
+
+    $('#bt_save_as').click(function() {
+        showModal($('#safe_as_dialog'), function() {
+            save('save', $('#save_as_title').val());
+        });
+        $('#save_as_title').val(snake_title).focus().select();
+    });
+}
+
+function showModal(el, ok_func)
+{
+    let dialog = $(el);
+    let blocker = dialog.parents('.modal');
+    blocker.show();
+
+    function close_ok()
+    {
+        ok_func();
+        hideModal(dialog);
+    }
+
+    dialog.find('.bt_ok').off("modal.ok").on("click", "modal.ok", close_ok);
+    $(document).off('keydown.modal').on('keydown.modal', function(event) {
+        if (event.which === 27) { hideModal(el); }
+        if (event.which === 13) { close_ok(); }
+    });
+}
+
+function hideModal(el)
+{
+    $(document).off('keydown.modal');
+    let blocker = $(el).parents('.modal');
+    blocker.find('.bt_ok').off("modal.ok");
+    blocker.hide();
 }
 
 function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
-function ajaxRun()
+function save(action, title)
 {
     let json_req = {
-        'action': 'run',
-        'code': editor.getSession().getValue()
+        'action': action,
+        'code': editor.getSession().getValue(),
+        'comment': title,
+        'parent': snake_id
     };
     $.post('/snake/edit/save', JSON.stringify(json_req), function(data) {
-        game.vis.FollowDbId(data.snake_id);
+        snake_id = data.snake_id;
+        snake_title = data.comment;
+        game.vis.FollowDbId(snake_id);
     });
 }
 

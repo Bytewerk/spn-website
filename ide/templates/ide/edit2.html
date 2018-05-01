@@ -20,21 +20,36 @@
     <div id="toolbar">
       <button id="bt_run">save & run</button>
       <button id="bt_restart">restart</button>
-      <button>save as</button>
+      <button id="bt_save_as">save as</button>
       <button>load</button>
       <button>preferences</button>
     </div>
   </div>
 </div>
 
+<div class="modal">
+  <div id="safe_as_dialog">
+    <header>save current version as</header>
+    <div class="main">
+      <label for="save_as_title">Title:</label>
+      <input id="save_as_title">
+    </div>
+    <footer>
+      <button class="bt_ok">Save</button>
+      <button class="bt_cancel">Cancel</button>
+    </footer>
+  </div>
+</div>
+
 {% endblock %}
 
 {% block js %}
-  <script type="text/javascript">
-    let snake_id = {{ snake.id | default:"null" }};
-    let viewer_key = "{{ profile.viewer_key }}";
-    let csrftoken = $("[name=csrfmiddlewaretoken]").val();
-  </script>
+<script type="text/javascript">
+  let snake_title = "{{ snake.comment | default:"" }}";
+  let snake_id = {{ snake.id | default:"null" }};
+  let viewer_key = "{{ profile.viewer_key }}";
+  let csrftoken = $("[name=csrfmiddlewaretoken]").val();
+</script>
 <script src="{% static "ide/ace/src-noconflict/ace.js" %}" type="text/javascript" charset="utf-8"></script>
 <script src="{% static "ide/ide.js" %}" type="text/javascript" charset="utf-8"></script>
 {% include "visualization/js.html" %}
