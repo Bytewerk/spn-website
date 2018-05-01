@@ -60,8 +60,9 @@ SnakeSegment.prototype.MoveRelative = function(dx, dy)
     );
 };
 
-function Snake(headTexture, bodyTexture, colorScheme, world_size_x, world_size_y)
+function Snake(headTexture, bodyTexture, name, colorScheme, world_size_x, world_size_y)
 {
+    this._name = name;
     this._colorScheme = colorScheme;
     this._bodyTexture = bodyTexture;
 
@@ -71,6 +72,11 @@ function Snake(headTexture, bodyTexture, colorScheme, world_size_x, world_size_y
     this.world_size_y = world_size_y;
 
     this._segments = [];
+    this._nameText = new PIXI.Text(name, {fill:'white'});
+    this._nameText.updateText();
+    this._nameSprite = new PIXI.Sprite(this._nameText.texture);
+    this._nameSprite.anchor.set(1.5);
+
     this._headSprite = new PIXI.Sprite(headTexture);
     this._headSprite.anchor.set(0.5);
     this._segmentContainer = new PIXI.Container();
@@ -79,6 +85,7 @@ function Snake(headTexture, bodyTexture, colorScheme, world_size_x, world_size_y
     this.Container = new PIXI.Container();
     this.Container.addChild(this._foodContainer);
     this.Container.addChild(this._segmentContainer);
+    this.Container.addChild(this._nameSprite);
     this.Container.addChild(this._headSprite);
 }
 
@@ -106,6 +113,9 @@ Snake.prototype.SetData = function(data)
     this._headSprite.x = data.snake_segments[0].pos_x;
     this._headSprite.y = data.snake_segments[0].pos_y;
     this._headSprite.rotation = data.heading;
+    this._nameSprite.x = data.snake_segments[0].pos_x;
+    this._nameSprite.y = data.snake_segments[0].pos_y;
+
     this._segmentRadius = data.segment_radius;
     this.SetScale(this._segmentRadius);
 };
@@ -178,6 +188,8 @@ Snake.prototype.UpdateHead = function()
     let seg0 = this.GetSegment(0);
     this._headSprite.x = seg0.x;
     this._headSprite.y = seg0.y;
+    this._nameSprite.x = seg0.x;
+    this._nameSprite.y = seg0.y;
     this._headSprite.rotation = this.heading;
 }
 
