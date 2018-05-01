@@ -5,12 +5,7 @@ from django.contrib.auth.models import User
 
 
 def create_viewer_key():
-    return random.getrandbits(63)
-
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    viewer_key = models.BigIntegerField(default=create_viewer_key, unique=True)
+    return None
 
 
 class SnakeVersion(models.Model):
@@ -19,21 +14,40 @@ class SnakeVersion(models.Model):
         unique_together = ('user', 'version')
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    parent = models.ForeignKey("SnakeVersion", blank=True, null=True, on_delete=models.SET_NULL)
     created = models.DateTimeField(default=now, blank=True)
     code = models.TextField()
     comment = models.CharField(max_length=1000, blank=True, null=True)
     version = models.IntegerField()
-    prev_version = models.IntegerField(blank=True, null=True)
     server_error_message = models.TextField(blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        if not self.version:
+            self.version = self.get_max_version_number() + 1
+        super(SnakeVersion, self).save(*args, **kwargs)
+
+    def get_max_version_number(self):
+        return SnakeVersion.objects.filter(user=self.user).aggregate(models.Max('version'))['version__max'] or 0
+
+    def activate(self):
+        UserProfile.objects.update_or_create(user=self.user, defaults={'active_snake': self})
+
+    @staticmethod
+    def get_latest_for_user(user):
+        return SnakeVersion.objects.filter(user=user).latest('created')
+
     objects = models.Manager()
 
 
-class ActiveSnake(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    version = models.ForeignKey(SnakeVersion, on_delete=models.CASCADE)
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    viewer_key = models.BigIntegerField(unique=True)
+    active_snake = models.ForeignKey(SnakeVersion, null=True, on_delete=models.SET_NULL)
 
-    objects = models.Manager()
+    def save(self, *args, **kwargs):
+        if not self.viewer_key:
+            self.viewer_key = random.getrandbits(63)
+        super(UserProfile, self).save(*args, **kwargs)
 
 
 class SnakeGame(models.Model):
