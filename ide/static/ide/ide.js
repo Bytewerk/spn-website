@@ -47,6 +47,13 @@ function setupPreview()
 function setupToolbar()
 {
     $('#bt_run').click(ajaxRun);
+
+    $('#bt_restart').click(function() {
+        $.post('/snake/restart', '', function(data) {
+            // todo show data.message
+            console.log(data.message)
+        });
+    });
 }
 
 function csrfSafeMethod(method) {
