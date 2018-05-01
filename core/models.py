@@ -70,6 +70,9 @@ class SnakeGame(models.Model):
     end_frame = models.IntegerField(blank=True, null=True)
     killer = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="games_won")
     final_mass = models.FloatField(blank=True, null=True)
+    natural_food_consumed = models.FloatField(blank=True, null=True)
+    carrison_food_consumed = models.FloatField(blank=True, null=True)
+    hunted_food_consumed = models.FloatField(blank=True, null=True)
 
     def __str__(self):
         return self.user.username + " " + str(self.start_date)
