@@ -54,7 +54,7 @@ def snake_edit_version(request, snake_version_id):
 @login_required
 @require_POST
 def snake_save(request):
-    json_req = json.loads(request.body)
+    json_req = json.loads(request.body.decode('utf-8'))
 
     action = json_req.get('action')
     if action not in ['run', 'save']:
