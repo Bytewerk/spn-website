@@ -15,9 +15,6 @@ $(function() {
             }
         }
     });
-
-    $('div.modal .bt_cancel').click(hideModal);
-    $('div.modal .bt_ok').click(hideModal);
 });
 
 $(window).resize(function() {
@@ -79,10 +76,16 @@ function showModal(el, ok_func)
         hideModal(dialog);
     }
 
-    dialog.find('.bt_ok').off("modal.ok").on("click", "modal.ok", close_ok);
+    function close_cancel()
+    {
+        hideModal(dialog);
+    }
+
+    dialog.find('.bt_ok').off().click(close_ok);
+    dialog.find('.bt_cancel').off().click(close_cancel);
     $(document).off('keydown.modal').on('keydown.modal', function(event) {
-        if (event.which === 27) { hideModal(el); }
         if (event.which === 13) { close_ok(); }
+        if (event.which === 27) { close_cancel(); }
     });
 }
 
@@ -91,6 +94,7 @@ function hideModal(el)
     $(document).off('keydown.modal');
     let blocker = $(el).parents('.modal');
     blocker.find('.bt_ok').off("modal.ok");
+    blocker.find('.bt_cancel').off("modal.cancel");
     blocker.hide();
 }
 
