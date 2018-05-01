@@ -134,6 +134,7 @@ def snake_disable(request):
         response = {'message': 'disabled snake {}'.format(profile.active_snake.version)}
         profile.active_snake = None
         profile.save()
+        send_kill_command(request.user)
     else:
         response = {'message': 'no snake was and is enabled.'}
 

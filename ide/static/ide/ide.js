@@ -56,6 +56,13 @@ function setupToolbar()
         });
     });
 
+    $('#bt_stop').click(function() {
+        $.post('/snake/disable', '', function(data) {
+            // todo show data.message
+            console.log(data.message)
+        });
+    });
+
     $('#bt_save_as').click(function() {
         showModal($('#safe_as_dialog'), function() {
             save('save', $('#save_as_title').val());
