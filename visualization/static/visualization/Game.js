@@ -30,7 +30,7 @@ Game.prototype.Run = function()
 
 Game.prototype.ConnectWebsocket = function()
 {
-    this.ws = new WebSocket(this.GetWebsocketURL());
+    this.ws = new ReconnectingWebSocket(this.GetWebsocketURL());
     this.ws.binaryType = 'arraybuffer';
     let self = this;
     this.ws.addEventListener('open', function(event) {
