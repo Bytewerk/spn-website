@@ -31,7 +31,7 @@
 
 {% block js %}
   <script type="text/javascript">
-    let snake_id = {{ snake.id }};
+    let snake_id = {{ snake.id | default:"null" }};
     let viewer_key = "{{ profile.viewer_key }}";
     let csrftoken = $("[name=csrfmiddlewaretoken]").val();
   </script>

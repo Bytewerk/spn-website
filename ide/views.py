@@ -1,31 +1,17 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.db.models import BooleanField, Case, Max, Value, When
 from django.forms import ModelForm
-from django.http import JsonResponse, HttpResponseNotAllowed, HttpResponseBadRequest
-from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
+from django.views.decorators.http import require_POST
 import json
-from core.models import SnakeVersion, ActiveSnake, ServerCommand, UserProfile
+from core.models import SnakeVersion, ServerCommand, UserProfile
 
 
 def get_user_profile(user):
     profile, _ = UserProfile.objects.get_or_create(user=user)
     return profile
-
-
-@login_required
-def snake_list(request):
-    return render(request, 'ide/list.html', {
-        'snakes': SnakeVersion.objects.filter(user=request.user).annotate(
-            active=Case(
-                When(activesnake__version_id__isnull=False, then=Value(1)),
-                default=Value(0),
-                output_field=BooleanField(),
-            ),
-        ).order_by('-version'),
-        'has_active': bool(len(ActiveSnake.objects.filter(user=request.user)))
-    })
 
 
 class CreateSnakeForm(ModelForm):
@@ -35,8 +21,16 @@ class CreateSnakeForm(ModelForm):
 
 
 @login_required
+def snake_list(request):
+    return render(request, 'ide/list.html', {
+        'snakes': SnakeVersion.objects.filter(user=request.user).order_by('-version'),
+        'active_snake': get_user_profile(request.user).active_snake
+    })
+
+
+@login_required
 def snake_create(request):
-    snake = SnakeVersion(version=0, user=request.user)
+    snake = SnakeVersion(user=request.user)
     snake.code = render_to_string('ide/initial-bot.lua')
     return snake_edit(request, snake)
 
@@ -44,58 +38,48 @@ def snake_create(request):
 @login_required
 def snake_edit_latest(request):
     try:
-        snake = SnakeVersion.objects.filter(user=request.user).latest('created')
-        return snake_edit(request, snake)
+        return snake_edit(request, SnakeVersion.get_latest_for_user(request.user))
     except SnakeVersion.DoesNotExist:
         return snake_create(request)
 
 
 @login_required
 def snake_edit_version(request, snake_version_id):
-    snake = SnakeVersion.objects.get(pk=snake_version_id)
+    snake = get_object_or_404(SnakeVersion, pk=snake_version_id)
     if snake.user != request.user:
         raise PermissionDenied
     return snake_edit(request, snake)
 
 
 @login_required
+@require_POST
 def snake_save(request):
-    if request.method != 'POST':
-        return HttpResponseNotAllowed(['POST'])
-
     json_req = json.loads(request.body)
-    allowed_actions = ['run', 'save']
-    action = json_req['action']
-    if action not in allowed_actions:
+
+    action = json_req.get('action')
+    if action not in ['run', 'save']:
         return HttpResponseBadRequest('unknown or undefined action')
 
-    if 'code' not in json_req:
+    code = json_req.get('code')
+    if code is None:
         return HttpResponseBadRequest('code not defined')
 
-    code = json_req['code']
     # TODO syntax check lua code?
 
-    if 'comment' in json_req:
-        comment = json_req['comment']
-    else:
-        comment = None
+    comment = json_req.get('comment')
 
-    new_version_numer = (SnakeVersion.objects.filter(user=request.user).aggregate(Max('version'))['version__max'] or 0) + 1
-    snake = SnakeVersion(user=request.user, code=code, comment=comment, version=new_version_numer)
+    snake = SnakeVersion(user=request.user, code=code, comment=comment)
     snake.save()
 
-    obj, _ = ActiveSnake.objects.filter(user=request.user).get_or_create(defaults={'user': request.user, 'version': snake})
-    obj.version = snake
-
-    obj.save()
-    send_kill_command(request.user)
+    if action == "run":
+        snake.activate()
+        send_kill_command(snake.user)
 
     return JsonResponse({'success': True, 'snake_id': snake.id})
 
 
 def send_kill_command(user):
-    cmd = ServerCommand(user=user, command='kill')
-    cmd.save()
+    ServerCommand(user=user, command='kill').save()
 
 
 def snake_edit(request, snake):
@@ -103,67 +87,50 @@ def snake_edit(request, snake):
     if form.is_valid():
         posted_code = form.cleaned_data.get('code')
         posted_comment = form.cleaned_data.get('comment', '')
-        last_version = SnakeVersion.objects.filter(user=request.user).aggregate(Max('version'))['version__max']
-
-        new_version = SnakeVersion(user=request.user,
-                                   prev_version=snake.version,
-                                   version=(last_version or 0) + 1,
-                                   code=posted_code,
-                                   comment=posted_comment)
+        new_version = SnakeVersion(user=request.user, parent=snake, code=posted_code, comment=posted_comment)
         new_version.save()
-
-        obj, _ = ActiveSnake.objects.filter(user=request.user).get_or_create(defaults={'user': request.user, 'version': new_version})
-        obj.version = new_version
-        obj.save()
-
-        send_kill_command(request.user)
+        new_version.activate()
+        send_kill_command(new_version.user)
         return redirect('snake_edit', snake_id=new_version.id)
 
     return render(request, 'ide/edit2.html', {'form': form, 'snake': snake, 'profile': get_user_profile(request.user)})
 
 
 @login_required
+@require_POST
 def snake_delete(request, snake_id=-1):
-    try:
-        snake = SnakeVersion.objects.get(pk=snake_id)
-    except SnakeVersion.DoesNotExist:
-        raise PermissionDenied
-
+    snake = get_object_or_404(SnakeVersion, pk=snake_id)
     if snake.user != request.user:
         raise PermissionDenied
-
     snake.delete()
-
     return redirect('snake')
 
 
 @login_required
+@require_POST
 def snake_activate(request, snake_id=-1):
-    if not request.is_ajax():
-        return JsonResponse({'message': 'ohh'}, status=500)
-
     try:
         snake = SnakeVersion.objects.filter(user=request.user).get(pk=snake_id)
     except SnakeVersion.DoesNotExist:
-        return JsonResponse({'message': 'Snake could not activated'}, status=500)
+        return JsonResponse({'message': 'Cannot activate snake: Not found.'}, status=404)
 
     if snake.user != request.user:
-        return JsonResponse({'message': 'Snake could not activated'}, status=500)
+        return JsonResponse({'message': 'Cannot activate snake: forbidden'}, status=403)
 
-    obj, _ = ActiveSnake.objects.filter(user=request.user).get_or_create(
-        defaults={'user': snake.user, 'version': snake})
-    obj.version = snake
-    obj.save()
-
+    snake.activate()
     return JsonResponse({'message': 'Snake {} was activated'.format(snake.version)})
 
 
 @login_required
+@require_POST
 def snake_disable(request):
-    obj = ActiveSnake.objects.filter(user=request.user)
-    if obj:
-        response = {'message': 'Snake {} was disabled'.format(obj[0].version.version)}
-        obj.delete()
+    profile = get_user_profile(request.user)
+    if profile.active_snake is not None:
+        response = {'message': 'disabled snake {}'.format(profile.active_snake.version)}
+        profile.active_snake = None
+        profile.save()
+    else:
+        response = {'message': 'no snake was and is enabled.'}
 
     if request.is_ajax():
         return JsonResponse(response)
@@ -172,16 +139,14 @@ def snake_disable(request):
 
 
 @login_required
+@require_POST
 def snake_restart(request):
-    obj = ActiveSnake.objects.filter(user=request.user)
-    if obj:
-        response = {'message': 'Restart signal send for Snake {}'.format(obj[0].version.version)}
-
-        cmd = ServerCommand(
-            user=request.user,
-            command='kill'
-        )
-        cmd.save()
+    profile = get_user_profile(request.user)
+    if profile.active_snake is not None:
+        send_kill_command(request.user)
+        response = {'message': 'requesting restart of snake version {}'.format(profile.active_snake.version)}
+    else:
+        response = {'message': 'requesting kill of any running snake version (no activate snake version)'}
 
     if request.is_ajax():
         return JsonResponse(response)
