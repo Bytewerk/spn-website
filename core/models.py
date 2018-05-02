@@ -49,6 +49,17 @@ class UserProfile(models.Model):
             self.viewer_key = random.getrandbits(63)
         super(UserProfile, self).save(*args, **kwargs)
 
+class LiveStats(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    last_update_frame = models.IntegerField(blank=True, null=True)
+
+    mass = models.FloatField(blank=True, null=True)
+    natural_food_consumed = models.FloatField(blank=True, null=True)
+    carrison_food_consumed = models.FloatField(blank=True, null=True)
+    hunted_food_consumed = models.FloatField(blank=True, null=True)
+
+    objects = models.Manager()
+
 
 class SnakeGame(models.Model):
     snake_version = models.ForeignKey(SnakeVersion, on_delete=models.CASCADE)
@@ -59,6 +70,9 @@ class SnakeGame(models.Model):
     end_frame = models.IntegerField(blank=True, null=True)
     killer = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="games_won")
     final_mass = models.FloatField(blank=True, null=True)
+    natural_food_consumed = models.FloatField(blank=True, null=True)
+    carrison_food_consumed = models.FloatField(blank=True, null=True)
+    hunted_food_consumed = models.FloatField(blank=True, null=True)
 
     def __str__(self):
         return self.user.username + " " + str(self.start_date)
