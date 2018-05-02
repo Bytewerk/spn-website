@@ -9,18 +9,18 @@
 {% block content %}
 
 <div class="highscore-title">Highscores</div>
-<table class="highscore-table" cellspacing="0">
+<table class="highscore-table ui celled selectable inverted table" cellspacing="0">
     <thead>
         <tr>
-            <th>User</th>
-            <th>Score</th>
+            <th class="eleven wide">User</th>
+            <th class="five wide right aligned">Score</th>
         </tr>
     </thead>
     <tbody>
     {% for score in highscores %}
         <tr>
             <td>{{score.user__username}}</td>
-            <td>{{score.score}}</td>
+            <td class="right aligned">{{score.score}}</td>
         </tr>
     {% endfor %}
     </tbody>
