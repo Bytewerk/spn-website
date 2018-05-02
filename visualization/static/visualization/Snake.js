@@ -229,6 +229,7 @@ Snake.prototype.AnimateEat = function()
 
         if (dist < radius)
         {
+            food.visible = false;
             this._foodContainer.removeChildAt(i);
             return; // FIXME this aborts eating for this animation cycle
         }

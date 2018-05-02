@@ -11,6 +11,7 @@ function GameVisualization(assets, snakeMoveStrategy, container)
     this.world_size_x = 1024;
     this.world_size_y = 1024;
     this.food_decay_rate = 0.001;
+    this.foodItems = {};
 
     this.colorSchemes = [
         [ 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000, 0xA00000, 0xA00000, 0xA00000, 0xA00000 ],
@@ -102,6 +103,19 @@ GameVisualization.prototype.HandleTickMessage = function(frame_id)
         food.Decay(32);
     }, this);
     this.nextFoodDecayRow %= 64;
+
+    if (this.nextFoodDecayRow == 0)
+    {
+        for (let food_id in this.foodItems)
+        {
+            if (!this.foodItems[food_id].visible)
+            {
+                delete this.foodItems[food_id];
+            }
+        }
+
+        this.foodMap.CleanUp();
+    }
 };
 
 GameVisualization.prototype.HandlePlayerInfoMessage = function(player_id)
@@ -131,8 +145,15 @@ GameVisualization.prototype.HandleWorldUpdateMessage = function(data)
     for (let id in data.food)
     {
         let food = data.food[id];
-        this.foodMap.AddSprite(new FoodSprite(this.txFood, this.food_decay_rate, food.id, food.pos_x, food.pos_y, food.value));
+        this.AddFood(food.id, food.pos_x, food.pos_y, food.value);
     }
+};
+
+GameVisualization.prototype.AddFood = function(food_id, pos_x, pos_y, value)
+{
+    let sprite = new FoodSprite(this.txFood, this.food_decay_rate, food_id, pos_x, pos_y, value);
+    this.foodItems[food_id] = sprite;
+    this.foodMap.AddSprite(sprite);
 };
 
 GameVisualization.prototype.HandleBotSpawnMessage = function(bot)
@@ -147,21 +168,25 @@ GameVisualization.prototype.HandleBotKilledMessage = function(killer_id, victim_
 
 GameVisualization.prototype.HandleFoodSpawnMessage = function(food_id, pos_x, pos_y, value)
 {
-    this.foodMap.AddSprite(new FoodSprite(this.txFood, this.food_decay_rate, food_id, pos_x, pos_y, value));
+    this.AddFood(food_id, pos_x, pos_y, value);
 };
 
 GameVisualization.prototype.HandleFoodConsumedMessage = function(food_id, consumer_id)
 {
-    let sprite = this.foodMap.RemoveItem(food_id);
-    if (sprite)
+    if (food_id in this.foodItems)
     {
+        let sprite = this.foodItems[food_id];
         this.snakes[consumer_id].Eat(sprite);
     }
 };
 
 GameVisualization.prototype.HandleFoodDecayedMessage = function(food_id)
 {
-    this.foodMap.RemoveItem(food_id);
+    if (food_id in this.foodItems)
+    {
+        let sprite = this.foodItems[food_id];
+        sprite.visible = false;
+    }
 };
 
 GameVisualization.prototype.HandleBotMovedMessage = function(bot_id, segment_data, length, segment_radius)
