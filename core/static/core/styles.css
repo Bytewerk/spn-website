@@ -23,6 +23,11 @@ ul.nav {
 
 ul.nav li {
     display:inline;
+    padding-bottom: 10px;
+    padding-top: 4px;
+}
+
+ul.nav li a {
     padding: 4px 10px 10px 10px;
 }
 
@@ -70,16 +75,6 @@ div.footer {
     right:15px;
     top:50px;
     bottom:50px;
-}
-
-pre.home {
-    width:750px;
-}
-
-pre.home code.lua.hljs {
-    padding:2em;
-    background-color:rgba(50, 50, 50, 0.85);
-    font-size:150%;
 }
 
 table.snake-list {
