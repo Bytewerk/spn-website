@@ -96,13 +96,15 @@ GameVisualization.prototype.HandleTickMessage = function(frame_id)
         this.snakes[snake_id].AnimateEat();
     }
 
-    this.foodMap.IterateRow(this.nextFoodDecayRow++, function(food) {
-        food.Decay(32);
-    }, this);
-    this.foodMap.IterateRow(this.nextFoodDecayRow++, function(food) {
-        food.Decay(32);
-    }, this);
-    this.nextFoodDecayRow %= 64;
+    this.nextFoodDecayRow = (this.nextFoodDecayRow + 1) % 64;
+
+    if ((this.nextFoodDecayRow % 8) == 0)
+    {
+        for (let food_id in this.foodItems)
+        {
+            this.foodItems[food_id].Decay(8);
+        }
+    }
 
     if (this.nextFoodDecayRow == 0)
     {
