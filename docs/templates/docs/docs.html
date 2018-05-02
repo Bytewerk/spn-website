@@ -21,7 +21,10 @@
 <div id="docs_content">
 
 <p>This is a brief overview of all usable functions within the bot logic.</p>
-<p></p>
+<p>
+ Every bot is allowed to store 100MB within the global namespace and the
+ data persists until the bot dies. So the bot can save data from frame
+ to frame.</p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
@@ -29,6 +32,11 @@
 	<tr>
 	<td class="name" nowrap><a href="#step">step ()</a></td>
 	<td class="summary">That method is called each frame.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#init">init ()</a></td>
+	<td class="summary">This method is called upon creation of a bot
+ Initialialize your environment here.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#findFood">findFood (max_distance, minimum_food_value)</a></td>
@@ -67,9 +75,25 @@
     <h4>Usage:</h4>
     <ul>
         <pre class="usage"><code class="lua"> <span class="keyword">function</span> step()
-   <span class="keyword">return</span> <span class="number">45</span>
+   <span class="keyword">return</span> <span class="number">0.005</span>
  <span class="keyword">end</span></code></pre>
     </ul>
+
+</dd>
+    <dt>
+    <a name = "init"></a>
+    <strong>init ()</strong>
+    </dt>
+    <dd>
+    This method is called upon creation of a bot
+ Initialialize your environment here.
+ you can also access the "self" object here and, e.g. set your snake's colors
+
+
+
+
+
+
 
 </dd>
     <dt>
