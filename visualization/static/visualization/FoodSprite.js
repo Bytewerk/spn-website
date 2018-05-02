@@ -29,7 +29,7 @@ FoodSprite.prototype.Decay = function(cycles)
         this.food_value -= cycles*this.decay_rate;
         this.UpdateSize();
     }
-    if (this.food_value <= 0)
+    if (this.food_value <= 0.05)
     {
         this.visible = false;
     }
