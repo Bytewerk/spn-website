@@ -9,7 +9,13 @@ return [==[
 {% endblock %}
 
 {% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static "core/highlight.js/styles/agate.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "docs/docs.css" %}" />
+{% endblock %}
+
+{% block js%}
+    <script src="{% static "core/highlight.js/highlight.pack.js" %}"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 {% endblock %}
 
 {% block content %}

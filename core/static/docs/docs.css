@@ -4,11 +4,12 @@
 }
 
 .docs_container {
-    background-color: #1a2632;
+    background-color: #000000A0;
     color: #fff;
+    margin-left: 200px;
     min-width: 400px;
-    width: 80%;
     padding: 14px;
+    width: 80%;
 }
 
 .markdown-body pre.usage {
