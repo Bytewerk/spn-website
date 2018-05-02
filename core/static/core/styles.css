@@ -53,6 +53,10 @@ div.content {
     padding:10px;
 }
 
+div.content > h2 {
+    margin-left: 200px;
+}
+
 div.footer {
     text-align:center;
     position:fixed;
@@ -117,7 +121,12 @@ table.snake-list {
     height: 320px;
 }
 
-#login_form div.segment {
+#login_form, #signup_form {
+    margin-left: 200px;
+}
+
+#login_form div.segment, #signup_form div.segment {
+    background: none;
     width: 350px;
 }
 
