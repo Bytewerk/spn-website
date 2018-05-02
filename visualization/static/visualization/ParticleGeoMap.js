@@ -23,11 +23,6 @@ ParticleGeoMap.prototype.AddSprite = function(sprite)
     {
         this._itemIdKeyMap[sprite.item_id] = key;
     }
-    if (!(key in this._geoMap))
-    {
-        console.log("key ", key, " is not in geo map!");
-        this._geoMap[key] = new PIXI.Container();
-    }
     this._geoMap[key].addChild(sprite);
 };
 
@@ -49,6 +44,27 @@ ParticleGeoMap.prototype.RemoveItem = function(item_id)
         {
             container.removeChild(child);
             return child;
+        }
+    }
+};
+
+ParticleGeoMap.prototype.CleanUp = function()
+{
+    for (let key in this._geoMap)
+    {
+        let container = this._geoMap[key];
+        for (let i in container.children)
+        {
+            let child = container.children[i];
+            if (child.visible)
+            {
+                continue;
+            }
+
+            let key = this._itemIdKeyMap[child.item_id];
+            delete this._itemIdKeyMap[key];
+
+            container.removeChild(child);
         }
     }
 };
@@ -130,7 +146,6 @@ ParticleGeoMap.prototype.FindContainersInRadius = function(x, y, radiusX, radius
             }
         }
     }
-
 };
 
 ParticleGeoMap.prototype.FindItemsInRadius = function(x, y, radius, callback, context)
