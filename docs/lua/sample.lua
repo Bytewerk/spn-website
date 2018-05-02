@@ -46,3 +46,8 @@ end
 -- end
 function findSegments(max_distance, include_own)
 end
+
+--- That method sends messages to the development console.
+-- @param message this string will be transfered to the console
+function log(message)
+end

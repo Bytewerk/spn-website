@@ -16,3 +16,7 @@
   padding: 0px;
   border: none;
 }
+
+.markdown-body dl dt {
+  font-size: 1.2em;
+}
