@@ -86,3 +86,9 @@ class ServerCommand(models.Model):
     command = models.CharField(max_length=255, choices=COMMAND_CHOICES)
     result = models.NullBooleanField(editable=False)
     result_msg = models.TextField(blank=True, null=True, editable=False)
+
+
+class ApiKey(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    key = models.CharField(max_length=100)
+    comment = models.CharField(max_length=255)

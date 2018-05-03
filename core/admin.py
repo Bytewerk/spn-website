@@ -1,10 +1,11 @@
 from django.contrib import admin
 
-from core.models import SnakeVersion, SnakeGame, ServerCommand, UserProfile
+from core.models import SnakeVersion, SnakeGame, ServerCommand, UserProfile, ApiKey
 
 admin.site.register(SnakeVersion)
 admin.site.register(SnakeGame)
 admin.site.register(UserProfile)
+admin.site.register(ApiKey)
 
 
 class ServerCommandAdmin(admin.ModelAdmin):
