@@ -85,8 +85,8 @@ function Snake(headTexture, bodyTexture, name, colorScheme, world_size_x, world_
     this.Container = new PIXI.Container();
     this.Container.addChild(this._foodContainer);
     this.Container.addChild(this._segmentContainer);
-    this.Container.addChild(this._nameSprite);
     this.Container.addChild(this._headSprite);
+    this.Container.addChild(this._nameSprite);
 }
 
 Snake.prototype.GetBodyTexture = function()
