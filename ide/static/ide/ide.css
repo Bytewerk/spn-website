@@ -101,14 +101,16 @@ div.modal>div {
 }
 
 div.modal>div>header {
-    position:fixed;
-    top:0; left:0; width:100%;
     background-color: #613600;
     text-align:center;
 }
 
 div.modal div.main {
-    padding: 1.5em 0.5em 1.5em 0.5em;
+    overflow: scroll;
+    position: absolute;
+    top: 1.2em; bottom: 1.5em;
+    left: 4px; right: 4px;
+    overflow-y:auto;
 }
 
 div.modal>div>footer {
@@ -116,4 +118,45 @@ div.modal>div>footer {
     bottom:0; left:0; width:100%;
     background-color: #613600;
     text-align:right;
+}
+
+#load_dialog {
+    width:40em;
+    height:20em;
+}
+
+#load_dialog .list>div {
+    display:flex;
+    flex-direction: row;
+    font-family:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size:10pt;
+    cursor:pointer;
+}
+
+#load_dialog .list>div.selected, #load_dialog .list>div:nth-child(even).selected {
+    background-color:rgba(0,0,0,0.5);
+}
+
+#load_dialog .list>div>div {
+    overflow:hidden;
+    padding:2px;
+}
+
+#load_dialog .list>div:nth-child(even) {
+    background-color:rgba(255,255,255,0.05);
+}
+
+#load_dialog .list>div>div:nth-child(1)
+{
+    width:3em; text-align: right;
+}
+
+#load_dialog .list>div>div:nth-child(2)
+{
+    width:15em; text-align: center;
+}
+
+#load_dialog .list>div>div:nth-child(3)
+{
+    width:400px; text-align: left;
 }

@@ -73,30 +73,39 @@ function setupToolbar()
         });
         $('#save_as_title').val(snake_title).focus().select();
     });
+
+    $('#bt_load').click(function() {
+        $.get("/snake/list", function (data, status) {
+            if (status!='success') {
+                console.log('loading version list failed: ' + status);
+                return;
+            }
+
+            if (!data.versions.length) {
+                console.log('got empty version list from server');
+                return;
+            }
+
+            showLoadDialog(data);
+        });
+    });
+
 }
 
 function showModal(el, ok_func)
 {
     let dialog = $(el);
     let blocker = dialog.parents('.modal');
+    let bt_ok = dialog.find('.bt_ok');
+    let bt_cancel = dialog.find('.bt_cancel');
+
     blocker.show();
+    bt_ok.off().click(function() { ok_func(); hideModal(dialog); });
+    bt_cancel.off().click(function() { hideModal(dialog); });
 
-    function close_ok()
-    {
-        ok_func();
-        hideModal(dialog);
-    }
-
-    function close_cancel()
-    {
-        hideModal(dialog);
-    }
-
-    dialog.find('.bt_ok').off().click(close_ok);
-    dialog.find('.bt_cancel').off().click(close_cancel);
     $(document).off('keydown.modal').on('keydown.modal', function(event) {
-        if (event.which === 13) { close_ok(); }
-        if (event.which === 27) { close_cancel(); }
+        if (event.which === 13) { bt_ok.click(); }
+        if (event.which === 27) { bt_cancel.click(); }
     });
 }
 
@@ -125,6 +134,35 @@ function save(action, title)
         snake_id = data.snake_id;
         snake_title = data.comment;
         game.vis.FollowDbId(snake_id);
+    });
+}
+
+function showLoadDialog(data)
+{
+    let list = $('#load_dialog .list');
+    let selected_version = 'latest';
+
+    let bt_ok = $('#load_dialog .bt_ok');
+    bt_ok.prop("disabled", true);
+    list.empty();
+
+    $.each(data.versions, function(i, version) {
+        let item = $('<div><div>'+version.version+'</div><div>'+version.date+'</div><div>'+version.title+'</div></div>');
+        item.click(function() {
+            list.children('div').removeClass('selected');
+            item.addClass('selected');
+            selected_version = version.id;
+            $('#load_dialog .bt_ok').prop("disabled", false);
+        });
+        item.dblclick(function() {
+            selected_version = version.id;
+            bt_ok.click();
+        });
+        list.append(item);
+    });
+
+    showModal($('#load_dialog'), function() {
+        window.location.href = '/snake/edit/' + selected_version;
     });
 }
 

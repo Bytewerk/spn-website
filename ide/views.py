@@ -1,3 +1,5 @@
+from datetime import datetime
+import json
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.forms import ModelForm
@@ -5,7 +7,6 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
-import json
 from core.models import SnakeVersion, ServerCommand, UserProfile
 
 
@@ -22,10 +23,16 @@ class CreateSnakeForm(ModelForm):
 
 @login_required
 def snake_list(request):
-    return render(request, 'ide/list.html', {
-        'snakes': SnakeVersion.objects.filter(user=request.user).order_by('-version'),
-        'active_snake': get_user_profile(request.user).active_snake
-    })
+    snakes = SnakeVersion.objects.filter(user=request.user).order_by('-created')
+    response = {'versions': [
+        {
+            'id': s.id,
+            'version': s.version,
+            'title': s.comment or '',
+            'date': s.created.strftime("%d.%m.%Y %H:%M:%S")
+        } for s in snakes
+    ]}
+    return JsonResponse(response)
 
 
 @login_required
@@ -44,8 +51,8 @@ def snake_edit_latest(request):
 
 
 @login_required
-def snake_edit_version(request, snake_version_id):
-    snake = get_object_or_404(SnakeVersion, pk=snake_version_id)
+def snake_edit_version(request, snake_id):
+    snake = get_object_or_404(SnakeVersion, pk=snake_id)
     if snake.user != request.user:
         raise PermissionDenied
     return snake_edit(request, snake)
@@ -154,7 +161,4 @@ def snake_restart(request):
     else:
         response = {'message': 'requesting kill of any running snake version (no activate snake version)'}
 
-    if request.is_ajax():
-        return JsonResponse(response)
-    else:
-        return snake_list(request)
+    return JsonResponse(response)
