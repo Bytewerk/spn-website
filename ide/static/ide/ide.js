@@ -162,7 +162,9 @@ function save(action, title)
         snake_id = data.snake_id;
         snake_title = data.comment;
         game.vis.FollowDbId(snake_id);
-        addLogLine(null, 'saved code as version #' + data.version + " title \"" + data.comment + "\"");
+        let logline = 'saved code as version #' + data.version;
+        if (data.comment) { logline += "(\"" + data.comment + "\")"; }
+        addLogLine(null, logline);
     });
 }
 
