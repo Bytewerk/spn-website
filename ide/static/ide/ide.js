@@ -7,6 +7,7 @@ $(function() {
     setupEditor();
     setupPreview();
     setupToolbar();
+    setupShortcuts();
 
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
@@ -92,6 +93,33 @@ function setupToolbar()
 
 }
 
+function setupShortcuts()
+{
+    $(window).bind('keydown', function(event) {
+        if (!(event.ctrlKey || event.metaKey)) {
+            return;
+        }
+        switch (String.fromCharCode(event.which).toLowerCase()) {
+            case 's':
+                if (event.shiftKey) {
+                    $('#bt_save_as').click();
+                } else {
+                    $('#bt_save').click();
+                }
+                event.preventDefault();
+                break;
+            case 'o':
+                $('#bt_load').click();
+                event.preventDefault();
+                break;
+            case 'r':
+                $('#bt_run').click();
+                event.preventDefault();
+                break;
+        }
+    });
+}
+
 function showModal(el, ok_func)
 {
     let dialog = $(el);
@@ -134,6 +162,7 @@ function save(action, title)
         snake_id = data.snake_id;
         snake_title = data.comment;
         game.vis.FollowDbId(snake_id);
+        addLogLine(null, 'saved code as version #' + data.version + " title \"" + data.comment + "\"");
     });
 }
 
@@ -178,7 +207,9 @@ function addLogLine(frame, msg)
 
     let div = document.createElement('div');
     let frameDiv = document.createElement('div');
-    frameDiv.appendChild(document.createTextNode("Frame " + frame + ":"));
+    if (frame) {
+        frameDiv.appendChild(document.createTextNode("Frame " + frame + ":"));
+    }
     div.appendChild(frameDiv);
     let msgDiv = document.createElement('pre');
     msgDiv.appendChild(document.createTextNode(msg));

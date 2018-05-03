@@ -87,7 +87,7 @@ def snake_save(request):
         snake.activate()
         send_kill_command(snake.user)
 
-    return JsonResponse({'success': True, 'snake_id': snake.id, 'comment': snake.comment})
+    return JsonResponse({'success': True, 'snake_id': snake.id, 'version': snake.version, 'comment': snake.comment})
 
 
 def send_kill_command(user):
