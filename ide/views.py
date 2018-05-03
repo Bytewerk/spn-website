@@ -105,7 +105,7 @@ def snake_edit(request, snake):
         send_kill_command(new_version.user)
         return redirect('snake_edit', snake_id=new_version.id)
 
-    return render(request, 'ide/edit2.html', {'form': form, 'snake': snake, 'profile': get_user_profile(request.user)})
+    return render(request, 'ide/ide.html', {'form': form, 'snake': snake, 'profile': get_user_profile(request.user)})
 
 
 @login_required
