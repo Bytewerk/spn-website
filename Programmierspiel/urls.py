@@ -6,9 +6,10 @@ from django.views.generic.base import RedirectView
 from core import views as core_views
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name='index.html'), name='home'),
+    path('', TemplateView.as_view(template_name='core/index.html'), name='home'),
     path('admin/', admin.site.urls),
     path('signup/', core_views.signup, name='signup'),
+    path('profile/', core_views.profile, name='profile'),
     path('login/', auth_views.login, {'template_name': 'login.html'}, name='login'),
     path('logout/', auth_views.logout, {'next_page': 'login'}, name='logout'),
     path('watch/', TemplateView.as_view(template_name='visualization/watch.html'), name='watch'),

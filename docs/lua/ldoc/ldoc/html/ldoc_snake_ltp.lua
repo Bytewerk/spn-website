@@ -1,7 +1,5 @@
 return [==[
-
-{% extends 'base.html' %}
-
+{% extends 'core/base.html' %}
 {% load static %}
 
 {% block earlycss %}
