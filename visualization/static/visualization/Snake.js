@@ -29,16 +29,6 @@ function Snake(headTexture, bodyTexture, name, colorScheme, world_size_x, world_
     this.Container.addChild(this._nameSprite);
 }
 
-Snake.prototype.GetBodyTexture = function()
-{
-    return this._bodyTexture;
-};
-
-Snake.prototype.GetCurrentSnakeScale = function()
-{
-    return this.spriteScale;
-};
-
 Snake.prototype.SetData = function(data)
 {
     this.heading = data.heading;
@@ -70,12 +60,14 @@ Snake.prototype.SetLength = function(newLength)
 
     for (let i=this.GetLength(); i<newLength; i++)
     {
-        let segment = new SnakeSegment(this);
+        let segment = new SnakeSegment(this._bodyTexture);
         if (this._segments.length > 0)
         {
             segment.ClonePosition(this._segments[this._segments.length-1]);
         }
         segment.SetTint(this._colorScheme[i % this._colorScheme.length]);
+        segment.SetScale(this.spriteScale);
+
         this._segmentContainer.addChildAt(segment.GetSprite(), 0);
         this._segments.push(segment);
     }

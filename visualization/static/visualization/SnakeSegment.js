@@ -1,13 +1,12 @@
 "use strict";
 
-function SnakeSegment(snake)
+function SnakeSegment(texture)
 {
     this.x = 0;
     this.y = 0;
-    this._sprite = new PIXI.Sprite(snake.GetBodyTexture());
+    this._sprite = new PIXI.Sprite(texture);
     this._sprite.anchor.set(0.5);
     this._sprite.alpha = 0.8;
-    this.SetScale(snake.GetCurrentSnakeScale());
 }
 
 SnakeSegment.prototype.GetSprite = function()
@@ -42,14 +41,6 @@ SnakeSegment.prototype.MoveDirection = function(direction, length)
     this.SetPosition(
         this.x + length*Math.cos(direction),
         this.y + length*Math.sin(direction)
-    );
-};
-
-SnakeSegment.prototype.MoveRelative = function(dx, dy)
-{
-    this.SetPosition(
-        this.x + dx,
-        this.y + dy
     );
 };
 
