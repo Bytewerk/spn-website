@@ -39,7 +39,7 @@ function setupPreview()
 {
     game = new Game(assets, strategy, document.getElementById('preview'));
     game.SetViewerKey(viewer_key);
-    game.protocol.AddEventHandler('Log', addLogLine);
+    game.AddLogHandler(addLogLine);
     game.Run();
     game.vis.FollowDbId(snake_id);
 }

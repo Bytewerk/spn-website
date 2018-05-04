@@ -7,20 +7,13 @@ function Game(assets, snakeMoveStrategy, container)
     this.speed = 2;
     this.viewer_key = 0;
     this.vis = new GameVisualization(assets, snakeMoveStrategy, container);
-
-    this.protocol = new JsonProtocol();
-    this.protocol.AddEventHandler('GameInfo', this.vis.HandleGameInfoMessage, this.vis);
-    this.protocol.AddEventHandler('PlayerInfo', this.vis.HandlePlayerInfoMessage, this.vis);
-    this.protocol.AddEventHandler('Tick', this.vis.HandleTickMessage, this.vis);
-    this.protocol.AddEventHandler('WorldUpdate', this.vis.HandleWorldUpdateMessage, this.vis);
-    this.protocol.AddEventHandler('BotSpawn', this.vis.HandleBotSpawnMessage, this.vis);
-    this.protocol.AddEventHandler('BotKilled', this.vis.HandleBotKilledMessage, this.vis);
-    this.protocol.AddEventHandler('FoodSpawn', this.vis.HandleFoodSpawnMessage, this.vis);
-    this.protocol.AddEventHandler('FoodConsumed', this.vis.HandleFoodConsumedMessage, this.vis);
-    this.protocol.AddEventHandler('FoodDecayed', this.vis.HandleFoodDecayedMessage, this.vis);
-    this.protocol.AddEventHandler('BotMoved', this.vis.HandleBotMovedMessage, this.vis);
-    this.protocol.AddEventHandler('BotsMovedDone', this.vis.HandleBotMovedMessagesDone, this.vis);
+    this.logHandlers = [];
 }
+
+Game.prototype.AddLogHandler = function(callback, thisArg)
+{
+    this.logHandlers.push([callback, thisArg]);
+};
 
 Game.prototype.Run = function()
 {
@@ -41,7 +34,7 @@ Game.prototype.ConnectWebsocket = function()
        }
     });
     this.ws.addEventListener('message', function(event) {
-        self.protocol.HandleMessage(event);
+        self.HandleMessage(event);
     });
 };
 
@@ -59,4 +52,66 @@ Game.prototype.SetViewerKey = function(key)
         let s = JSON.stringify(msg);
         this.ws.send(s);
     }
+};
+
+Game.prototype.HandleMessage = function(event)
+{
+    let data = JSON.parse(event.data);
+    switch (data.t)
+    {
+        case "GameInfo":
+            return this.vis.HandleGameInfoMessage(data.world_size_x, data.world_size_y, data.food_decay_per_frame);
+
+        case "WorldUpdate":
+            return this.vis.HandleWorldUpdateMessage(data);
+
+        case "Tick":
+            return this.vis.HandleTickMessage(data.frame_id);
+
+        case "BotSpawn":
+            return this.vis.HandleBotSpawnMessage(data.bot);
+
+        case "BotKill":
+            return this.vis.HandleBotKilledMessage(data.killer_id, data.victim_id);
+
+        case "BotMove":
+            for (let i=0; i<data.items.length; i++)
+            {
+                let b = data.items[i];
+                this.vis.HandleBotMovedMessage(b.bot_id, b.segment_data, b.length, b.segment_radius);
+            }
+            return this.vis.HandleTickMessage(null); // FIXME this is a workaround because we somehow do not receive TickMessage
+
+        case "FoodSpawn":
+            for (let item of data.items)
+            {
+                this.vis.HandleFoodSpawnMessage(item.id, item.pos_x, item.pos_y, item.value);
+            }
+            return;
+
+        case "FoodConsume":
+            for (let item of data.items)
+            {
+                this.vis.HandleFoodConsumedMessage(item.food_id, item.bot_id);
+            }
+            return;
+
+        case "FoodDecay":
+            for (let item of data.items)
+            {
+                this.vis.HandleFoodDecayedMessage(item);
+            }
+            return;
+
+        case "Log":
+            for (let item of this.logHandlers)
+            {
+                item[0].call(item[1], data.frame, data,msg);
+            }
+            return;
+
+        default:
+            return;
+    }
+
 };

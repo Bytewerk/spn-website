@@ -1,16 +1,12 @@
 {% load static %}
 <script src="{% static "visualization/lib/pixi.min.js" %}"></script>
 <script src="{% static "visualization/lib/websocket/reconnecting-websocket.min.js" %}"></script>
-<script src="{% static "visualization/JsonProtocol.js" %}"></script>
 <script src="{% static "visualization/ParticleGeoMap.js" %}"></script>
 <script src="{% static "visualization/Snake.js" %}"></script>
 <script src="{% static "visualization/FoodSprite.js" %}"></script>
 <script src="{% static "visualization/SimpleDirectionSnakeMoveStrategy.js" %}"></script>
-<script src="{% static "visualization/ImpulseSnakeMoveStrategy.js" %}"></script>
-<script src="{% static "visualization/TwoPredecessorSnakeMoveStrategy.js" %}"></script>
 <script src="{% static "visualization/GameVisualization.js" %}"></script>
 <script src="{% static "visualization/Game.js" %}"></script>
-<script src="{% static "visualization/DynamicSegmentCountSnakeMoveStrategy.js" %}"></script>
 <script>
     let assets = {
       'body.png': '{% static "visualization/assets/body.png" %}',

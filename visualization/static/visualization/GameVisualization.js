@@ -118,10 +118,8 @@ GameVisualization.prototype.HandleTickMessage = function(frame_id)
 
         this.foodMap.CleanUp();
     }
-};
 
-GameVisualization.prototype.HandlePlayerInfoMessage = function(player_id)
-{
+    this.UpdateStagePosition();
 };
 
 GameVisualization.prototype.HandleWorldUpdateMessage = function(data)
@@ -207,12 +205,6 @@ GameVisualization.prototype.HandleBotMoved2Message = function(bot_id, heading, s
         this.snakeMoveStrategy.NewStyleMove(this.snakes[bot_id], heading, speed, length, segment_radius);
         this.snakes[bot_id].UpdateHead();
     }
-};
-
-GameVisualization.prototype.HandleBotMovedMessagesDone = function(data)
-{
-    this.HandleTickMessage();
-    this.UpdateStagePosition();
 };
 
 GameVisualization.prototype.FollowDbId = function(db_id)
