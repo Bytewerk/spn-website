@@ -1,18 +1,25 @@
-function FoodSprite(texture, decay_rate, food_id, pos_x, pos_y, value)
+function FoodSprite(texture)
 {
     PIXI.Sprite.call(this, texture);
-    this.food_value = value;
-    this.item_id = food_id;
-    this.decay_rate = decay_rate;
-    this.textureRadius = texture.width / 2;
+    this.food_value = 0;
+    this.decay_rate = 0;
+    this.item_id = 0;
     this.anchor.set(0.5);
-    this.x = pos_x;
-    this.y = pos_y;
+    this.textureRadius = 32;
     this.tint = this.GetRandomTint();
-    this.UpdateSize();
 }
 
 FoodSprite.prototype = Object.create(PIXI.Sprite.prototype);
+
+FoodSprite.prototype.SetData = function(decay_rate, food_id, pos_x, pos_y, value)
+{
+    this.decay_rate = decay_rate;
+    this.food_value = value;
+    this.item_id = food_id;
+    this.x = pos_x;
+    this.y = pos_y;
+    this.UpdateSize();
+};
 
 FoodSprite.prototype.UpdateSize = function()
 {

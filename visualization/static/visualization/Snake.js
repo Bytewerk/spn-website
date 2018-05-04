@@ -29,6 +29,27 @@ function Snake(headTexture, segmentPool, name, colorScheme, world_size_x, world_
     this.Container.addChild(this._nameSprite);
 }
 
+Snake.prototype.Destroy = function()
+{
+    while (this._segments.length>0)
+    {
+        let segment = this._segments.pop();
+        this._segmentContainer.removeChild(segment.GetSprite());
+        this._segmentPool.free(segment);
+    }
+
+    while (this._foodContainer.children.length>0)
+    {
+        let foodItem = this._foodContainer.children[0];
+        foodItem.visible = false; // will be removed with decayed food
+        this._foodContainer.removeChild(foodItem);
+    }
+
+    this._foodContainer.destroy();
+    this._segmentContainer.destroy();
+    this.Container.destroy();
+};
+
 Snake.prototype.SetData = function(data)
 {
     this.heading = data.heading;
@@ -163,8 +184,7 @@ Snake.prototype.AnimateEat = function()
         if (dist < radius)
         {
             food.visible = false;
-            this._foodContainer.removeChildAt(i);
-            return; // FIXME this aborts eating for this animation cycle
+            this._foodContainer.removeChild(food);
         }
 
         let factor = (dist-food.speed) / dist;

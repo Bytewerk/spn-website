@@ -37,6 +37,10 @@ function GameVisualization(assets, snakeMoveStrategy, container)
     this.segmentPool = new ObjectPool(function() {
         return new SnakeSegment(this.txBody);
     }, this, 10000);
+
+    this.foodItemPool = new ObjectPool(function() {
+        return new FoodSprite(this.txFood);
+    }, this, 10000);
 }
 
 GameVisualization.prototype.Run = function()
@@ -80,6 +84,7 @@ GameVisualization.prototype.RemoveSnake = function(id)
     if (id in this.snakes)
     {
         this.mainStage.removeChild(this.snakes[id].Container);
+        this.snakes[id].Destroy();
         delete this.snakes[id];
     }
 };
@@ -114,12 +119,13 @@ GameVisualization.prototype.HandleTickMessage = function(frame_id)
     {
         for (let food_id in this.foodItems)
         {
-            if (!this.foodItems[food_id].visible)
+            let item = this.foodItems[food_id];
+            if (!item.visible)
             {
                 delete this.foodItems[food_id];
+                this.foodItemPool.free(item);
             }
         }
-
         this.foodMap.CleanUp();
     }
 
@@ -155,7 +161,8 @@ GameVisualization.prototype.HandleWorldUpdateMessage = function(data)
 
 GameVisualization.prototype.AddFood = function(food_id, pos_x, pos_y, value)
 {
-    let sprite = new FoodSprite(this.txFood, this.food_decay_rate, food_id, pos_x, pos_y, value);
+    let sprite = this.foodItemPool.get();
+    sprite.SetData(this.food_decay_rate, food_id, pos_x, pos_y, value);
     this.foodItems[food_id] = sprite;
     this.foodMap.AddSprite(sprite);
 };
@@ -180,7 +187,16 @@ GameVisualization.prototype.HandleFoodConsumedMessage = function(food_id, consum
     if (food_id in this.foodItems)
     {
         let sprite = this.foodItems[food_id];
-        this.snakes[consumer_id].Eat(sprite);
+        if (consumer_id in this.snakes)
+        {
+            this.snakes[consumer_id].Eat(sprite);
+        }
+        else
+        {
+            this.foodItems[food_id].visible = false;
+            delete this.foodItems[food_id];
+            this.foodItemPool.free(sprite);
+        }
     }
 };
 
