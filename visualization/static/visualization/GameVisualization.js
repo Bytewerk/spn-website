@@ -33,6 +33,10 @@ function GameVisualization(assets, snakeMoveStrategy, container)
 
     this.mainStage = new PIXI.Container();
     this.app.stage.addChild(this.mainStage);
+
+    this.segmentPool = new ObjectPool(function() {
+        return new SnakeSegment(this.txBody);
+    }, this, 10000);
 }
 
 GameVisualization.prototype.Run = function()
@@ -63,7 +67,7 @@ GameVisualization.prototype.CreateSnake = function(bot)
     {
         this.ego_id = bot.id;
     }
-    let snake = new Snake(this.txHead, this.txBody, bot.name, bot.color, this.world_size_x, this.world_size_y);
+    let snake = new Snake(this.txHead, this.segmentPool, bot.name, bot.color, this.world_size_x, this.world_size_y);
     snake.snake_id = bot.id;
     snake.db_id = bot.db_id;
     this.snakes[bot.id] = snake;

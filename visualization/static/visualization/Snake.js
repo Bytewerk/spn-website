@@ -1,10 +1,10 @@
 "use strict";
 
-function Snake(headTexture, bodyTexture, name, colorScheme, world_size_x, world_size_y)
+function Snake(headTexture, segmentPool, name, colorScheme, world_size_x, world_size_y)
 {
     this._name = name;
     this._colorScheme = colorScheme;
-    this._bodyTexture = bodyTexture;
+    this._segmentPool = segmentPool;
 
     this.textureRadius = headTexture.width / 2;
     this.spriteScale = 0.1;
@@ -56,11 +56,12 @@ Snake.prototype.SetLength = function(newLength)
     {
         let seg = this._segments.pop();
         this._segmentContainer.removeChild(seg.GetSprite());
+        this._segmentPool.free(seg);
     }
 
     for (let i=this.GetLength(); i<newLength; i++)
     {
-        let segment = new SnakeSegment(this._bodyTexture);
+        let segment = this._segmentPool.get();
         if (this._segments.length > 0)
         {
             segment.ClonePosition(this._segments[this._segments.length-1]);
