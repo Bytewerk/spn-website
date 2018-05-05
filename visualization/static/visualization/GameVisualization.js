@@ -33,7 +33,6 @@ function GameVisualization(assets, snakeMoveStrategy, container)
 
     this.mainStage = new PIXI.Container();
     this.app.stage.addChild(this.mainStage);
-
     this.segmentPool = new ObjectPool(function() {
         return new SnakeSegment(this.txBody);
     }, this, 10000);
@@ -91,6 +90,7 @@ GameVisualization.prototype.RemoveSnake = function(id)
 
 GameVisualization.prototype.HandleGameInfoMessage = function(world_size_x, world_size_y, food_decay_rate)
 {
+    console.log("GameInfo received");
     this.world_size_x = world_size_x;
     this.world_size_y = world_size_y;
     this.food_decay_rate = food_decay_rate;
@@ -134,6 +134,7 @@ GameVisualization.prototype.HandleTickMessage = function(frame_id)
 
 GameVisualization.prototype.HandleWorldUpdateMessage = function(data)
 {
+    console.log("WorldUpdate received");
     for (let id in data.bots)
     {
         let bot = data.bots[id];

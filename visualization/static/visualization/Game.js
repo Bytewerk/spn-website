@@ -8,6 +8,8 @@ function Game(assets, snakeMoveStrategy, container)
     this.viewer_key = 0;
     this.vis = new GameVisualization(assets, snakeMoveStrategy, container);
     this.logHandlers = [];
+    this.gameInfoReceived = false;
+    this.preGameInfoMessages = [];
 }
 
 Game.prototype.AddLogHandler = function(callback, thisArg)
@@ -57,6 +59,21 @@ Game.prototype.SetViewerKey = function(key)
 Game.prototype.HandleMessage = function(event)
 {
     let data = JSON.parse(event.data);
+
+    if (data.t == "GameInfo")
+    {
+        this.gameInfoReceived = true;
+        this.vis.HandleGameInfoMessage(data.world_size_x, data.world_size_y, data.food_decay_per_frame);
+        while (this.preGameInfoMessages.length > 0)
+        {
+            this.HandleMessage(this.preGameInfoMessages.pop());
+        }
+    } else if (!this.gameInfoReceived)
+    {
+        this.preGameInfoMessages.push(event);
+        return;
+    }
+
     switch (data.t)
     {
         case "GameInfo":
