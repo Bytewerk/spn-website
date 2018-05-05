@@ -33,6 +33,9 @@ function GameVisualization(assets, snakeMoveStrategy, container)
 
     this.mainStage = new PIXI.Container();
     this.app.stage.addChild(this.mainStage);
+
+    this.UpdateMask();
+
     this.segmentPool = new ObjectPool(function() {
         return new SnakeSegment(this.txBody);
     }, this, 10000);
@@ -41,6 +44,16 @@ function GameVisualization(assets, snakeMoveStrategy, container)
         return new FoodSprite(this.txFood);
     }, this, 10000);
 }
+
+GameVisualization.prototype.UpdateMask = function()
+{
+    const mask = new PIXI.Graphics();
+    mask.lineStyle(0);
+    mask.beginFill(0x000000, 0.5);
+    mask.drawRect(0, 0, this.world_size_x, this.world_size_y);
+    mask.endFill();
+    this.app.stage.mask = mask;
+};
 
 GameVisualization.prototype.Run = function()
 {
@@ -95,7 +108,8 @@ GameVisualization.prototype.HandleGameInfoMessage = function(world_size_x, world
     this.world_size_y = world_size_y;
     this.food_decay_rate = food_decay_rate;
     this.foodMap = new ParticleGeoMap(this.world_size_x, this.world_size_y, 64, 64);
-    this.app.stage.addChildAt(this.foodMap.Container, 1);
+    this.app.stage.addChildAt(this.foodMap.Container, 0);
+    this.UpdateMask();
 };
 
 GameVisualization.prototype.HandleTickMessage = function(frame_id)

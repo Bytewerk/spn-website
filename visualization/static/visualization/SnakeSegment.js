@@ -4,35 +4,96 @@ function SnakeSegment(texture)
 {
     this.x = 0;
     this.y = 0;
-    this._sprite = new PIXI.Sprite(texture);
-    this._sprite.anchor.set(0.5);
-    this._sprite.alpha = 0.8;
+    this._texture = texture;
+    this._radius = 1.0;
+    this._world_size_x = 0;
+    this._world_size_y = 0;
+
+    this._sprites = [];
+    for (let i=0; i<3; i++)
+    {
+        let sprite = new PIXI.Sprite(texture);
+        sprite.anchor.set(0.5);
+        sprite.alpha = 0.8;
+        this._sprites.push(sprite);
+    }
 }
+
+SnakeSegment.prototype.SetWorldSize = function(world_size_x, world_size_y)
+{
+    this._world_size_x = world_size_x;
+    this._world_size_y = world_size_y;
+};
 
 SnakeSegment.prototype.AddSpritesFront = function(container)
 {
-    container.addChildAt(this._sprite, 0);
+    for (let sprite of this._sprites)
+    {
+        container.addChildAt(sprite, 0);
+    }
 };
 
 SnakeSegment.prototype.RemoveSprites = function()
 {
-    this._sprite.parent.removeChild(this._sprite);
+    for (let sprite of this._sprites)
+    {
+        sprite.parent.removeChild(sprite);
+    }
 };
 
 SnakeSegment.prototype.UpdateSprites = function()
 {
-    this._sprite.x = this.x;
-    this._sprite.y = this.y;
+    this._sprites[0].x = this.x;
+    this._sprites[0].y = this.y;
+    this._sprites[1].x = this.x;
+    this._sprites[2].y = this.y;
+
+    if (this.x < this._radius)
+    {
+        this._sprites[2].x = this.x + this._world_size_x;
+        this._sprites[2].visible = true;
+    }
+    else if (this.x > this._world_size_x-this._radius)
+    {
+        this._sprites[2].x = this.x - this._world_size_x;
+        this._sprites[2].visible = true;
+    }
+    else
+    {
+        this._sprites[2].visible = false;
+    }
+
+    if (this.y < this._radius)
+    {
+        this._sprites[1].y = this.y + this._world_size_y;
+        this._sprites[1].visible = true;
+    }
+    else if (this.y > this._world_size_y-this._radius)
+    {
+        this._sprites[1].y = this.y - this._world_size_y;
+        this._sprites[1].visible = true;
+    }
+    else
+    {
+        this._sprites[1].visible = false;
+    }
 };
 
 SnakeSegment.prototype.SetTint = function(tint)
 {
-    this._sprite.tint = tint;
+    for (let sprite of this._sprites)
+    {
+        sprite.tint = tint;
+    }
 };
 
 SnakeSegment.prototype.SetScale = function(scale)
 {
-    this._sprite.scale.set(scale, scale);
+    this._radius = scale * (this._texture.width / 2);
+    for (let sprite of this._sprites)
+    {
+        sprite.scale.set(scale, scale);
+    }
 };
 
 SnakeSegment.prototype.SetPosition = function(x, y)

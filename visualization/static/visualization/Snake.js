@@ -87,6 +87,7 @@ Snake.prototype.SetLength = function(newLength)
         {
             segment.ClonePosition(this._segments[this._segments.length-1]);
         }
+        segment.SetWorldSize(this.world_size_x, this.world_size_y);
         segment.SetTint(this._colorScheme[i % this._colorScheme.length]);
         segment.SetScale(this.spriteScale);
         segment.AddSpritesFront(this._segmentContainer);
