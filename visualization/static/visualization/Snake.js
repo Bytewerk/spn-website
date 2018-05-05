@@ -184,7 +184,7 @@ Snake.prototype.AnimateEat = function()
         if (dist < radius)
         {
             food.visible = false;
-            this._foodContainer.removeChild(food);
+            food.parent.removeChild(food);
         }
 
         let factor = (dist-food.speed) / dist;

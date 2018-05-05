@@ -4,8 +4,6 @@ function FoodSprite(texture)
     this.food_value = 0;
     this.decay_rate = 0;
     this.item_id = 0;
-    this.anchor.set(0.5);
-    this.textureRadius = 32;
     this.tint = this.GetRandomTint();
 }
 
@@ -16,8 +14,12 @@ FoodSprite.prototype.SetData = function(decay_rate, food_id, pos_x, pos_y, value
     this.decay_rate = decay_rate;
     this.food_value = value;
     this.item_id = food_id;
+    this.textureRadius = this.texture.width / 2;
+    this.anchor.set(0.5);
     this.x = pos_x;
     this.y = pos_y;
+    this.tint = this.GetRandomTint();
+    this.visible = true;
     this.UpdateSize();
 };
 
