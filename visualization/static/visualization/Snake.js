@@ -21,6 +21,7 @@ function Snake(headTexture, segmentPool, name, colorScheme, world_size_x, world_
     this.Container.addChild(this._segmentContainer);
 
     this._headSegment = new SnakeSegment(headTexture);
+    this._headSegment.SetPosition(-100000, -100000);
     this._headSegment.AddSprites(this.Container);
 
     this._nameText = new PIXI.Text(name, {fill:'white', fontSize:14, fontWeight:"bold", dropShadow:true, dropShadowBlur:1, dropShadowDistance:2});
