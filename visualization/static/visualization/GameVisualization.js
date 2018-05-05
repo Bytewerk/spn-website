@@ -31,8 +31,11 @@ function GameVisualization(assets, snakeMoveStrategy, container)
     this.txBody = PIXI.Texture.fromImage(assets['body.png']);
     this.txFood = PIXI.Texture.fromImage(assets['food.png']);
 
-    this.mainStage = new PIXI.Container();
-    this.app.stage.addChild(this.mainStage);
+    this.foodContainer = new PIXI.Container();
+    this.app.stage.addChild(this.foodContainer);
+
+    this.snakesContainer = new PIXI.Container();
+    this.app.stage.addChild(this.snakesContainer);
 
     this.UpdateMask();
 
@@ -87,7 +90,7 @@ GameVisualization.prototype.CreateSnake = function(bot)
     snake.snake_id = bot.id;
     snake.db_id = bot.db_id;
     this.snakes[bot.id] = snake;
-    this.mainStage.addChild(snake.Container);
+    this.snakesContainer.addChild(snake.Container);
     return snake;
 };
 
@@ -95,7 +98,6 @@ GameVisualization.prototype.RemoveSnake = function(id)
 {
     if (id in this.snakes)
     {
-        this.mainStage.removeChild(this.snakes[id].Container);
         this.snakes[id].Destroy();
         delete this.snakes[id];
     }
@@ -108,7 +110,8 @@ GameVisualization.prototype.HandleGameInfoMessage = function(world_size_x, world
     this.world_size_y = world_size_y;
     this.food_decay_rate = food_decay_rate;
     this.foodMap = new ParticleGeoMap(this.world_size_x, this.world_size_y, 64, 64);
-    this.app.stage.addChildAt(this.foodMap.Container, 0);
+    this.foodContainer.removeChildren();
+    this.foodContainer.addChild(this.foodMap.Container);
     this.UpdateMask();
 };
 

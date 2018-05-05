@@ -43,6 +43,8 @@ Snake.prototype.SetWorldSize = function(world_size_x, world_size_y)
 
 Snake.prototype.Destroy = function()
 {
+    this.Container.parent.removeChild(this.Container);
+
     while (this._segments.length>0)
     {
         let segment = this._segments.pop();
