@@ -24,7 +24,7 @@ function GameVisualization(assets, snakeMoveStrategy, container)
         [ 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,  ],
     ];
 
-    this.app = new PIXI.Application({'transparent':true});
+    this.app = new PIXI.Application({'transparent':false});
     this.app.stage.interactiveChildren = false;
 
     this.txHead = PIXI.Texture.fromImage(assets['head.png']);

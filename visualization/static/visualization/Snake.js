@@ -190,6 +190,6 @@ Snake.prototype.AnimateEat = function()
         let factor = (dist-food.speed) / dist;
         food.x = x + dx*factor;
         food.y = y + dy*factor;
-        food.speed *= 1.2;
+        food.speed *= 1.3;
     }
 };
