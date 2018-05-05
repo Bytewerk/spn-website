@@ -12,22 +12,33 @@ function Snake(headTexture, segmentPool, name, colorScheme, world_size_x, world_
     this.world_size_y = world_size_y;
 
     this._segments = [];
-    this._nameText = new PIXI.Text(name, {fill:'white', fontSize:14, fontWeight:"bold", dropShadow:true, dropShadowBlur:1, dropShadowDistance:2});
-    this._nameText.updateText();
-    this._nameSprite = new PIXI.Sprite(this._nameText.texture);
-    this._nameSprite.anchor.set(1.2, 0.5);
 
-    this._headSprite = new PIXI.Sprite(headTexture);
-    this._headSprite.anchor.set(0.5);
     this._segmentContainer = new PIXI.Container();
     this._foodContainer = new PIXI.Container();
 
     this.Container = new PIXI.Container();
     this.Container.addChild(this._foodContainer);
     this.Container.addChild(this._segmentContainer);
-    this.Container.addChild(this._headSprite);
+
+    this._headSegment = new SnakeSegment(headTexture);
+    this._headSegment.AddSprites(this.Container);
+
+    this._nameText = new PIXI.Text(name, {fill:'white', fontSize:14, fontWeight:"bold", dropShadow:true, dropShadowBlur:1, dropShadowDistance:2});
+    this._nameText.updateText();
+    this._nameSprite = new PIXI.Sprite(this._nameText.texture);
+    this._nameSprite.anchor.set(1.2, 0.5);
     this.Container.addChild(this._nameSprite);
+
+    this.SetWorldSize(world_size_x, world_size_y);
 }
+
+Snake.prototype.SetWorldSize = function(world_size_x, world_size_y)
+{
+    this.world_size_x = world_size_x;
+    this.world_size_y = world_size_y;
+    this._headSegment.SetWorldSize(this.world_size_x, this.world_size_y);
+
+};
 
 Snake.prototype.Destroy = function()
 {
@@ -61,9 +72,9 @@ Snake.prototype.SetData = function(data)
         let seg = data.snake_segments[i];
         this._segments[i].SetPosition(seg.pos_x, seg.pos_y);
     }
-    this._headSprite.x = data.snake_segments[0].pos_x;
-    this._headSprite.y = data.snake_segments[0].pos_y;
-    this._headSprite.rotation = data.heading;
+
+    this._headSegment.SetPosition(data.snake_segments[0].pos_x, data.snake_segments[0].pos_y);
+    this._headSegment.SetRotation(data.heading);
     this._nameSprite.x = data.snake_segments[0].pos_x;
     this._nameSprite.y = data.snake_segments[0].pos_y;
 
@@ -109,7 +120,7 @@ Snake.prototype.SetScale = function(segment_radius)
     {
         this._segments[i].SetScale(this.spriteScale);
     }
-    this._headSprite.scale.set(this.spriteScale, this.spriteScale);
+    this._headSegment.SetScale(this.spriteScale);
 };
 
 Snake.prototype.GetLength = function()
@@ -124,12 +135,12 @@ Snake.prototype.GetSegment = function(i)
 
 Snake.prototype.GetHeadX = function()
 {
-    return this._headSprite.x;
+    return this._headSegment.x;
 };
 
 Snake.prototype.GetHeadY = function()
 {
-    return this._headSprite.y;
+    return this._headSegment.y;
 };
 
 Snake.prototype.GetSegmentRadius = function()
@@ -140,11 +151,10 @@ Snake.prototype.GetSegmentRadius = function()
 Snake.prototype.UpdateHead = function()
 {
     let seg0 = this.GetSegment(0);
-    this._headSprite.x = seg0.x;
-    this._headSprite.y = seg0.y;
+    this._headSegment.ClonePosition(seg0);
+    this._headSegment.SetRotation(this.heading);
     this._nameSprite.x = seg0.x;
     this._nameSprite.y = seg0.y;
-    this._headSprite.rotation = this.heading;
 }
 
 Snake.prototype.CalcRealLength = function()

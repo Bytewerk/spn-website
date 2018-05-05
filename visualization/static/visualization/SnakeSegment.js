@@ -25,6 +25,14 @@ SnakeSegment.prototype.SetWorldSize = function(world_size_x, world_size_y)
     this._world_size_y = world_size_y;
 };
 
+SnakeSegment.prototype.AddSprites = function(container)
+{
+    for (let sprite of this._sprites)
+    {
+        container.addChild(sprite);
+    }
+};
+
 SnakeSegment.prototype.AddSpritesFront = function(container)
 {
     for (let sprite of this._sprites)
@@ -93,6 +101,14 @@ SnakeSegment.prototype.SetScale = function(scale)
     for (let sprite of this._sprites)
     {
         sprite.scale.set(scale, scale);
+    }
+};
+
+SnakeSegment.prototype.SetRotation = function(rotation)
+{
+    for (let sprite of this._sprites)
+    {
+        sprite.rotation = rotation;
     }
 };
 
