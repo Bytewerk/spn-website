@@ -106,7 +106,7 @@ Game.prototype.HandleMessage = function(event)
         case "Log":
             for (let item of this.logHandlers)
             {
-                item[0].call(item[1], data.frame, data,msg);
+                item[0].call(item[1], data.frame, data.msg);
             }
             return;
 
