@@ -9,9 +9,20 @@ function SnakeSegment(texture)
     this._sprite.alpha = 0.8;
 }
 
-SnakeSegment.prototype.GetSprite = function()
+SnakeSegment.prototype.AddSpritesFront = function(container)
 {
-    return this._sprite;
+    container.addChildAt(this._sprite, 0);
+};
+
+SnakeSegment.prototype.RemoveSprites = function()
+{
+    this._sprite.parent.removeChild(this._sprite);
+};
+
+SnakeSegment.prototype.UpdateSprites = function()
+{
+    this._sprite.x = this.x;
+    this._sprite.y = this.y;
 };
 
 SnakeSegment.prototype.SetTint = function(tint)
@@ -42,10 +53,4 @@ SnakeSegment.prototype.MoveDirection = function(direction, length)
         this.x + length*Math.cos(direction),
         this.y + length*Math.sin(direction)
     );
-};
-
-SnakeSegment.prototype.UpdateSprites = function()
-{
-    this._sprite.x = this.x;
-    this._sprite.y = this.y;
 };

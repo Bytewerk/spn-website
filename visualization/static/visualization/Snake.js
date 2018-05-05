@@ -34,7 +34,7 @@ Snake.prototype.Destroy = function()
     while (this._segments.length>0)
     {
         let segment = this._segments.pop();
-        this._segmentContainer.removeChild(segment.GetSprite());
+        segment.RemoveSprites();
         this._segmentPool.free(segment);
     }
 
@@ -76,7 +76,7 @@ Snake.prototype.SetLength = function(newLength)
     while (this.GetLength() > newLength)
     {
         let seg = this._segments.pop();
-        this._segmentContainer.removeChild(seg.GetSprite());
+        seg.RemoveSprites();
         this._segmentPool.free(seg);
     }
 
@@ -89,8 +89,7 @@ Snake.prototype.SetLength = function(newLength)
         }
         segment.SetTint(this._colorScheme[i % this._colorScheme.length]);
         segment.SetScale(this.spriteScale);
-
-        this._segmentContainer.addChildAt(segment.GetSprite(), 0);
+        segment.AddSpritesFront(this._segmentContainer);
         this._segments.push(segment);
     }
 };
