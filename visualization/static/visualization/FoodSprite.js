@@ -20,10 +20,11 @@ FoodSprite.prototype.SetData = function(decay_rate, food_id, pos_x, pos_y, value
     this.y = pos_y;
     this.tint = this.GetRandomTint();
     this.visible = true;
-    this.UpdateSize();
+    this.request_garbage_collect = false;
+    this.UpdateScale();
 };
 
-FoodSprite.prototype.UpdateSize = function()
+FoodSprite.prototype.UpdateScale = function()
 {
     let size = Math.sqrt(this.food_value) / this.textureRadius;
     this.scale.x = size;
@@ -36,11 +37,12 @@ FoodSprite.prototype.Decay = function(cycles)
     {
         if (!cycles) { cycles = 1; }
         this.food_value -= cycles*this.decay_rate;
-        this.UpdateSize();
+        this.UpdateScale();
     }
-    if (this.food_value <= 0.05)
+    if (this.food_value < 0)
     {
         this.visible = false;
+        this.request_garbage_collect = true;
     }
 };
 

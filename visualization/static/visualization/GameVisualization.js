@@ -133,16 +133,14 @@ GameVisualization.prototype.HandleTickMessage = function(frame_id)
         {
             let item = this.foodItems[food_id];
             item.Decay(nth);
-            if (!item.visible)
+            if (item.request_garbage_collect)
             {
                 delete this.foodItems[food_id];
                 this.foodItemPool.free(item);
             }
         }
-        this.foodMap.CleanUp();
+        this.foodMap.GarbageCollect();
     }
-
-    this.UpdateStagePosition();
 };
 
 GameVisualization.prototype.HandleWorldUpdateMessage = function(data)
@@ -256,24 +254,22 @@ GameVisualization.prototype.FollowDbId = function(db_id)
 
 GameVisualization.prototype.UpdateStagePosition = function()
 {
-    if (this.ego_id in this.snakes)
+    if ((++this.updateVisibilityCounter < 25) || (!this.foodMap))
     {
-        /*let egoSnake = this.snakes[this.ego_id];
-        let egoX = egoSnake.GetHeadX();
-        let egoY = egoSnake.GetHeadY();
-
-        let transX = (this.app.renderer.width/2) - egoX;
-        let transY = (this.app.renderer.height/2) - egoY;
-        this.app.stage.setTransform(transX, transY);
-        if (this.foodMap)
-        {
-            this.foodMap.Update(egoX, egoY, this.app.renderer.width, this.app.renderer.height);
-        } */
-    } else {
-        this.app.stage.setTransform(0,0);
-        if (this.foodMap)
-        {
-            this.foodMap.Update(this.world_size_x/2, this.world_size_y/2, this.world_size_x, this.world_size_y);
-        }
+        return;
     }
+    this.updateVisibilityCounter = 0;
+
+    const center = this.viewport.center;
+    const width = this.viewport.right - this.viewport.left;
+    const height = this.viewport.bottom - this.viewport.top;
+
+    this.foodMap.Update(center.x, center.y, width, height);
+
+    const minimumVisibleFoodSize = 0.5 / this.viewport.scale.x;
+    console.log(minimumVisibleFoodSize);
+    this.foodMap.Iterate(function(foodSprite) {
+        foodSprite.visible = foodSprite.food_value > minimumVisibleFoodSize;
+    });
+
 };

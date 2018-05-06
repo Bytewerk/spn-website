@@ -26,41 +26,19 @@ ParticleGeoMap.prototype.AddSprite = function(sprite)
     this._geoMap[key].addChild(sprite);
 };
 
-ParticleGeoMap.prototype.RemoveItem = function(item_id)
-{
-    if (!(item_id in this._itemIdKeyMap))
-    {
-        return;
-    }
-
-    let key = this._itemIdKeyMap[item_id];
-    delete this._itemIdKeyMap[key];
-
-    let container = this._geoMap[key];
-    for (let i in container.children)
-    {
-        let child = container.children[i];
-        if (child.item_id == item_id)
-        {
-            container.removeChild(child);
-            return child;
-        }
-    }
-};
-
-ParticleGeoMap.prototype.CleanUp = function()
+ParticleGeoMap.prototype.GarbageCollect = function()
 {
     for (let container of this._geoMap)
     {
-        this.RemoveInvisibleFromContainer(container);
+        this.GarbageCollectContainer(container);
     }
 };
 
-ParticleGeoMap.prototype.RemoveInvisibleFromContainer = function(container)
+ParticleGeoMap.prototype.GarbageCollectContainer = function(container)
 {
     for (let child of container.children)
     {
-        if (!child.visible)
+        if (child.request_garbage_collect)
         {
             let key = this._itemIdKeyMap[child.item_id];
             delete this._itemIdKeyMap[key];
@@ -77,18 +55,6 @@ ParticleGeoMap.prototype.Iterate = function(callback)
         for (let i in container.children)
         {
             callback(container.children[i]);
-        }
-    }
-};
-
-ParticleGeoMap.prototype.IterateRow = function(row, callback, context)
-{
-    for (let i=row*this._numTilesX; i<(row+1)*this._numTilesX; i++)
-    {
-        let container = this._geoMap[i];
-        for (let i in container.children)
-        {
-            callback.call(context, container.children[i]);
         }
     }
 };
