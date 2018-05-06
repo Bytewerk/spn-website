@@ -13,30 +13,24 @@ function GameVisualization(assets, snakeMoveStrategy, container)
     this.food_decay_rate = 0.001;
     this.foodItems = {};
 
-    this.colorSchemes = [
-        [ 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000, 0xA00000, 0xA00000, 0xA00000, 0xA00000 ],
-        [ 0x00FF00, 0x00FF00, 0x00FF00, 0x00FF00, 0x00A000, 0x00A000, 0x00A000, 0x00A000 ],
-        [ 0x0000FF, 0x0000FF, 0x0000FF, 0x0000FF, 0x0000A0, 0x0000A0, 0x0000A0, 0x0000A0 ],
-        [ 0xFF0000, 0xFF0000, 0x444444 ],
-        [ 0x444444, 0x444444, 0x444444, 0x444444, 0x444444, 0x444444, 0x444444, 0x444444, 0x444444, 0x444444, 0x00FF00 ],
-        [ 0xFFBA00, 0xFFBA00, 0xFFBA00, 0x555555, 0x555555, 0x555555, 0x555555, 0x555555, 0x555555, 0x555555, 0x555555, 0x555555, 0x555555 ],
-        [ 0xAAAAAA, 0x999999, 0x888888, 0x777777, 0x666666, 0x555555, 0x444444, 0x555555, 0x666666, 0x777777, 0x888888, 0x999999 ],
-        [ 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000, 0xFF0000, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF,  ],
-    ];
-
     this.app = new PIXI.Application({'transparent':false});
-    this.app.stage.interactiveChildren = false;
+    //this.app.stage.interactiveChildren = false;
 
     this.txHead = PIXI.Texture.fromImage(assets['head.png']);
     this.txBody = PIXI.Texture.fromImage(assets['body.png']);
     this.txFood = PIXI.Texture.fromImage(assets['food.png']);
 
-    this.foodContainer = new PIXI.Container();
-    this.app.stage.addChild(this.foodContainer);
+    this.viewport = new PIXI.extras.Viewport({
+        screenWidth: this.container.clientWidth,
+        screenHeight: this.container.clientHeight,
+        worldWidth: this.world_size_x,
+        worldHeight: this.world_size_y
+    });
+    this.app.stage.addChild(this.viewport);
+    this.viewport.drag().pinch().wheel();
 
-    this.snakesContainer = new PIXI.Container();
-    this.app.stage.addChild(this.snakesContainer);
-
+    this.foodContainer = this.viewport.addChild(new PIXI.Container());
+    this.snakesContainer = this.viewport.addChild(new PIXI.Container());
     this.UpdateMask();
 
     this.segmentPool = new ObjectPool(function() {
@@ -55,7 +49,7 @@ GameVisualization.prototype.UpdateMask = function()
     mask.beginFill(0x000000, 0.5);
     mask.drawRect(0, 0, this.world_size_x, this.world_size_y);
     mask.endFill();
-    this.app.stage.mask = mask;
+    this.snakesContainer.mask = mask;
 };
 
 GameVisualization.prototype.Run = function()
@@ -113,6 +107,8 @@ GameVisualization.prototype.HandleGameInfoMessage = function(world_size_x, world
     this.foodContainer.removeChildren();
     this.foodContainer.addChild(this.foodMap.Container);
     this.UpdateMask();
+    this.viewport.resize(this.container.clientWidth, this.container.clientHeight, this.world_size_x, this.world_size_y);
+    this.viewport.fitWidth();
 };
 
 GameVisualization.prototype.HandleTickMessage = function(frame_id)
