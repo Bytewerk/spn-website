@@ -136,6 +136,11 @@ Snake.prototype.GetSegment = function(i)
     return this._segments[i];
 };
 
+Snake.prototype.GetHeadSprite = function()
+{
+    return this._headSegment.GetMainSprite();
+};
+
 Snake.prototype.GetHeadX = function()
 {
     return this._headSegment.x;

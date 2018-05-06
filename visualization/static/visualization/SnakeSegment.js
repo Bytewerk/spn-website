@@ -19,6 +19,11 @@ function SnakeSegment(texture)
     }
 }
 
+SnakeSegment.prototype.GetMainSprite = function()
+{
+    return this._sprites[0];
+};
+
 SnakeSegment.prototype.SetWorldSize = function(world_size_x, world_size_y)
 {
     this._world_size_x = world_size_x;

@@ -14,8 +14,6 @@ function GameVisualization(assets, snakeMoveStrategy, container)
     this.foodItems = {};
 
     this.app = new PIXI.Application({'transparent':false});
-    //this.app.stage.interactiveChildren = false;
-
     this.txHead = PIXI.Texture.fromImage(assets['head.png']);
     this.txBody = PIXI.Texture.fromImage(assets['body.png']);
     this.txFood = PIXI.Texture.fromImage(assets['food.png']);
@@ -44,12 +42,12 @@ function GameVisualization(assets, snakeMoveStrategy, container)
 
 GameVisualization.prototype.UpdateMask = function()
 {
-    const mask = new PIXI.Graphics();
+/*    const mask = new PIXI.Graphics();
     mask.lineStyle(0);
     mask.beginFill(0x000000, 0.5);
     mask.drawRect(0, 0, this.world_size_x, this.world_size_y);
     mask.endFill();
-    this.snakesContainer.mask = mask;
+    this.snakesContainer.mask = mask; */
 };
 
 GameVisualization.prototype.Run = function()
@@ -67,7 +65,12 @@ GameVisualization.prototype.Resize = function()
 GameVisualization.prototype.GetRenderer = function()
 {
     return this.app.renderer;
-}
+};
+
+GameVisualization.prototype.GetSnake = function(id)
+{
+    return this.snakes[id];
+};
 
 GameVisualization.prototype.GameTick = function(delta)
 {
@@ -76,15 +79,18 @@ GameVisualization.prototype.GameTick = function(delta)
 
 GameVisualization.prototype.CreateSnake = function(bot)
 {
-    if (bot.db_id == this.follow_db_id)
-    {
-        this.ego_id = bot.id;
-    }
     let snake = new Snake(this.txHead, this.segmentPool, bot.name, bot.color, this.world_size_x, this.world_size_y);
     snake.snake_id = bot.id;
     snake.db_id = bot.db_id;
     this.snakes[bot.id] = snake;
     this.snakesContainer.addChild(snake.Container);
+
+    if (snake.db_id == this.follow_db_id)
+    {
+        this.ego_id = snake.snake_id;
+        this.viewport.follow(snake.GetHeadSprite(), { radius: 0 });
+    }
+
     return snake;
 };
 
@@ -240,9 +246,10 @@ GameVisualization.prototype.FollowDbId = function(db_id)
     this.follow_db_id = db_id;
     for (let id in this.snakes)
     {
-        if (this.snakes[id].db_id == db_id)
+        let snake = this.snakes[id];
+        if (snake.db_id == db_id)
         {
-            this.ego_id = id;
+            this.viewport.follow(snake.GetHeadSprite(), { radius: 200 });
         }
     }
 }
@@ -251,7 +258,7 @@ GameVisualization.prototype.UpdateStagePosition = function()
 {
     if (this.ego_id in this.snakes)
     {
-        let egoSnake = this.snakes[this.ego_id];
+        /*let egoSnake = this.snakes[this.ego_id];
         let egoX = egoSnake.GetHeadX();
         let egoY = egoSnake.GetHeadY();
 
@@ -261,7 +268,7 @@ GameVisualization.prototype.UpdateStagePosition = function()
         if (this.foodMap)
         {
             this.foodMap.Update(egoX, egoY, this.app.renderer.width, this.app.renderer.height);
-        }
+        } */
     } else {
         this.app.stage.setTransform(0,0);
         if (this.foodMap)
