@@ -68,6 +68,7 @@ Game.prototype.HandleMessage = function(event)
         {
             this.HandleMessage(this.preGameInfoMessages.pop());
         }
+        return;
     } else if (!this.gameInfoReceived)
     {
         this.preGameInfoMessages.push(event);
@@ -76,9 +77,6 @@ Game.prototype.HandleMessage = function(event)
 
     switch (data.t)
     {
-        case "GameInfo":
-            return this.vis.HandleGameInfoMessage(data.world_size_x, data.world_size_y, data.food_decay_per_frame);
-
         case "WorldUpdate":
             return this.vis.HandleWorldUpdateMessage(data);
 
@@ -98,6 +96,13 @@ Game.prototype.HandleMessage = function(event)
                 this.vis.HandleBotMovedMessage(b.bot_id, b.segment_data, b.length, b.segment_radius);
             }
             return this.vis.HandleTickMessage(null); // FIXME this is a workaround because we somehow do not receive TickMessage
+
+        case "BotStats":
+            this.HandleBotStatsMessage(data.data);
+            return;
+
+        case "BotMoveHead":
+            return;
 
         case "FoodSpawn":
             for (let item of data.items)
@@ -131,4 +136,20 @@ Game.prototype.HandleMessage = function(event)
             return;
     }
 
+};
+
+Game.prototype.HandleBotStatsMessage = function(data)
+{
+    let el = $('#bot_stats tbody');
+    let vis = this.vis;
+    el.empty();
+    for (let id in data)
+    {
+        let snake = this.vis.GetSnake(id);
+        if (!snake) { continue; }
+        let d = data[id];
+        let row = $("<tr><td>"+snake.GetName()+"</td><td>"+d.n.toFixed(1)+"</td><td>"+d.c.toFixed(1)+"</td><td>"+d.h.toFixed(1)+"</td></tr>");
+        row.click(function() { vis.FollowName(snake.GetName())});
+        el.append(row);
+    }
 };
