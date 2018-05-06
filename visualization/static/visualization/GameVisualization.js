@@ -5,8 +5,7 @@ function GameVisualization(assets, snakeMoveStrategy, container)
     this.container = container;
     this.snakeMoveStrategy = snakeMoveStrategy;
     this.snakes = {};
-    this.ego_id = 0;
-    this.follow_db_id = null;
+    this.follow_name = null;
     this.nextFoodDecayRow = 0;
     this.world_size_x = 1024;
     this.world_size_y = 1024;
@@ -85,9 +84,8 @@ GameVisualization.prototype.CreateSnake = function(bot)
     this.snakes[bot.id] = snake;
     this.snakesContainer.addChild(snake.Container);
 
-    if (snake.db_id == this.follow_db_id)
+    if (snake.GetName() == this.follow_name)
     {
-        this.ego_id = snake.snake_id;
         this.viewport.follow(snake.GetHeadSprite(), { radius: 0 });
     }
 
@@ -239,18 +237,18 @@ GameVisualization.prototype.HandleBotMoved2Message = function(bot_id, heading, s
     }
 };
 
-GameVisualization.prototype.FollowDbId = function(db_id)
+GameVisualization.prototype.FollowName = function(name)
 {
-    this.follow_db_id = db_id;
+    this.follow_name = name;
     for (let id in this.snakes)
     {
         let snake = this.snakes[id];
-        if (snake.db_id == db_id)
+        if (snake.GetName() == this.follow_name)
         {
             this.viewport.follow(snake.GetHeadSprite(), { radius: 200 });
         }
     }
-}
+};
 
 GameVisualization.prototype.UpdateStagePosition = function()
 {
@@ -267,7 +265,6 @@ GameVisualization.prototype.UpdateStagePosition = function()
     this.foodMap.Update(center.x, center.y, width, height);
 
     const minimumVisibleFoodSize = 0.5 / this.viewport.scale.x;
-    console.log(minimumVisibleFoodSize);
     this.foodMap.Iterate(function(foodSprite) {
         foodSprite.visible = foodSprite.food_value > minimumVisibleFoodSize;
     });

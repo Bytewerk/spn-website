@@ -66,6 +66,7 @@
 <script type="text/javascript">
   let snake_title = "{{ snake.comment | default:"" }}";
   let snake_id = {{ snake.id | default:"null" }};
+  let snake_follow_name = "{{ snake.user.username }}";
   let viewer_key = "{{ profile.viewer_key }}";
   let csrftoken = $("[name=csrfmiddlewaretoken]").val();
 </script>

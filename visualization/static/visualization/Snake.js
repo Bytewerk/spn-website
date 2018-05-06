@@ -156,6 +156,11 @@ Snake.prototype.GetSegmentRadius = function()
     return this._segmentRadius;
 };
 
+Snake.prototype.GetName = function()
+{
+    return this._name;
+};
+
 Snake.prototype.UpdateHead = function()
 {
     let seg0 = this.GetSegment(0);
