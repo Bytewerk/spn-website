@@ -2,6 +2,10 @@
 --- Every bot is allowed to store 100MB within the global namespace and the 
 --- data persists until the bot dies. So the bot can save data from frame 
 --- to frame.
+--- The following Lua standard methods are allowed: assert, print, ipairs, 
+--- error, next, pairs, pcall, select,tonumber, tostring, type, unpack, 
+--- _VERSION, xpcall
+
 
 --- That method is called each frame.
 -- Here you can implement you bot logic. The return value must be an radiant angle.
