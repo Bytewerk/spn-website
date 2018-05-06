@@ -2,31 +2,89 @@
 --- Every bot is allowed to store 100MB within the global namespace and the 
 --- data persists until the bot dies. So the bot can save data from frame 
 --- to frame.
---- The following Lua standard methods are allowed: assert, print, ipairs, 
---- error, next, pairs, pcall, select,tonumber, tostring, type, unpack, 
---- _VERSION, xpcall
+--- <p>The following Lua standard functions are allowed:</p>
+--- <p><a href="http://pgl.yoyo.org/luai/i/assert">assert</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/print">print</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/ipairs">ipairs</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/error">error</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/next">next</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/pairs">pairs</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/pcall">pcall</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/select">select</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/tonumber">tonumber</a>,
+--- <a href="http://pgl.yoyo.org/luai/i/tostring">tostring</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/type">type</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/unpack">unpack</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/_VERSION">_VERSION</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/xpcall">xpcall</a></p>
+--- <p>From the module <code>math</code> you can use:</p>
+--- <p><a href="http://pgl.yoyo.org/luai/i/math.abs">abs</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.acos">acos</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.asin">asin</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.atan">atan</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.atan2">atan2</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.ceil">ceil</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.cos">cos</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.cosh">cosh</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.deg">deg</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.exp">exp</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.floor">floor</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.fmod">fmod</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.frexp">frexp</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.huge">huge</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.ldexp">ldexp</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.log">log</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.log10">log10</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.max">max</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.min">min</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.modf">modf</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.pi">pi</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.pow">pow</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.rad">rad</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.random">random</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.randomseed">randomseed</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.sin">sin</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.sinh">sinh</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.sqrt">sqrt</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.tan">tan</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/math.tanh">tanh</a></p>
+--- <p>From the module <code>os</code> you can use:</p>
+--- <p><a href="http://pgl.yoyo.org/luai/i/os.clock">clock</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/os.difftime">difftime</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/os.time">time</a></p>
+--- <p>From the module <code>table</code> you can use:</p>
+--- <a href="http://pgl.yoyo.org/luai/i/table.maxn">maxn</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/table.insert">insert</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/table.remove">remove</a>, 
+--- <a href="http://pgl.yoyo.org/luai/i/table.sort">sort</a></p>
+--- <p>Every snake can describe itself with the following attributes of the global variable <code>self</code>:</p>
+--- <ul><li>id (number): internal identifier</li>
+--- <li>segment_radius (number): the size of the snake</li>
+--- <li>mass (number): the weight of the snake</li>
+--- <li>sight_radius (number): the field of view of the snake, which increases with the size of the snake</li>
+--- <li>consume_radius (number): the field of feed of the snake, which increases with the size of the snake</li>
+--- <li>max_step_angle (number): unknown definition</li>
+--- <li>start_frame (number): the game frame, when the snake was born</li>
+--- <li>current_frame (number): the current game frame</li>
+--- <li>speed (number): default speed is 1, but it can change if a snake is using boost</li>
+--- <li>food_consumed_natural (number): unknown definition</li>
+--- <li>food_consumed_hunted_self (number): unknown definition</li>
+--- <li>food_consumed_hunted_by_others (number): unknown definition</li>
+--- <li>colors ({number}): table of colors (default color is 0x0000FF00, maximum count is 100, set is available in <a href="#init">init</a>)</li>
+--- <li>face (number): not implemented yet (returns 0, set is available in <a href="#init">init</a>)</li>
+--- <li>logo (number): not implemented yet (returns 0, set is available in <a href="#init">init</a>)</li></ul>
 
 
---- That method is called each frame.
--- Here you can implement you bot logic. The return value must be an radiant angle.
--- A negative angle means turn left and a positive angle 
--- means turn right. With 0, the snake keeps its direction.
--- @return new angle relative to the head direction
--- @usage function step()
---   return 0.005
--- end
-function step()
-    return 0.005
-end
-
---- This method is called upon creation of a bot
+--- This function is called upon creation of a bot
 -- Initialialize your environment here.
--- you can also access the "self" object here and, e.g. set your snake's colors
+-- You can also access the "self" module here and, e.g. set your snake's colors.
+-- @usage function init()
+--     self.colors = { 0xFF0000, 0xFFBF00, 0x80FF00, 0x00FF40, 0x00FFFF, 0x0015FF, 0x8000FF }
+-- end
 function init()
-    self.colors = { 0xFF0000, 0xFFBF00, 0x80FF00, 0x00FF40, 0x00FFFF, 0x0015FF, 0x8000FF }
 end
 
---- That method returns all food as list.
+--- That function returns all food as list.
 -- @param max_distance all food within the distance is included
 -- @param minimum_food_value all lower food values are filtered (min: 0, max: unknown)
 -- @usage local food = findFood(max_distance, 0.8)
@@ -37,7 +95,7 @@ end
 function findFood(max_distance, minimum_food_value)
 end
 
---- That method returns all segments of all snakes within a certain radius as list. 
+--- That function returns all segments of all snakes within a certain radius as list. 
 -- All attributes of each item in the segments list are measured between the center of your head the the center of the item center.
 -- @param max_distance all segements within that distance are included
 -- @param include_own If true, your snake segments are included. Otherwise you get only enemy segments
@@ -51,7 +109,18 @@ end
 function findSegments(max_distance, include_own)
 end
 
---- That method sends messages to the development console.
+--- That function sends messages to the development console.
 -- @param message this string will be transfered to the console
 function log(message)
+end
+
+--- That function is called each frame.
+-- Here you can implement you bot logic. The return value must be an radiant angle.
+-- A negative angle means turn left and a positive angle 
+-- means turn right. With 0, the snake keeps its direction.
+-- @return new angle relative to the head direction
+-- @usage function step()
+--   return 0.005
+-- end
+function step()
 end

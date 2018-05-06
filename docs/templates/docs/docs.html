@@ -1,10 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block title %}
-    <title>Docs - Schlangenprogrammiernacht 2018</title>
-{% endblock %}
-
 {% block earlycss %}
     <link rel="stylesheet" type="text/css" href="{% static "docs/github-markdown.css" %}" />
 {% endblock %}
@@ -32,31 +28,102 @@
 <p>
  Every bot is allowed to store 100MB within the global namespace and the
  data persists until the bot dies. So the bot can save data from frame
- to frame.</p>
+ to frame.
+ <p>The following Lua standard functions are allowed:</p>
+ <p><a href="http://pgl.yoyo.org/luai/i/assert">assert</a>,
+ <a href="http://pgl.yoyo.org/luai/i/print">print</a>,
+ <a href="http://pgl.yoyo.org/luai/i/ipairs">ipairs</a>,
+ <a href="http://pgl.yoyo.org/luai/i/error">error</a>,
+ <a href="http://pgl.yoyo.org/luai/i/next">next</a>,
+ <a href="http://pgl.yoyo.org/luai/i/pairs">pairs</a>,
+ <a href="http://pgl.yoyo.org/luai/i/pcall">pcall</a>,
+ <a href="http://pgl.yoyo.org/luai/i/select">select</a>,
+ <a href="http://pgl.yoyo.org/luai/i/tonumber">tonumber</a>,
+ <a href="http://pgl.yoyo.org/luai/i/tostring">tostring</a>,
+ <a href="http://pgl.yoyo.org/luai/i/type">type</a>,
+ <a href="http://pgl.yoyo.org/luai/i/unpack">unpack</a>,
+ <a href="http://pgl.yoyo.org/luai/i/_VERSION">_VERSION</a>,
+ <a href="http://pgl.yoyo.org/luai/i/xpcall">xpcall</a></p>
+ <p>From the module <code>math</code> you can use:</p>
+ <p><a href="http://pgl.yoyo.org/luai/i/math.abs">abs</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.acos">acos</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.asin">asin</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.atan">atan</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.atan2">atan2</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.ceil">ceil</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.cos">cos</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.cosh">cosh</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.deg">deg</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.exp">exp</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.floor">floor</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.fmod">fmod</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.frexp">frexp</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.huge">huge</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.ldexp">ldexp</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.log">log</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.log10">log10</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.max">max</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.min">min</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.modf">modf</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.pi">pi</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.pow">pow</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.rad">rad</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.random">random</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.randomseed">randomseed</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.sin">sin</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.sinh">sinh</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.sqrt">sqrt</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.tan">tan</a>,
+ <a href="http://pgl.yoyo.org/luai/i/math.tanh">tanh</a></p>
+ <p>From the module <code>os</code> you can use:</p>
+ <p><a href="http://pgl.yoyo.org/luai/i/os.clock">clock</a>,
+ <a href="http://pgl.yoyo.org/luai/i/os.difftime">difftime</a>,
+ <a href="http://pgl.yoyo.org/luai/i/os.time">time</a></p>
+ <p>From the module <code>table</code> you can use:</p>
+ <a href="http://pgl.yoyo.org/luai/i/table.maxn">maxn</a>,
+ <a href="http://pgl.yoyo.org/luai/i/table.insert">insert</a>,
+ <a href="http://pgl.yoyo.org/luai/i/table.remove">remove</a>,
+ <a href="http://pgl.yoyo.org/luai/i/table.sort">sort</a></p>
+ <p>Every snake can describe itself with the following attributes of the global variable <code>self</code>:</p>
+ <ul><li>id (number): internal identifier</li>
+ <li>segment_radius (number): the size of the snake</li>
+ <li>mass (number): the weight of the snake</li>
+ <li>sight_radius (number): the field of view of the snake, which increases with the size of the snake</li>
+ <li>consume_radius (number): the field of feed of the snake, which increases with the size of the snake</li>
+ <li>max_step_angle (number): unknown definition</li>
+ <li>start_frame (number): the game frame, when the snake was born</li>
+ <li>current_frame (number): the current game frame</li>
+ <li>speed (number): default speed is 1, but it can change if a snake is using boost</li>
+ <li>food_consumed_natural (number): unknown definition</li>
+ <li>food_consumed_hunted_self (number): unknown definition</li>
+ <li>food_consumed_hunted_by_others (number): unknown definition</li>
+ <li>colors ({number}): table of colors (default color is 0x0000FF00, maximum count is 100, set is available in <a href="#init">init</a>)</li>
+ <li>face (number): not implemented yet (returns 0, set is available in <a href="#init">init</a>)</li>
+ <li>logo (number): not implemented yet (returns 0, set is available in <a href="#init">init</a>)</li></ul></p>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#step">step ()</a></td>
-	<td class="summary">That method is called each frame.</td>
-	</tr>
-	<tr>
 	<td class="name" nowrap><a href="#init">init ()</a></td>
-	<td class="summary">This method is called upon creation of a bot
+	<td class="summary">This function is called upon creation of a bot
  Initialialize your environment here.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#findFood">findFood (max_distance, minimum_food_value)</a></td>
-	<td class="summary">That method returns all food as list.</td>
+	<td class="summary">That function returns all food as list.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#findSegments">findSegments (max_distance, include_own)</a></td>
-	<td class="summary">That method returns all segments of all snakes within a certain radius as list.</td>
+	<td class="summary">That function returns all segments of all snakes within a certain radius as list.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#log">log (message)</a></td>
-	<td class="summary">That method sends messages to the development console.</td>
+	<td class="summary">That function sends messages to the development console.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#step">step ()</a></td>
+	<td class="summary">That function is called each frame.</td>
 	</tr>
 </table>
 
@@ -65,47 +132,25 @@
 
     <dl class="function">
     <dt>
-    <a name = "step"></a>
-    <strong>step ()</strong>
+    <a name = "init"></a>
+    <strong>init ()</strong>
     </dt>
     <dd>
-    That method is called each frame.
- Here you can implement you bot logic. The return value must be an radiant angle.
- A negative angle means turn left and a positive angle
- means turn right. With 0, the snake keeps its direction.
+    This function is called upon creation of a bot
+ Initialialize your environment here.
+ You can also access the "self" module here and, e.g. set your snake's colors.
 
 
 
-    <h4>Returns:</h4>
-    <ol>
-
-        new angle relative to the head direction
-    </ol>
 
 
 
     <h4>Usage:</h4>
     <ul>
-        <pre class="usage"><code class="lua"> <span class="keyword">function</span> step()
-   <span class="keyword">return</span> <span class="number">0.005</span>
+        <pre class="usage"><code class="lua"> <span class="keyword">function</span> init()
+     self.colors = { <span class="number">0xFF0000</span>, <span class="number">0xFFBF00</span>, <span class="number">0x80FF00</span>, <span class="number">0x00FF40</span>, <span class="number">0x00FFFF</span>, <span class="number">0x0015FF</span>, <span class="number">0x8000FF</span> }
  <span class="keyword">end</span></code></pre>
     </ul>
-
-</dd>
-    <dt>
-    <a name = "init"></a>
-    <strong>init ()</strong>
-    </dt>
-    <dd>
-    This method is called upon creation of a bot
- Initialialize your environment here.
- you can also access the "self" object here and, e.g. set your snake's colors
-
-
-
-
-
-
 
 </dd>
     <dt>
@@ -113,7 +158,7 @@
     <strong>findFood (max_distance, minimum_food_value)</strong>
     </dt>
     <dd>
-    That method returns all food as list.
+    That function returns all food as list.
 
 
     <h4>Parameters:</h4>
@@ -144,7 +189,7 @@
     <strong>findSegments (max_distance, include_own)</strong>
     </dt>
     <dd>
-    That method returns all segments of all snakes within a certain radius as list.
+    That function returns all segments of all snakes within a certain radius as list.
  All attributes of each item in the segments list are measured between the center of your head the the center of the item center.
 
 
@@ -178,7 +223,7 @@
     <strong>log (message)</strong>
     </dt>
     <dd>
-    That method sends messages to the development console.
+    That function sends messages to the development console.
 
 
     <h4>Parameters:</h4>
@@ -191,6 +236,34 @@
 
 
 
+
+</dd>
+    <dt>
+    <a name = "step"></a>
+    <strong>step ()</strong>
+    </dt>
+    <dd>
+    That function is called each frame.
+ Here you can implement you bot logic. The return value must be an radiant angle.
+ A negative angle means turn left and a positive angle
+ means turn right. With 0, the snake keeps its direction.
+
+
+
+    <h4>Returns:</h4>
+    <ol>
+
+        new angle relative to the head direction
+    </ol>
+
+
+
+    <h4>Usage:</h4>
+    <ul>
+        <pre class="usage"><code class="lua"> <span class="keyword">function</span> step()
+   <span class="keyword">return</span> <span class="number">0.005</span>
+ <span class="keyword">end</span></code></pre>
+    </ul>
 
 </dd>
 </dl>
