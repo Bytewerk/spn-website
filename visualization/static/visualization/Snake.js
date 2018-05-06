@@ -23,12 +23,14 @@ function Snake(headTexture, segmentPool, name, colorScheme, world_size_x, world_
     this._headSegment = new SnakeSegment(headTexture);
     this._headSegment.SetPosition(-100000, -100000);
     this._headSegment.AddSprites(this.Container);
+    this.GetHeadSprite().interactive = true;
 
     this._nameText = new PIXI.Text(name, {fill:'white', fontSize:64, fontWeight:"bold", dropShadow:true, dropShadowBlur:3, dropShadowDistance:6});
     this._nameText.updateText();
     this._nameSprite = new PIXI.Sprite(this._nameText.texture);
-    this._nameSprite.scale.set(0.2, 0.2);
+    this._nameSprite.scale.set(0.3, 0.3);
     this._nameSprite.anchor.set(1.2, 0.5);
+    this._nameSprite.interactive = true;
     this.Container.addChild(this._nameSprite);
 
     this.SetWorldSize(world_size_x, world_size_y);
@@ -140,6 +142,11 @@ Snake.prototype.GetSegment = function(i)
 Snake.prototype.GetHeadSprite = function()
 {
     return this._headSegment.GetMainSprite();
+};
+
+Snake.prototype.GetNameSprite = function()
+{
+    return this._nameSprite;
 };
 
 Snake.prototype.GetHeadX = function()

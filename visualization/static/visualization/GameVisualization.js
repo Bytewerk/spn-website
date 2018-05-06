@@ -83,6 +83,8 @@ GameVisualization.prototype.CreateSnake = function(bot)
     snake.db_id = bot.db_id;
     this.snakes[bot.id] = snake;
     this.snakesContainer.addChild(snake.Container);
+    snake.GetNameSprite().on('click', function() { this.FollowName(bot.name); }, this);
+    snake.GetHeadSprite().on('click', function() { this.FollowName(bot.name); }, this);
 
     if (snake.GetName() == this.follow_name)
     {
