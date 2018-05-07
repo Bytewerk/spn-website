@@ -12,7 +12,6 @@ BotMoveHeadMoveStrategy = function()
 
 BotMoveHeadMoveStrategy.prototype.SetGameInfo = function(gameinfo)
 {
-    this.gameinfo =  gameinfo;
     this.WORLD_SIZE_X = gameinfo.world_size_x;
     this.WORLD_SIZE_Y = gameinfo.world_size_y;
     this.WORLD_RADIUS_X = gameinfo.world_size_x/2;
@@ -53,7 +52,7 @@ BotMoveHeadMoveStrategy.prototype.GetTargetSegmentDistance = function(mass)
 BotMoveHeadMoveStrategy.prototype.NewStyleMove = function(bot, mass, positions)
 {
 	if (!bot._movedSinceLastSpawn) { bot._movedSinceLastSpawn = 0; }
-	if (bot.GetLength() < 2) { return; } // FIXME should this be possible? happens all the time!
+	if (bot.GetLength() < 2) { bot.SetLength(2); }
 
 	const targetSegmentDistance = this.GetTargetSegmentDistance(mass);
 	const targetLength = Math.max(mass / targetSegmentDistance / 5, 2);
