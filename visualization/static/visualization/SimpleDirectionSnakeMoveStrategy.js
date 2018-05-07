@@ -2,18 +2,8 @@ SimpleDirectionSnakeMoveStrategy = function()
 {
 };
 
-SimpleDirectionSnakeMoveStrategy.prototype.NewStyleMove = function(bot, heading, speed, length, segment_radius)
+SimpleDirectionSnakeMoveStrategy.prototype.NewStyleMove = function(bot, mass, positions)
 {
-    bot.heading = heading;
-    bot.speed = speed;
-    bot.SetLength(Math.floor(length));
-    bot.SetScale(segment_radius);
-
-    for (let i=bot.GetLength()-1; i>0; i--)
-    {
-        bot.GetSegment(i).ClonePosition(bot.GetSegment(i-1));
-    }
-    bot.GetSegment(0).MoveDirection(bot.heading, bot.speed);
 };
 
 SimpleDirectionSnakeMoveStrategy.prototype.OldStyleMove = function(bot, new_segments, new_length, current_segment_radius)

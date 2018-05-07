@@ -172,11 +172,18 @@ Snake.prototype.GetName = function()
 Snake.prototype.UpdateHead = function()
 {
     let seg0 = this.GetSegment(0);
+    let seg1 = this.GetSegment(1);
+    this.heading = Math.atan2(seg0.y - seg1.y, seg0.x - seg1.x);
+
     this._headSegment.ClonePosition(seg0);
     this._headSegment.SetRotation(this.heading);
     this._nameSprite.x = seg0.x;
     this._nameSprite.y = seg0.y;
-}
+    for (let i=0; i<this.GetLength(); i++)
+    {
+        this.GetSegment(i).SetTint(this._colorScheme[i % this._colorScheme.length]);
+    }
+};
 
 Snake.prototype.CalcRealLength = function()
 {
@@ -224,3 +231,13 @@ Snake.prototype.AnimateEat = function()
         food.speed *= 1.3;
     }
 };
+
+Snake.prototype.InsertSegmentAfterHead = function(x, y)
+{
+    let segment = this._segmentPool.get();
+    segment.SetPosition(x, y);
+    segment.SetWorldSize(this.world_size_x, this.world_size_y);
+    segment.SetScale(this.spriteScale);
+    segment.AddSpritesSecond(this._segmentContainer);
+    this._segments.splice(1, 0, segment);
+}

@@ -7,6 +7,7 @@
 <script src="{% static "visualization/Snake.js" %}"></script>
 <script src="{% static "visualization/FoodSprite.js" %}"></script>
 <script src="{% static "visualization/SimpleDirectionSnakeMoveStrategy.js" %}"></script>
+<script src="{% static "visualization/BotMoveHeadMoveStrategy.js" %}"></script>
 <script src="{% static "visualization/GameVisualization.js" %}"></script>
 <script src="{% static "visualization/Game.js" %}"></script>
 <script>
@@ -15,8 +16,6 @@
       'food.png': '{% static "visualization/assets/food.png" %}',
       'head.png': '{% static "visualization/assets/head.png" %}',
   };
-  let strategy = new SimpleDirectionSnakeMoveStrategy();
-  //let strategy = new ImpulseSnakeMoveStrategy();
-  //let strategy = new TwoPredecessorSnakeMoveStrategy();
-  //let strategy = new DynamicSegmentCountSnakeMoveStrategy();
+  //let strategy = new SimpleDirectionSnakeMoveStrategy();
+  let strategy = new BotMoveHeadMoveStrategy();
 </script>

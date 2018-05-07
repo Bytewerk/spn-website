@@ -230,12 +230,11 @@ GameVisualization.prototype.HandleBotMovedMessage = function(bot_id, segment_dat
     }
 };
 
-GameVisualization.prototype.HandleBotMoved2Message = function(bot_id, heading, speed, length, segment_radius)
+GameVisualization.prototype.HandleBotMoveHeadMessage = function(bot_id, mass, positions)
 {
     if (bot_id in this.snakes)
     {
-        this.snakeMoveStrategy.NewStyleMove(this.snakes[bot_id], heading, speed, length, segment_radius);
-        this.snakes[bot_id].UpdateHead();
+        this.snakeMoveStrategy.NewStyleMove(this.snakes[bot_id], mass, positions);
     }
 };
 

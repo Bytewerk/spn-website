@@ -6,6 +6,7 @@ function Game(assets, snakeMoveStrategy, container)
     this.heading = 0;
     this.speed = 2;
     this.viewer_key = 0;
+    this.snakeMoveStrategy = snakeMoveStrategy;
     this.vis = new GameVisualization(assets, snakeMoveStrategy, container);
     this.logHandlers = [];
     this.gameInfoReceived = false;
@@ -63,6 +64,10 @@ Game.prototype.HandleMessage = function(event)
     if (data.t == "GameInfo")
     {
         this.gameInfoReceived = true;
+        if (this.snakeMoveStrategy.SetGameInfo)
+        {
+            this.snakeMoveStrategy.SetGameInfo(data);
+        }
         this.vis.HandleGameInfoMessage(data.world_size_x, data.world_size_y, data.food_decay_per_frame);
         while (this.preGameInfoMessages.length > 0)
         {
@@ -95,13 +100,17 @@ Game.prototype.HandleMessage = function(event)
                 let b = data.items[i];
                 this.vis.HandleBotMovedMessage(b.bot_id, b.segment_data, b.length, b.segment_radius);
             }
-            return this.vis.HandleTickMessage(null); // FIXME this is a workaround because we somehow do not receive TickMessage
+            return;
 
         case "BotStats":
             this.HandleBotStatsMessage(data.data);
             return;
 
         case "BotMoveHead":
+            for (let bot of data.items)
+            {
+                this.vis.HandleBotMoveHeadMessage(bot.bot_id, bot.m, bot.p);
+            }
             return;
 
         case "FoodSpawn":

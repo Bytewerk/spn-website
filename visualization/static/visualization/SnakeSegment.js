@@ -46,6 +46,14 @@ SnakeSegment.prototype.AddSpritesFront = function(container)
     }
 };
 
+SnakeSegment.prototype.AddSpritesSecond = function(container)
+{
+    for (let sprite of this._sprites)
+    {
+        container.addChildAt(sprite, container.children.length-2);
+    }
+};
+
 SnakeSegment.prototype.RemoveSprites = function()
 {
     for (let sprite of this._sprites)
