@@ -13,6 +13,7 @@ urlpatterns = [
     path('login/', auth_views.login, {'template_name': 'login.html'}, name='login'),
     path('logout/', auth_views.logout, {'next_page': 'login'}, name='logout'),
     path('watch/', TemplateView.as_view(template_name='visualization/watch.html'), name='watch'),
+    path('tv/', TemplateView.as_view(template_name='visualization/tv.html'), name='tv'),
     path('accounts/profile/', RedirectView.as_view(url='/', permanent=False)),
     path('snake/', include('ide.urls')),
     path('highscore/', include('highscore.urls')),

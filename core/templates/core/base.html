@@ -26,6 +26,7 @@
 
   </head>
   <body>
+{% block header %}
     <ul class="nav">
       <li><a href="{% url 'home' %}">Home</a></li>
       <li><a href="{% url 'watch' %}">Watch</a></li>
@@ -42,21 +43,24 @@
         <li><a href="{% url 'signup' %}">Signup</a></li>
       {% endif %}
     </ul>
+{% endblock %}
 
     <div class="content">
 {% block content %}
 {% endblock %}
     </div>
 
+{% block footer %}
     <div class="footer">
       <img id="snake" src="{% static "core/snake200.png" %}">
       (c) 2018 <a href="https://www.bytewerk.org/">bytewerk.org</a>
     </div>
+{% endblock %}
 
     <script src="{% static "core/jquery-3.3.1.min.js" %}"></script>
     <script src="{% static "core/checkbox.min.js" %}"></script>
     <script src="{% static "core/jquery.growl.js" %}"></script>
-    {% block js %}
-    {% endblock %}
+{% block js %}
+{% endblock %}
   </body>
 </html>
