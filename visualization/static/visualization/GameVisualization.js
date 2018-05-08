@@ -28,6 +28,8 @@ function GameVisualization(assets, snakeMoveStrategy, container)
 
     this.foodContainer = this.viewport.addChild(new PIXI.Container());
     this.snakesContainer = this.viewport.addChild(new PIXI.Container());
+    this.snakesMask = this.viewport.addChild(new PIXI.Graphics());
+    this.snakesContainer.mask = this.snakesMask;
     this.UpdateMask();
 
     this.segmentPool = new ObjectPool(function() {
@@ -41,12 +43,11 @@ function GameVisualization(assets, snakeMoveStrategy, container)
 
 GameVisualization.prototype.UpdateMask = function()
 {
-/*    const mask = new PIXI.Graphics();
-    mask.lineStyle(0);
-    mask.beginFill(0x000000, 0.5);
-    mask.drawRect(0, 0, this.world_size_x, this.world_size_y);
-    mask.endFill();
-    this.snakesContainer.mask = mask; */
+    this.snakesMask.clear();
+    this.snakesMask.lineStyle(0);
+    this.snakesMask.beginFill(0x000000, 0.5);
+    this.snakesMask.drawRect(0, 0, this.world_size_x, this.world_size_y);
+    this.snakesMask.endFill();
 };
 
 GameVisualization.prototype.Run = function()
