@@ -126,8 +126,12 @@ end
 -- A negative angle means turn left and a positive angle 
 -- means turn right. With 0, the snake keeps its direction.
 -- @return new angle relative to the head direction
+--@return if true the snake will use boost, otherwise false or empty (optional)
 -- @usage function step()
 --   return 0.005
+-- end
+-- @usage function step()
+--   return 0.005, true
 -- end
 function step()
 end

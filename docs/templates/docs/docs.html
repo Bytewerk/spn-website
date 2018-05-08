@@ -271,17 +271,22 @@
 
     <h4>Returns:</h4>
     <ol>
-
-        new angle relative to the head direction
+        <li>
+        new angle relative to the head direction</li>
+        <li>
+        if true the snake will use boost, otherwise false or empty (optional)</li>
     </ol>
 
 
 
     <h4>Usage:</h4>
     <ul>
-        <pre class="usage"><code class="lua"> <span class="keyword">function</span> step()
+        <li><pre class="usage"><code class="lua"> <span class="keyword">function</span> step()
    <span class="keyword">return</span> <span class="number">0.005</span>
- <span class="keyword">end</span></code></pre>
+ <span class="keyword">end</span></code></pre></li>
+        <li><pre class="usage"><code class="lua"> <span class="keyword">function</span> step()
+   <span class="keyword">return</span> <span class="number">0.005</span>, <span class="keyword">true</span>
+ <span class="keyword">end</span></code></pre></li>
     </ul>
 
 </dd>
