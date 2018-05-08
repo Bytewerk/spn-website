@@ -1,0 +1,37 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+  <h1>API Keys</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>API Key</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+{% for key in user.apikey_set.all %}
+      <tr>
+        <td>{{ key.key }}</td>
+        <td>{{ key.comment }}</td>
+      <td>
+        <form action="{% url "api_key_delete" key_id=key.id %}" method="post">
+          {% csrf_token %}
+          <td><button type="submit">Revoke</button></td>
+        </form>
+      </td>
+      </tr>
+{% endfor %}
+<form action="{% url "api_key_create" %}" method="post">
+  {% csrf_token %}
+      <tr>
+        <td></td>
+        <td><input name="comment"></td>
+        <td><button type="submit">Create</button></td>
+      </tr>
+</form>
+    </tbody>
+  </table>
+{% endblock %}

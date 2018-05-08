@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='userprofile',
             name='viewer_key',
-            field=models.BigIntegerField(default=core.models.create_viewer_key, unique=True),
+            field=models.BigIntegerField(default=None, unique=True),
         ),
     ]

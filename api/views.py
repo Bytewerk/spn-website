@@ -1,8 +1,11 @@
 import json
-from core.models import ApiKey, SnakeVersion
-from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseNotAllowed
+from core.models import ApiKey, SnakeVersion, UserProfile
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.forms import ModelForm
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
 
 
 def get_user(request):
@@ -24,6 +27,11 @@ def get_user(request):
         raise PermissionDenied('invalid API key')
 
 
+def get_user_profile(user):
+    profile, _ = UserProfile.objects.get_or_create(user=user)
+    return profile
+
+
 def version_dict(v):
     return {
         'id': v.id,
@@ -41,26 +49,24 @@ def full_version_dict(v):
     return d
 
 
+@require_http_methods(['GET', 'POST', 'PUT'])
 def version(request):
     if request.method in ['PUT', 'POST']:
         return put_version(request)
-    elif request.method == 'GET':
-        return JsonResponse({ 'versions': [version_dict(v) for v in SnakeVersion.objects.filter(user=get_user(request))]})
-    return HttpResponseNotAllowed(permitted_methods=['GET', 'PUT', 'POST'])
+    else:
+        return JsonResponse({'versions': [version_dict(v) for v in SnakeVersion.objects.filter(user=get_user(request))]})
 
 
+@require_http_methods(['GET'])
 def get_version(request, version_id):
     user = get_user(request)
     v = get_object_or_404(SnakeVersion, user=user, id=version_id)
     return JsonResponse(full_version_dict(v))
 
 
+@require_http_methods(['POST', 'PUT'])
 def put_version(request):
     user = get_user(request)
-    permitted_methods = ['PUT', 'POST']
-    if request.method not in permitted_methods:
-        return HttpResponseNotAllowed(permitted_methods=permitted_methods)
-
     data = json.loads(request.body)
     if not isinstance(data, dict):
         return HttpResponseBadRequest('need to send a json dict as request body')
@@ -74,3 +80,64 @@ def put_version(request):
         return HttpResponseBadRequest('need to provide lua script in code field');
     v.save()
     return get_version(request, version_id=v.id)
+
+
+@require_http_methods(['GET'])
+def get_active_version(request, version_id):
+    user = get_user(request)
+    up = get_user_profile(user)
+    v = up.active_snake
+    if v:
+        return get_version(request, version_id=v.id)
+    else:
+        return JsonResponse({})
+
+
+@require_http_methods(['POST'])
+def activate_version(request, version_id):
+    user = get_user(request)
+    v = get_object_or_404(SnakeVersion, user=user, id=version_id)
+    up = get_user_profile(user)
+    up.active_snake = v
+    up.save()
+    return JsonResponse(version_dict(v))
+
+
+@require_http_methods(['GET'])
+def get_viewer_key(request):
+    user = get_user(request)
+    up = get_user_profile(user)
+    return JsonResponse({'viewer_key': up.viewer_key})
+
+
+@require_http_methods(['GET'])
+@login_required()
+def list_api_keys(request):
+    return render(request, 'api/list_api_keys.html', {
+        'user': request.user
+    })
+
+
+class CreateKeyForm(ModelForm):
+    class Meta:
+        model = ApiKey
+        fields = ['comment']
+
+
+@require_http_methods(['POST'])
+@login_required()
+def create_api_key(request):
+    form = CreateKeyForm(request.POST or None)
+    if form.is_valid():
+        key = ApiKey(user=request.user)
+        key.comment = form.cleaned_data.get('comment', None)
+        key.save()
+    return redirect('api_keys_list')
+
+
+@require_http_methods(['POST', 'DELETE'])
+@login_required()
+def delete_api_key(request, key_id):
+    key = get_object_or_404(ApiKey, user=request.user, id=key_id)
+    key.delete()
+    return redirect('api_keys_list')
