@@ -1,11 +1,11 @@
 import json
-from core.models import ApiKey, SnakeVersion, UserProfile
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.forms import ModelForm
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, SuspiciousOperation
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
+from core.models import ApiKey, SnakeVersion, ServerCommand, get_user_profile
 
 
 def get_user(request):
@@ -14,22 +14,17 @@ def get_user(request):
         if key is not None:
             return ApiKey.objects.get(key=key)
 
-        key = request.POST.get('token', None) or request.GET.get('token', None)
+        key = request.GET.get('token', None)
         if key is not None:
             return ApiKey.objects.get(key=key)
 
-        if request.user:
+        if request.user.is_authenticated:
             return request.user
 
         raise PermissionDenied('API access needs login or api key')
 
     except ApiKey.DoesNotExist:
         raise PermissionDenied('invalid API key')
-
-
-def get_user_profile(user):
-    profile, _ = UserProfile.objects.get_or_create(user=user)
-    return profile
 
 
 def version_dict(v):
@@ -83,7 +78,7 @@ def put_version(request):
 
 
 @require_http_methods(['GET'])
-def get_active_version(request, version_id):
+def get_active_version(request):
     user = get_user(request)
     up = get_user_profile(user)
     v = up.active_snake
@@ -103,6 +98,32 @@ def activate_version(request, version_id):
     return JsonResponse(version_dict(v))
 
 
+@require_http_methods(['POST'])
+def disable_active_version(request):
+    user = get_user(request)
+    up = get_user_profile(user)
+    up.active_snake = None
+    up.save()
+    return JsonResponse({'result': 'ok'})
+
+
+@require_http_methods(['POST'])
+def disable_version(request, version_id):
+    user = get_user(request)
+    up = get_user_profile(user)
+    if up.active_snake is not None and up.active_snake.id == version_id:
+        up.active_snake = None
+        up.save()
+    return JsonResponse({'result': 'ok'})
+
+
+@require_http_methods(['POST', 'DELETE'])
+def kill_bot(request):
+    user = get_user(request)
+    ServerCommand(user=user, command='kill').save()
+    return JsonResponse({'result': 'ok'})
+
+
 @require_http_methods(['GET'])
 def get_viewer_key(request):
     user = get_user(request)
@@ -114,7 +135,8 @@ def get_viewer_key(request):
 @login_required()
 def list_api_keys(request):
     return render(request, 'api/list_api_keys.html', {
-        'user': request.user
+        'user': request.user,
+        'max_keys': ApiKey.MAX_KEYS_PER_USER
     })
 
 
@@ -127,6 +149,9 @@ class CreateKeyForm(ModelForm):
 @require_http_methods(['POST'])
 @login_required()
 def create_api_key(request):
+    if request.user.apikey_set.count() >= ApiKey.MAX_KEYS_PER_USER:
+        raise SuspiciousOperation
+
     form = CreateKeyForm(request.POST or None)
     if form.is_valid():
         key = ApiKey(user=request.user)
