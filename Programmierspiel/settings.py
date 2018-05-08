@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'visualization',
     'ide',
     'highscore',
-    'docs'
+    'docs',
+    'api'
 ]
 
 MIDDLEWARE = [

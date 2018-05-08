@@ -3,4 +3,8 @@
 
 {% block content %}
   <h1>Profile</h1>
+  <h3>API Keys</h3>
+  <form method="GET" action="{% url "api_keys_list" %}"><button type="submit">Manage API Keys</button></form>
+  <h3>Viewer Key</h3>
+  Websocket Viewer Key: {{ profile.viewer_key }}
 {% endblock %}

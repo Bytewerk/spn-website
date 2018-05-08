@@ -1,4 +1,3 @@
-from datetime import datetime
 import json
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
@@ -7,12 +6,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
-from core.models import SnakeVersion, ServerCommand, UserProfile
-
-
-def get_user_profile(user):
-    profile, _ = UserProfile.objects.get_or_create(user=user)
-    return profile
+from core.models import SnakeVersion, ServerCommand, get_user_profile
 
 
 class CreateSnakeForm(ModelForm):

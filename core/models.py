@@ -1,11 +1,13 @@
 import random
+import uuid
 from django.db import models
 from django.utils.timezone import now
 from django.contrib.auth.models import User
 
 
-def create_viewer_key():
-    return None
+def get_user_profile(user):
+    profile, _ = UserProfile.objects.get_or_create(user=user)
+    return profile
 
 
 class SnakeVersion(models.Model):
@@ -88,7 +90,11 @@ class ServerCommand(models.Model):
     result_msg = models.TextField(blank=True, null=True, editable=False)
 
 
+def create_key():
+    return str(uuid.uuid4())
+
 class ApiKey(models.Model):
+    MAX_KEYS_PER_USER = 20
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    key = models.CharField(max_length=100)
-    comment = models.CharField(max_length=255)
+    key = models.CharField(max_length=100, default=create_key)
+    comment = models.CharField(max_length=255, null=True, blank=True)

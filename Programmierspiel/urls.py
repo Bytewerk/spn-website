@@ -18,4 +18,5 @@ urlpatterns = [
     path('snake/', include('ide.urls')),
     path('highscore/', include('highscore.urls')),
     path('docs/', include('docs.urls')),
+    path('api/v1/', include('api.urls')),
 ]

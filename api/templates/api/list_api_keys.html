@@ -1,0 +1,60 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block css %}
+  <style>
+  table.api_keys td {
+    padding: 0 1em;
+  }
+  table.api_keys td, table.api_keys th
+  {
+    background-color:rgba(0,0,0,0.2);
+  }
+
+  table.api_keys input {
+    width:100%;
+  }
+
+  table.api_keys button {
+    border: 2px solid #321700;
+    background-color: #613600;
+    color:white;
+    padding:5px;
+  }
+
+  </style>
+{% endblock %}
+
+{% block content %}
+  <h1>API Keys</h1>
+  <table class="api_keys">
+    <thead>
+      <tr>
+        <th>API Key</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+{% for key in user.apikey_set.all %}
+    <form action="{% url "api_key_delete" key_id=key.id %}" method="post">
+      {% csrf_token %}
+      <tr>
+        <td>{{ key.key }}</td>
+        <td>{{ key.comment }}</td>
+        <td><button type="submit">Revoke</button></td>
+      </tr>
+    </form>
+{% endfor %}
+{% if user.apikey_set.all.count < max_keys %}
+<form action="{% url "api_key_create" %}" method="post">
+  {% csrf_token %}
+      <tr>
+        <td colspan="2"><input name="comment"></td>
+        <td><button type="submit">Create</button></td>
+      </tr>
+</form>
+{% endif %}
+    </tbody>
+  </table>
+{% endblock %}
