@@ -107,7 +107,10 @@ BotMoveHeadMoveStrategy.prototype.NewStyleMove = function(bot, mass, positions)
     }
 
 	bot.SetLength(targetLength);
-    bot.SetScale(Math.sqrt(mass) / 2);
+	const new_radius = Math.pow((20*mass+100), 0.3) - 3.9810717055349722;
+	//                                    100**0.3 --------^
+
+    bot.SetScale(new_radius);
     bot.UpdateHead();
 };
 
