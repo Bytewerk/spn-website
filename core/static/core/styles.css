@@ -156,6 +156,16 @@ table.snake-list {
     cursor:pointer;
 }
 
+#bot_stats th
+{
+    font-weight: bold;
+}
+
+#bot_stats td, #bot_stats th
+{
+    text-align: right;
+}
+
 #followmsg {
     position: absolute;
     top:0; left:0; right:0;
