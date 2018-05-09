@@ -1,8 +1,13 @@
 --- This is a brief overview of all usable functions within the bot logic.
---- Every bot is allowed to store 100MB within the global namespace and the 
---- data persists until the bot dies. So the bot can save data from frame 
---- to frame.
+--- Every player can start with a simple demo bot. You get the code in the 
+--- <a href="/snake/edit/latest">editor</a>. A snake hungers, so it constantly 
+--- loses size. Feed it and it will stay alive and grows. Your snake will die, 
+--- when it touches another snake with its head.
+--- 
 --- <h2>Lua global namespace</h2>
+--- <p>Every snake is allowed to store 100MB within the global namespace and the 
+--- data persists until the bot dies. So the bot can save data from frame 
+--- to frame.</p>
 --- <p>The following Lua standard functions are allowed:</p>
 --- <table>
 --- <tr><td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-assert">assert</a></td>
@@ -86,7 +91,9 @@ function init()
 end
 
 --- That function returns all food as list.
--- The list is ordered by food value, from largest to lowest.
+-- The list is ordered by food value, from largest to lowest. The values of new spawning 
+-- food are calculated based on a mean value of 3.5 and a standard deviation of 2.
+-- A killed snake drops a part of the consumed food, that is distributed by the same rule.
 -- @param max_distance all food within the distance is included
 -- @param minimum_food_value all lower food values are filtered (min: 0, max: unknown)
 -- @usage local food = findFood(max_distance, 0.8)
