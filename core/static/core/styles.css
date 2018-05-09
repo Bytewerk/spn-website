@@ -48,6 +48,7 @@ ul.nav li a, .footer a {
 ul.nav li:hover {
     background-color: #804600;
 }
+
 a:hover {
     text-decoration: underline;
 }
@@ -153,4 +154,18 @@ table.snake-list {
 
 #bot_stats tbody {
     cursor:pointer;
+}
+
+#followmsg {
+    position: absolute;
+    top:0; left:0; right:0;
+    text-align: center;
+    display:none;
+    cursor:pointer;
+}
+
+#followmsg>span {
+    background-color:rgba(60,60,60,0.7);
+    border-radius: 0 0 0.5em 0.5em;
+    padding: 0.1em 0.5em;
 }

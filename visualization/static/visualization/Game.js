@@ -11,6 +11,14 @@ function Game(assets, snakeMoveStrategy, container)
     this.logHandlers = [];
     this.gameInfoReceived = false;
     this.preGameInfoMessages = [];
+
+    let vis=this.vis;
+    $("#followmsg").click(function(event) {
+        vis.Unfollow();
+        $("#followmsg").hide();
+        event.preventDefault();
+    });
+
 }
 
 Game.prototype.AddLogHandler = function(callback, thisArg)

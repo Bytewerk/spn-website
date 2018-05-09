@@ -247,9 +247,17 @@ GameVisualization.prototype.FollowName = function(name)
         let snake = this.snakes[id];
         if (snake.GetName() == this.follow_name)
         {
-            this.viewport.follow(snake.GetHeadSprite(), { radius: 200 });
+            $("#followmsg>span>span").text(this.follow_name);
+            $("#followmsg").show();
+            this.viewport.follow(snake.GetHeadSprite(), { radius: 0 });
         }
     }
+};
+
+GameVisualization.prototype.Unfollow = function()
+{
+    this.follow_name = null;
+    delete this.viewport.plugins['follow'];
 };
 
 GameVisualization.prototype.UpdateStagePosition = function()
