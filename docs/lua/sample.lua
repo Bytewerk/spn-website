@@ -57,23 +57,25 @@
 --- <a href="http://pgl.yoyo.org/luai/i/table.insert">insert</a>, 
 --- <a href="http://pgl.yoyo.org/luai/i/table.remove">remove</a>, 
 --- <a href="http://pgl.yoyo.org/luai/i/table.sort">sort</a></p>
+--- <h2>Globals</h2>
 --- <p>Every snake can describe itself with the following attributes of the global variable <code>self</code>:</p>
---- <ul><li>id (number): internal identifier</li>
---- <li>segment_radius (number): the size of the snake</li>
---- <li>mass (number): the weight of the snake</li>
---- <li>sight_radius (number): the field of view of the snake, which increases with the size of the snake</li>
---- <li>consume_radius (number): the field of feed of the snake, which increases with the size of the snake</li>
---- <li>max_step_angle (number): unknown definition</li>
---- <li>start_frame (number): the game frame, when the snake was born</li>
---- <li>current_frame (number): the current game frame</li>
---- <li>speed (number): default speed is 1, but it can change if a snake is using boost</li>
---- <li>food_consumed_natural (number): unknown definition</li>
---- <li>food_consumed_hunted_self (number): unknown definition</li>
---- <li>food_consumed_hunted_by_others (number): unknown definition</li>
---- <li>colors ({number}): table of colors (default color is 0x0000FF00, maximum count is 100, set is available in <a href="#init">init</a>)</li>
---- <li>face (number): not implemented yet (returns 0, set is available in <a href="#init">init</a>)</li>
---- <li>logo (number): not implemented yet (returns 0, set is available in <a href="#init">init</a>)</li></ul>
-
+--- <table><tbody>
+--- <tr><td>id</td><td>number</td><td>internal identifier</td></tr>
+--- <tr><td>segment_radius</td><td>number</td><td>the size of the snake</td></tr>
+--- <tr><td>mass</td><td>number</td><td>the weight of the snake</td></tr>
+--- <tr><td>sight_radius</td><td>number</td><td>the field of view of the snake, which increases with the size of the snake</td></tr>
+--- <tr><td>consume_radius</td><td>number</td><td>the field of feed of the snake, which increases with the size of the snake</td></tr>
+--- <tr><td>max_step_angle</td><td>number</td><td>unknown definition</td></tr>
+--- <tr><td>start_frame</td><td>number</td><td>the game frame, when the snake was born</td></tr>
+--- <tr><td>current_frame</td><td>number</td><td>the current game frame</td></tr>
+--- <tr><td>speed</td><td>number</td><td>default speed is 1, but it can change if a snake is using boost</td></tr>
+--- <tr><td>food_consumed_natural</td><td>number</td><td>unknown definition</td></tr>
+--- <tr><td>food_consumed_hunted_self</td><td>number</td><td>unknown definition</td></tr>
+--- <tr><td>food_consumed_hunted_by_others</td><td>number</td><td>unknown definition</td></tr>
+--- <tr><td>colors</td><td>{number}</td><td>table of colors (default color is 0x0000FF00, maximum count is 100, set is available in <a href="#init">init</a>)</td></tr>
+--- <tr><td>face</td><td>number</td><td>not implemented yet (returns 0, set is available in <a href="#init">init</a>)</td></tr>
+--- <tr><td>logo</td><td>number</td><td>not implemented yet (returns 0, set is available in <a href="#init">init</a>)</td></tr></tr>
+--- </tbody></table>
 
 --- This function is called upon creation of a bot
 -- Initialialize your environment here.
@@ -123,4 +125,5 @@ end
 --   return 0.005
 -- end
 function step()
+    return 0.005
 end
