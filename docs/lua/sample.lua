@@ -78,7 +78,7 @@
 
 --- This function is called upon creation of a bot
 -- Initialialize your environment here.
--- You can also access the "self" module here and, e.g. set your snake's colors.
+-- You can also modify the "self" variables here and, e.g. set your snake's colors.
 -- @usage function init()
 --     self.colors = { 0xFF0000, 0xFFBF00, 0x80FF00, 0x00FF40, 0x00FFFF, 0x0015FF, 0x8000FF }
 -- end
