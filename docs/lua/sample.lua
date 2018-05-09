@@ -2,6 +2,7 @@
 --- Every bot is allowed to store 100MB within the global namespace and the 
 --- data persists until the bot dies. So the bot can save data from frame 
 --- to frame.
+--- <h2>Lua global namespace</h2>
 --- <p>The following Lua standard functions are allowed:</p>
 --- <p><a href="http://pgl.yoyo.org/luai/i/assert">assert</a>, 
 --- <a href="http://pgl.yoyo.org/luai/i/print">print</a>, 
@@ -59,7 +60,11 @@
 --- <a href="http://pgl.yoyo.org/luai/i/table.sort">sort</a></p>
 --- <h2>Globals</h2>
 --- <p>Every snake can describe itself with the following attributes of the global variable <code>self</code>:</p>
---- <table><tbody>
+--- <table>
+--- <thead>
+--- <tr><td>Variable within self</td><td>Type</td><td>Description</td></tr>
+--- </thead>
+--- <tbody>
 --- <tr><td>id</td><td>number</td><td>internal identifier</td></tr>
 --- <tr><td>segment_radius</td><td>number</td><td>the size of the snake</td></tr>
 --- <tr><td>mass</td><td>number</td><td>the weight of the snake</td></tr>
@@ -121,8 +126,12 @@ end
 -- A negative angle means turn left and a positive angle 
 -- means turn right. With 0, the snake keeps its direction.
 -- @return new angle relative to the head direction
+--@return if true the snake will use boost, otherwise false or empty (optional)
 -- @usage function step()
 --   return 0.005
+-- end
+-- @usage function step()
+--   return 0.005, true
 -- end
 function step()
     return 0.005

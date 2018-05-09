@@ -63,12 +63,24 @@ return [==[
 # for kind,items in module.kinds() do
 <h2><a href="#$(no_spaces(kind))">$(kind)</a></h2>
 <table class="function_list">
+  <thead>
+    <tr>
+      <td>
+        Function name
+      </td>
+      <td>
+        Description
+      </td>
+    </tr>
+  </thead>
+  <tbody>
 #  for item in items() do
 	<tr>
 	<td class="name" $(nowrap)><a href="#$(item.name)">$(display_name(item))</a></td>
 	<td class="summary">$(M(item.summary,item))</td>
 	</tr>
 #  end -- for items
+  </tbody>
 </table>
 #end -- for kinds
 
