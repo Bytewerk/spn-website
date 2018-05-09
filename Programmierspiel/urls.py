@@ -9,6 +9,7 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='core/index.html'), name='home'),
     path('admin/', admin.site.urls),
     path('signup/', core_views.signup, name='signup'),
+    path('password/', core_views.change_password, name='change_password'),
     path('profile/', core_views.profile, name='profile'),
     path('login/', auth_views.login, {'template_name': 'login.html'}, name='login'),
     path('logout/', auth_views.logout, {'next_page': 'login'}, name='logout'),

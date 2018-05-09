@@ -3,6 +3,8 @@
 
 {% block content %}
   <h1>Profile</h1>
+  <h3>Password</h3>
+  <form method="GET" action="{% url "change_password" %}"><button type="submit">Change User Password</button></form>
   <h3>API Keys</h3>
   <form method="GET" action="{% url "api_keys_list" %}"><button type="submit">Manage API Keys</button></form>
   <h3>Viewer Key</h3>

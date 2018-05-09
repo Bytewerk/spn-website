@@ -131,11 +131,11 @@ table.snake-list {
     height: 320px;
 }
 
-#login_form, #signup_form {
+#login_form, #signup_form, #change_password_form {
     margin-left: 200px;
 }
 
-#login_form div.segment, #signup_form div.segment {
+#login_form div.segment, #signup_form div.segment, #change_password_form div.segment {
     background: none;
     width: 350px;
 }
