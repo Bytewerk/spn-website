@@ -5,7 +5,7 @@
 --- when it touches another snake with its head.
 --- 
 --- <h2>Lua global namespace</h2>
---- <p>Every snake is allowed to store 100MB within the global namespace and the 
+--- <p>Every snake is allowed to store 10MB within the global namespace and the 
 --- data persists until the bot dies. So the bot can save data from frame 
 --- to frame.</p>
 --- <p>The following Lua standard functions are allowed:</p>
