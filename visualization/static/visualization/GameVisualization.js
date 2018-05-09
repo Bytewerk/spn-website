@@ -266,7 +266,6 @@ GameVisualization.prototype.Unfollow = function()
 {
     this.follow_name = null;
     this.viewport.pausePlugin('follow');
-    //delete this.viewport.plugins['follow'];
 };
 
 GameVisualization.prototype.UpdateStagePosition = function()

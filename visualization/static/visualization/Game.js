@@ -160,12 +160,19 @@ Game.prototype.HandleBotStatsMessage = function(data)
     let el = $('#bot_stats tbody');
     let vis = this.vis;
     el.empty();
+
+    let arr=[];
     for (let id in data)
     {
-        let snake = this.vis.GetSnake(id);
+        data[id].id = id;
+        arr.push(data[id]);
+    }
+    arr.sort(function(a,b) { return b.m-a.m; });
+    for (let d of arr.slice(0, 20))
+    {
+        let snake = this.vis.GetSnake(d.id);
         if (!snake) { continue; }
-        let d = data[id];
-        let row = $("<tr><td>"+snake.GetName()+"</td><td>"+d.n.toFixed(1)+"</td><td>"+d.c.toFixed(1)+"</td><td>"+d.h.toFixed(1)+"</td></tr>");
+        let row = $("<tr><td>"+snake.GetName()+"</td><td>"+d.m.toFixed(1)+"</td><td>"+d.n.toFixed(1)+"</td><td>"+d.c.toFixed(1)+"</td><td>"+d.h.toFixed(1)+"</td></tr>");
         row.click(function() { vis.FollowName(snake.GetName(), true)});
         el.append(row);
     }
