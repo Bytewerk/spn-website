@@ -8,7 +8,7 @@
 {% block content %}
 
 <h2>Highscores</h2>
-<table class="highscore-table ui celled selectable inverted table" cellspacing="0">
+<table class="highscore-table ui celled selectable inverted table" cellspacing="0" style="margin-bottom:5em">
     <thead>
         <tr>
             <th class="eleven wide">User</th>
@@ -19,7 +19,7 @@
     {% for score in highscores %}
         <tr>
             <td>{{score.user__username}}</td>
-            <td class="right aligned">{{score.score}}</td>
+            <td class="right aligned">{{score.score|floatformat:1}}</td>
         </tr>
     {% endfor %}
     </tbody>
