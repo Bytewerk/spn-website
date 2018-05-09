@@ -1,7 +1,9 @@
 --- WELCOME TO YOUR FIRST SNAKE!
--- you can edit this code, save and run it.
-
--- you should see log output at the bottom of this page,
+-- It is programmed in the Lua language. If you didn't used 
+-- it until now, ask us or visit https://www.lua.org/manual/5.3/.
+-- 
+-- You can edit this code, save and run it.
+-- You should see log output at the bottom of this page,
 -- and a live view on your snake's wellbeing on the right
 
 --- init() is called once upon creation of the bot
