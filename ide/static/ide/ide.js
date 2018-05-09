@@ -41,7 +41,7 @@ function setupPreview()
     game.SetViewerKey(viewer_key);
     game.AddLogHandler(addLogLine);
     game.Run();
-    game.vis.FollowName(snake_follow_name);
+    game.vis.FollowName(snake_follow_name, true);
 }
 
 function setupToolbar()
@@ -161,7 +161,7 @@ function save(action, title)
     $.post('/snake/edit/save', JSON.stringify(json_req), function(data) {
         snake_id = data.snake_id;
         snake_title = data.comment;
-        game.vis.FollowName(snake_follow_name);
+        game.vis.FollowName(snake_follow_name, true);
         let logline = 'saved code as version #' + data.version;
         if (data.comment) { logline += "(\"" + data.comment + "\")"; }
         addLogLine(null, logline);

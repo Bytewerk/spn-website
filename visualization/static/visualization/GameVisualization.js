@@ -6,6 +6,7 @@ function GameVisualization(assets, snakeMoveStrategy, container)
     this.snakeMoveStrategy = snakeMoveStrategy;
     this.snakes = {};
     this.follow_name = null;
+    this.follow_scale = false;
     this.nextFoodDecayRow = 0;
     this.world_size_x = 1024;
     this.world_size_y = 1024;
@@ -84,12 +85,12 @@ GameVisualization.prototype.CreateSnake = function(bot)
     snake.db_id = bot.db_id;
     this.snakes[bot.id] = snake;
     this.snakesContainer.addChild(snake.Container);
-    snake.GetNameSprite().on('click', function() { this.FollowName(bot.name); }, this);
-    snake.GetHeadSprite().on('click', function() { this.FollowName(bot.name); }, this);
+    snake.GetNameSprite().on('click', function() { this.FollowName(bot.name, false); }, this);
+    snake.GetHeadSprite().on('click', function() { this.FollowName(bot.name, false); }, this);
 
     if (snake.GetName() == this.follow_name)
     {
-        this.viewport.follow(snake.GetHeadSprite(), { radius: 0 });
+        this.FollowName(bot.name, this.follow_scale);
     }
 
     return snake;
@@ -239,9 +240,10 @@ GameVisualization.prototype.HandleBotMoveHeadMessage = function(bot_id, mass, po
     }
 };
 
-GameVisualization.prototype.FollowName = function(name)
+GameVisualization.prototype.FollowName = function(name, changeZoomLevel)
 {
     this.follow_name = name;
+    this.follow_scale = changeZoomLevel;
     for (let id in this.snakes)
     {
         let snake = this.snakes[id];
@@ -250,6 +252,12 @@ GameVisualization.prototype.FollowName = function(name)
             $("#followmsg>span>span").text(this.follow_name);
             $("#followmsg").show();
             this.viewport.follow(snake.GetHeadSprite(), { radius: 0 });
+            if (changeZoomLevel)
+            {
+                let scale = 1.5/snake.spriteScale;
+                this.viewport.scale.x = scale;
+                this.viewport.scale.y = scale;
+            }
         }
     }
 };
@@ -257,7 +265,8 @@ GameVisualization.prototype.FollowName = function(name)
 GameVisualization.prototype.Unfollow = function()
 {
     this.follow_name = null;
-    delete this.viewport.plugins['follow'];
+    this.viewport.pausePlugin('follow');
+    //delete this.viewport.plugins['follow'];
 };
 
 GameVisualization.prototype.UpdateStagePosition = function()

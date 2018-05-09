@@ -166,7 +166,7 @@ Game.prototype.HandleBotStatsMessage = function(data)
         if (!snake) { continue; }
         let d = data[id];
         let row = $("<tr><td>"+snake.GetName()+"</td><td>"+d.n.toFixed(1)+"</td><td>"+d.c.toFixed(1)+"</td><td>"+d.h.toFixed(1)+"</td></tr>");
-        row.click(function() { vis.FollowName(snake.GetName())});
+        row.click(function() { vis.FollowName(snake.GetName(), true)});
         el.append(row);
     }
 };
