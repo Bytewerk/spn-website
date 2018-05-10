@@ -1,6 +1,6 @@
 --- This is a brief overview of all usable functions within the bot logic.
---- Every bot is allowed to store 100MB within the global namespace and the 
---- data persists until the bot dies. So the bot can save data from frame 
+--- Every bot is allowed to store 10 MB within the global namespace and the
+--- data persists until the bot dies. So the bot can save data from frame
 --- to frame.
 --- <h2>Lua global namespace</h2>
 --- <p>The following Lua standard functions are allowed:</p>
