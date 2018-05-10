@@ -1,11 +1,12 @@
 --- This is a brief overview of all usable functions within the bot logic.
+
 --- Every player can start with a simple demo bot. You get the code in the 
 --- <a href="/snake/edit/latest">editor</a>. A snake hungers, so it constantly 
 --- loses size. Feed it and it will stay alive and grows. Your snake will die, 
 --- when it touches another snake with its head.
---- 
+---
 --- <h2>Lua global namespace</h2>
---- <p>Every snake is allowed to store 10MB within the global namespace and the 
+--- <p>Every snake is allowed to store 10 MB within the global namespace and the 
 --- data persists until the bot dies. So the bot can save data from frame 
 --- to frame.</p>
 --- <p>The following Lua standard functions are allowed:</p>

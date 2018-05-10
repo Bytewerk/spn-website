@@ -44,7 +44,7 @@ class SnakeVersion(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     viewer_key = models.BigIntegerField(unique=True)
-    active_snake = models.ForeignKey(SnakeVersion, null=True, on_delete=models.SET_NULL)
+    active_snake = models.ForeignKey(SnakeVersion, null=True, blank=True, on_delete=models.SET_NULL)
 
     def save(self, *args, **kwargs):
         if not self.viewer_key:
