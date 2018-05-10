@@ -160,3 +160,14 @@ div.modal>div>footer {
 {
     width:400px; text-align: left;
 }
+
+/* safari hack against grid layout bugs */
+/* https://stackoverflow.com/questions/16348489 */
+@media not all and (min-resolution:.001dpcm) {
+    @supports (-webkit-appearance:none) and (stroke-color:transparent) {
+        #ide {
+            height: 87vh;
+            width: 98vw;
+        }
+    }
+}

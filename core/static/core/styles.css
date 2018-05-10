@@ -63,7 +63,8 @@ div.content {
     padding:10px;
 }
 
-div.content > h2 {
+div.content > h2,
+div.content > div.panel {
     margin-left: 200px;
 }
 

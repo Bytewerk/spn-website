@@ -17,11 +17,35 @@
   border: none;
 }
 
+.markdown-body code, 
+.markdown-body tt {
+  color: white;
+  background-color: #333;
+}
+
 .markdown-body dl dt {
   font-size: 1.2em;
 }
 
 table thead tr td {
-  background: rgb(0,0,0,.50);
+  background: #000;
   font-weight: 700;
+}
+
+.markdown-body table tr {
+  background-color: #1a1a1a;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #242424;
+}
+
+th, 
+.markdown-body table td {
+  border-color: #303030;
+}
+
+.markdown-body a {
+  color: white;
+  text-decoration: underline;
 }

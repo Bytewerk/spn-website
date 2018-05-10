@@ -1,63 +1,63 @@
 --- This is a brief overview of all usable functions within the bot logic.
---- Every bot is allowed to store 10 MB within the global namespace and the
---- data persists until the bot dies. So the bot can save data from frame
---- to frame.
+
+--- Every player can start with a simple demo bot. You get the code in the 
+--- <a href="/snake/edit/latest">editor</a>. A snake hungers, so it constantly 
+--- loses size. Feed it and it will stay alive and grows. Your snake will die, 
+--- when it touches another snake with its head.
+---
 --- <h2>Lua global namespace</h2>
+--- <p>Every snake is allowed to store 10 MB within the global namespace and the 
+--- data persists until the bot dies. So the bot can save data from frame 
+--- to frame.</p>
 --- <p>The following Lua standard functions are allowed:</p>
---- <p><a href="http://pgl.yoyo.org/luai/i/assert">assert</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/print">print</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/ipairs">ipairs</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/error">error</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/next">next</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/pairs">pairs</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/pcall">pcall</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/select">select</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/tonumber">tonumber</a>,
---- <a href="http://pgl.yoyo.org/luai/i/tostring">tostring</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/type">type</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/unpack">unpack</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/_VERSION">_VERSION</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/xpcall">xpcall</a></p>
+--- <table>
+--- <tr><td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-assert">assert</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-print">print</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-ipairs">ipairs</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-error">error</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-next">next</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-pairs">pairs</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-pcall">pcall</a></td></tr>
+--- <tr><td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-select">select</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-tonumber">tonumber</a>,
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-tostring">tostring</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-type">type</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-unpack">unpack</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-_VERSION">_VERSION</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-xpcall">xpcall</a></td></tr></table>
 --- <p>From the module <code>math</code> you can use:</p>
---- <p><a href="http://pgl.yoyo.org/luai/i/math.abs">abs</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.acos">acos</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.asin">asin</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.atan">atan</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.atan2">atan2</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.ceil">ceil</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.cos">cos</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.cosh">cosh</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.deg">deg</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.exp">exp</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.floor">floor</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.fmod">fmod</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.frexp">frexp</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.huge">huge</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.ldexp">ldexp</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.log">log</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.log10">log10</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.max">max</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.min">min</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.modf">modf</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.pi">pi</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.pow">pow</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.rad">rad</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.random">random</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.randomseed">randomseed</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.sin">sin</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.sinh">sinh</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.sqrt">sqrt</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.tan">tan</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/math.tanh">tanh</a></p>
+--- <table><tr><td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.abs">abs</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.acos">acos</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.asin">asin</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.atan">atan</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.ceil">ceil</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.cos">cos</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.deg">deg</a></td></tr>
+--- <tr><td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.exp">exp</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.floor">floor</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.fmod">fmod</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.frexp">frexp</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.huge">huge</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.log">log</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.max">max</a></td></tr>
+--- <tr><td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.min">min</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.modf">modf</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.pi">pi</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.pow">pow</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.rad">rad</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.random">random</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.randomseed">randomseed</a></td></tr>
+--- <tr><td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.sin">sin</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.sqrt">sqrt</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-math.tan">tan</a></td></tr></table>
 --- <p>From the module <code>os</code> you can use:</p>
---- <p><a href="http://pgl.yoyo.org/luai/i/os.clock">clock</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/os.difftime">difftime</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/os.time">time</a></p>
+--- <table><tr><td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-os.clock">clock</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-os.difftime">difftime</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-os.time">time</a></td></tr></table>
 --- <p>From the module <code>table</code> you can use:</p>
---- <a href="http://pgl.yoyo.org/luai/i/table.maxn">maxn</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/table.insert">insert</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/table.remove">remove</a>, 
---- <a href="http://pgl.yoyo.org/luai/i/table.sort">sort</a></p>
+--- <table><tr><td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-table.insert">insert</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-table.remove">remove</a></td>
+--- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-table.sort">sort</a></td></tr></table>
 --- <p>Every snake can describe itself with the following attributes of the global variable <code>self</code>:</p>
 --- <table>
 --- <thead>
@@ -69,22 +69,21 @@
 --- <tr><td>mass</td><td>number</td><td>the weight of the snake</td></tr>
 --- <tr><td>sight_radius</td><td>number</td><td>the field of view of the snake, which increases with the size of the snake</td></tr>
 --- <tr><td>consume_radius</td><td>number</td><td>the field of feed of the snake, which increases with the size of the snake</td></tr>
---- <tr><td>max_step_angle</td><td>number</td><td>unknown definition</td></tr>
+--- <tr><td>max_step_angle</td><td>number</td><td>limits the return value of the step function (-max_step_angle to +max_step_angle)</td></tr>
 --- <tr><td>start_frame</td><td>number</td><td>the game frame, when the snake was born</td></tr>
 --- <tr><td>current_frame</td><td>number</td><td>the current game frame</td></tr>
 --- <tr><td>speed</td><td>number</td><td>default speed is 1, but it can change if a snake is using boost</td></tr>
---- <tr><td>food_consumed_natural</td><td>number</td><td>unknown definition</td></tr>
---- <tr><td>food_consumed_hunted_self</td><td>number</td><td>unknown definition</td></tr>
---- <tr><td>food_consumed_hunted_by_others</td><td>number</td><td>unknown definition</td></tr>
---- <tr><td>colors</td><td>{number}</td><td>table of colors (default color is 0x0000FF00, maximum count is 100, set is available in <a href="#init">init</a>)</td></tr>
+--- <tr><td>food_consumed_natural</td><td>number</td><td>consumed food which appeared naturally in the world</td></tr>
+--- <tr><td>food_consumed_hunted_self</td><td>number</td><td>consumed food from snakes that you killed</td></tr>
+--- <tr><td>food_consumed_hunted_by_others</td><td>number</td><td>consumed food from snakes that were killed by others</td></tr>
+--- <tr><td>colors</td><td>{number,..}</td><td>table of colors (default color is 0x0000FF00, maximum count is 100, set is available in <a href="#init">init</a>)</td></tr>
 --- <tr><td>face</td><td>number</td><td>not implemented yet (returns 0, set is available in <a href="#init">init</a>)</td></tr>
 --- <tr><td>logo</td><td>number</td><td>not implemented yet (returns 0, set is available in <a href="#init">init</a>)</td></tr></tr>
 --- </tbody></table>
 
-
 --- This function is called upon creation of a bot
 -- Initialialize your environment here.
--- You can also access the "self" module here and, e.g. set your snake's colors.
+-- You can also modify the "self" variables here and, e.g. set your snake's colors.
 -- @usage function init()
 --     self.colors = { 0xFF0000, 0xFFBF00, 0x80FF00, 0x00FF40, 0x00FFFF, 0x0015FF, 0x8000FF }
 -- end
@@ -92,26 +91,34 @@ function init()
 end
 
 --- That function returns all food as list.
+-- The list is ordered by food value, from largest to lowest. The values of new spawning 
+-- food are calculated based on a mean value of 3.5 and a standard deviation of 2.
+-- A killed snake drops a part of the consumed food, that is distributed by the same rule.
 -- @param max_distance all food within the distance is included
 -- @param minimum_food_value all lower food values are filtered (min: 0, max: unknown)
 -- @usage local food = findFood(max_distance, 0.8)
 -- for i, item in food:pairs() do
---   item.d -- angle in radian
+--   item.d    -- angle in radian (-π to +π)
 --   item.dist -- distance
+--   item.v    -- food value
 -- end
 function findFood(max_distance, minimum_food_value)
 end
 
 --- That function returns all segments of all snakes within a certain radius as list. 
--- All attributes of each item in the segments list are measured between the center of your head the the center of the item center.
+-- The list is ordered by distance, from smallest to largest. All attributes of each 
+-- item in the segments list are measured between the center of your head the the center 
+-- of the item center.
 -- @param max_distance all segements within that distance are included
 -- @param include_own If true, your snake segments are included. Otherwise you get only enemy segments
 -- @usage local segments = findSegments(50.0, false)
 -- for i, item in segments:pairs() do
---   item.d -- angle in radian
---   item.r -- radius of the item
---   item.dist -- distance
---   item.bot -- id of the other snake
+--   item.d        -- angle in radian (-π to +π)
+--   item.r        -- radius of the item
+--   item.dist     -- distance
+--   item.bot      -- id of the other snake (new one after death)
+--   item.bot_id   -- id of the other snake (new one after death)
+--   item.bot_name -- name of the other snake (will never change)
 -- end
 function findSegments(max_distance, include_own)
 end
@@ -121,12 +128,12 @@ end
 function log(message)
 end
 
---- That function is called each frame.
+--- That function (defined by you) is called each frame.
 -- Here you can implement you bot logic. The return value must be an radiant angle.
 -- A negative angle means turn left and a positive angle 
 -- means turn right. With 0, the snake keeps its direction.
 -- @return new angle relative to the head direction
---@return if true the snake will use boost, otherwise false or empty (optional)
+-- @return if true the snake will use boost, otherwise false or empty (optional)
 -- @usage function step()
 --   return 0.005
 -- end
@@ -134,4 +141,5 @@ end
 --   return 0.005, true
 -- end
 function step()
+    return 0.005
 end
