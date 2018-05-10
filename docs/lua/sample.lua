@@ -57,7 +57,6 @@
 --- <table><tr><td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-table.insert">insert</a></td>
 --- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-table.remove">remove</a></td>
 --- <td><a href="https://www.lua.org/manual/5.3/manual.html#pdf-table.sort">sort</a></td></tr></table>
---- <h2>Globals</h2>
 --- <p>Every snake can describe itself with the following attributes of the global variable <code>self</code>:</p>
 --- <table>
 --- <thead>
