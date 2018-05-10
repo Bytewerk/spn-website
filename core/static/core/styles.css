@@ -84,6 +84,11 @@ div.footer {
     bottom:0px;
 }
 
+#snake:hover
+{
+    opacity: 0;
+}
+
 .fullwindow {
     position:absolute;
     left:15px;
