@@ -26,7 +26,7 @@ function step()
     -- to find food in your head's surroundings, call something like that:
     local food = findFood(100, 0.8)
     -- this will give you all food in maximum distance of 100 around your head,
-    -- with a mass of at least 0.8
+    -- with a mass of at least 0.8 ordered by food value (largest to lowest)
 
     -- you can iterate over the result:
     for i, item in food:pairs() do
