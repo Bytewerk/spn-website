@@ -32,7 +32,7 @@ function step()
         -- distance of the food item, relative to the center of your head
         local distance = item.dist
 
-        -- direction to the food item, in radiens (0..2*math.pi)
+        -- direction to the food item, in radians (0..2*math.pi)
         -- 0 means "straight ahead", math.pi means "right behind you"
         local direction = item.d
 
@@ -58,7 +58,7 @@ function step()
         -- distance to the center of the segment
         local distance = item.dist
 
-        -- direction to the segment, in radiens (0..2*math.pi)
+        -- direction to the segment, in radians (0..2*math.pi)
         local direction = item.d
 
         -- radius of the segment
