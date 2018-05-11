@@ -38,6 +38,9 @@ class SnakeVersion(models.Model):
     def get_latest_for_user(user):
         return SnakeVersion.objects.filter(user=user).latest('created')
 
+    def __str__(self):
+        return "Snake " + str(self.version) + " by " + self.user.username
+
     objects = models.Manager()
 
 
@@ -51,21 +54,9 @@ class UserProfile(models.Model):
             self.viewer_key = random.getrandbits(63)
         super(UserProfile, self).save(*args, **kwargs)
 
-class LiveStats(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    last_update_frame = models.IntegerField(blank=True, null=True)
-
-    mass = models.FloatField(blank=True, null=True)
-    natural_food_consumed = models.FloatField(blank=True, null=True)
-    carrison_food_consumed = models.FloatField(blank=True, null=True)
-    hunted_food_consumed = models.FloatField(blank=True, null=True)
-
-    objects = models.Manager()
-
-
 class SnakeGame(models.Model):
     snake_version = models.ForeignKey(SnakeVersion, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     start_date = models.DateTimeField(blank=True, null=True)
     end_date = models.DateTimeField(blank=True, null=True)
     start_frame = models.IntegerField(blank=True, null=True)
@@ -77,7 +68,7 @@ class SnakeGame(models.Model):
     hunted_food_consumed = models.FloatField(blank=True, null=True)
 
     def __str__(self):
-        return self.user.username + " " + str(self.start_date)
+        return self.user.username + "@" + str(self.start_date)
 
 
 class ServerCommand(models.Model):
