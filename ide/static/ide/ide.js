@@ -33,6 +33,11 @@ function setupEditor()
     $("#snake_edit_form").submit(function(event) {
         textarea.val(editor.getSession().getValue());
     });
+
+    editor.on("input", function() {
+        $('#bt_save').prop("disabled", editor.session.getUndoManager().isClean());
+        $('#bt_save_as').prop("disabled", editor.session.getUndoManager().isClean());
+    });
 }
 
 function setupPreview()
@@ -165,6 +170,8 @@ function save(action, title)
         let logline = 'saved code as version #' + data.version;
         if (data.comment) { logline += "(\"" + data.comment + "\")"; }
         addLogLine(null, logline);
+
+        editor.session.getUndoManager().markClean()
     });
 }
 
@@ -223,3 +230,12 @@ function addLogLine(frame, msg)
         logWindow.scrollTop = logWindow.scrollHeight - logWindow.clientHeight;
     }
 }
+
+window.onbeforeunload = function (e) {
+    if (editor.session.getUndoManager().isClean()) return;
+
+    var confirmationMessage = "You have edited your snake, but you didn't save it yet.";
+
+    e.returnValue = confirmationMessage;
+    return confirmationMessage;
+};
