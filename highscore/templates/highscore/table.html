@@ -49,3 +49,13 @@
     </table>
 </div>
 {% endblock %}
+
+{% block js %}
+{% if rotate %}
+<script>
+    setTimeout(function(){
+        document.location.href = "{% url rotate %}?rotate=rotate";
+    }, 3000);
+</script>
+{% endif %}
+{% endblock %}

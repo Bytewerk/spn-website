@@ -17,7 +17,7 @@ def gattr(obj, attr):
         return getattr(obj, attr)
 
 
-def table(request, data, usr, title):
+def table(request, data, usr, title, rotate):
     i = 0
     
     for d in data:
@@ -31,6 +31,9 @@ def table(request, data, usr, title):
     if request.user.is_authenticated:
         context['usr'] = usr
     
+    if request.GET.get('rotate'):
+        context['rotate'] = rotate
+
     return render(request, 'highscore/table.html', context=context)
 
 def score(request):
@@ -39,7 +42,7 @@ def score(request):
         usr = SnakeGame.objects.filter(user=request.user).aggregate(score=Max('final_mass'))
     else:
         usr = False
-    return table(request, data, usr, 'Highscore')
+    return table(request, data, usr, 'Highscore', 'highscore_maxage')
 
 def maxage(request):
     data = SnakeGame.objects.values('user__username').annotate(score=Max(F('end_frame')-F('start_frame'))).order_by('-score')
@@ -48,7 +51,7 @@ def maxage(request):
         usr = SnakeGame.objects.filter(user=request.user).aggregate(score=Max(F('end_frame')-F('start_frame')))
     else:
         usr = False
-    return table(request, data, usr, 'Max Age')
+    return table(request, data, usr, 'Max Age', 'highscore_consumerate')
 
 def consumerate(request):
     data = SnakeGame.objects.raw(
@@ -89,4 +92,4 @@ def consumerate(request):
         )[0]
     else:
         usr = False
-    return table(request, data, usr, 'Consume Rate')
+    return table(request, data, usr, 'Consume Rate', 'highscore')
