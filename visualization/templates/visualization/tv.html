@@ -60,9 +60,9 @@
             vp.position.set(0, 0);
         }
 
-        else if (currentView>5)
+        else if (currentView>4)
         {
-            let index = currentView-5;
+            let index = currentView-4;
             if (game.stats && (game.stats.length > index))
             {
                 let snake_id = game.stats[index].id;
@@ -70,6 +70,6 @@
                 game.vis.FollowName(snake.GetName(), true);
             }
         }
-    }, 3000);
+    }, 5000);
   </script>
 {% endblock %}
