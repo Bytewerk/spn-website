@@ -7,22 +7,37 @@
 
 {% block content %}
 
-<h2>Highscores</h2>
-<table class="highscore-table ui celled selectable inverted table" cellspacing="0" style="margin-bottom:5em">
-    <thead>
-        <tr>
-            <th class="eleven wide">User</th>
-            <th class="five wide right aligned">Score</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for score in highscores %}
-        <tr>
-            <td>{{score.user__username}}</td>
-            <td class="right aligned">{{score.score|floatformat:1}}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+<div class="panel">
+    {% if usr %}
+        <h2>Your score</h2>
+        <table class="highscore-table ui celled selectable inverted table" cellspacing="0" style="margin-bottom:5em">
+            <tr>
+                <td class="two wide">{{usr.position}}</td>
+                <td class="nine wide">{{request.user.username}}</td>
+                <td class="five wide right aligned">{{usr.score|floatformat:1}}</td>
+            </tr>
+        </tbody>
+        </table>
+    {% endif %}
 
+    <h2>Highscores</h2>
+    <table class="highscore-table ui celled selectable inverted table" cellspacing="0" style="margin-bottom:5em">
+        <thead>
+            <tr>
+                <th class="two wide">Position</th>
+                <th class="nine wide">User</th>
+                <th class="five wide right aligned">Score</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for score in highscores %}
+            <tr>
+                <td>{{score.position}}</td>
+                <td>{{score.user__username}}</td>
+                <td class="right aligned">{{score.score|floatformat:1}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
