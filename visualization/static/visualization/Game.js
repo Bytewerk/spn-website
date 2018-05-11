@@ -22,6 +22,11 @@ function Game(assets, snakeMoveStrategy, container)
 
 }
 
+Game.prototype.AddLogHandler = function(callback, thisArg)
+{
+    this.logHandlers.push([callback, thisArg]);
+};
+
 Game.prototype.AddGameEventHandler = function(callback, thisArg)
 {
     this.gameEventHandlers.push([callback, thisArg]);
