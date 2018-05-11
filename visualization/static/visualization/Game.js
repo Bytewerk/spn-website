@@ -168,6 +168,7 @@ Game.prototype.HandleBotStatsMessage = function(data)
         arr.push(data[id]);
     }
     arr.sort(function(a,b) { return b.m-a.m; });
+    this.stats = arr;
     for (let d of arr.slice(0, 20))
     {
         let snake = this.vis.GetSnake(d.id);

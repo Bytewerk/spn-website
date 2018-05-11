@@ -46,5 +46,30 @@
     {
         game.vis.Resize();
     };
+
+    let currentView = 0;
+    window.setInterval(function() {
+        currentView = (currentView + 1) % 10;
+        if (currentView==0)
+        {
+            game.vis.Unfollow();
+            let vp = game.vis.viewport;
+            let scale = vp._screenWidth / game.vis.world_size_x;
+            vp.scale.x = scale;
+            vp.scale.y = scale;
+            vp.position.set(0, 0);
+        }
+
+        else if (currentView>5)
+        {
+            let index = currentView-5;
+            if (game.stats && (game.stats.length > index))
+            {
+                let snake_id = game.stats[index].id;
+                let snake = game.vis.GetSnake(snake_id);
+                game.vis.FollowName(snake.GetName(), true);
+            }
+        }
+    }, 3000);
   </script>
 {% endblock %}
