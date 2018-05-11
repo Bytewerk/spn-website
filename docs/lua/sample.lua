@@ -1,5 +1,5 @@
 --- This is a brief overview of all usable functions within the bot logic.
-
+--- 
 --- Every player can start with a simple demo bot. You get the code in the 
 --- <a href="/snake/edit/latest">editor</a>. A snake hungers, so it constantly 
 --- loses size. Feed it and it will stay alive and grows. Your snake will die, 

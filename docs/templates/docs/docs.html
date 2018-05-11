@@ -26,13 +26,13 @@
 
 <p>This is a brief overview of all usable functions within the bot logic.</p>
 <p>
+
  Every player can start with a simple demo bot. You get the code in the
  <a href="/snake/edit/latest">editor</a>. A snake hungers, so it constantly
  loses size. Feed it and it will stay alive and grows. Your snake will die,
  when it touches another snake with its head.
-
- <h2>Lua global namespace</h2>
- <p>Every snake is allowed to store 10MB within the global namespace and the
+<p> <h2>Lua global namespace</h2>
+ <p>Every snake is allowed to store 10 MB within the global namespace and the
  data persists until the bot dies. So the bot can save data from frame
  to frame.</p>
  <p>The following Lua standard functions are allowed:</p>
@@ -198,7 +198,7 @@
     <h4>Usage:</h4>
     <ul>
         <pre class="usage"><code class="lua"> <span class="keyword">local</span> food = findFood(max_distance, <span class="number">0.8</span>)
- <span class="keyword">for</span> i, item <span class="keyword">in</span> food:<span class="global">pairs</span>() <span class="keyword">do</span>
+ <span class="keyword">for</span> i, item <span class="keyword">in</span> <span class="global">pairs</span>(food) <span class="keyword">do</span>
    item.d    <span class="comment">-- angle in radian (-π to +π)
 </span>   item.dist <span class="comment">-- distance
 </span>   item.v    <span class="comment">-- food value
@@ -233,7 +233,7 @@
     <h4>Usage:</h4>
     <ul>
         <pre class="usage"><code class="lua"> <span class="keyword">local</span> segments = findSegments(<span class="number">50.0</span>, <span class="keyword">false</span>)
- <span class="keyword">for</span> i, item <span class="keyword">in</span> segments:<span class="global">pairs</span>() <span class="keyword">do</span>
+ <span class="keyword">for</span> i, item <span class="keyword">in</span> <span class="global">pairs</span>(segments) <span class="keyword">do</span>
    item.d        <span class="comment">-- angle in radian (-π to +π)
 </span>   item.r        <span class="comment">-- radius of the item
 </span>   item.dist     <span class="comment">-- distance
