@@ -17,6 +17,17 @@
       border-radius: 0.5em 0.5em 0 0;
       padding: 0.1em 0.5em;
     }
+
+    #gameEvents {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background-color: rgba(0,0,0,0.5);
+      font-size: 18px;
+      text-align:right;
+      padding:10px;
+    }
+
     body { background:black; }
   </style>
 {% endblock %}
@@ -28,6 +39,7 @@
   <div id="stage"></div>
   <img id="tvlogo" src="{% static "visualization/assets/bytewerk_tv_150w_2.png" %}">
   <div id="url"><span>https://schlangen.bytewerk.org/</span></div>
+  <div id="gameEvents"></div>
 {% endblock %}
 
 {% block footer %}
@@ -46,6 +58,16 @@
     {
         game.vis.Resize();
     };
+
+    game.AddGameEventHandler(function(className, msg) {
+        console.log(msg);
+        let logDiv = $("#gameEvents");
+        while ($("#gameEvents").children().length >= 10)
+        {
+            $("#gameEvents").children().first().remove();
+        }
+        $("<div></div>").addClass(className).text(msg).appendTo(logDiv);
+    }, this);
 
     let currentView = 0;
     window.setInterval(function() {

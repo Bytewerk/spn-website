@@ -9,6 +9,7 @@ function Game(assets, snakeMoveStrategy, container)
     this.snakeMoveStrategy = snakeMoveStrategy;
     this.vis = new GameVisualization(assets, snakeMoveStrategy, container);
     this.logHandlers = [];
+    this.gameEventHandlers = [];
     this.gameInfoReceived = false;
     this.preGameInfoMessages = [];
 
@@ -21,9 +22,17 @@ function Game(assets, snakeMoveStrategy, container)
 
 }
 
-Game.prototype.AddLogHandler = function(callback, thisArg)
+Game.prototype.AddGameEventHandler = function(callback, thisArg)
 {
-    this.logHandlers.push([callback, thisArg]);
+    this.gameEventHandlers.push([callback, thisArg]);
+};
+
+Game.prototype.SendGameEvent = function(className, message)
+{
+    for (let i of this.gameEventHandlers)
+    {
+        i[0].call(i[1], className, message);
+    }
 };
 
 Game.prototype.Run = function()
@@ -100,6 +109,13 @@ Game.prototype.HandleMessage = function(event)
             return this.vis.HandleBotSpawnMessage(data.bot);
 
         case "BotKill":
+            let killer = this.vis.snakes[data.killer_id];
+            let victim = this.vis.snakes[data.victim_id];
+            if (killer && victim)
+            {
+                let msg = killer.GetName() + " killed " + victim.GetName();
+                this.SendGameEvent("kill", msg);
+            }
             return this.vis.HandleBotKilledMessage(data.killer_id, data.victim_id);
 
         case "BotMove":
