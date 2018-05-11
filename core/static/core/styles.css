@@ -49,6 +49,15 @@ ul.nav li:hover {
     background-color: #804600;
 }
 
+ul.sub.nav {
+    background-color: #492903;
+    left: 50%;
+    margin-top: 6px;
+    position: relative;
+    width: 500px;
+    transform: translateX(-50%);
+}
+
 a:hover {
     text-decoration: underline;
 }

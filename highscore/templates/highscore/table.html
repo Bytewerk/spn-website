@@ -5,11 +5,19 @@
 <link rel="stylesheet" type="text/css" href="{% static "highscore/highscore.css" %}" />
 {% endblock css %}
 
+{% block subheader %}
+    <ul class="sub nav">
+      <li><a href="{% url 'highscore' %}">Max Score</a></li>
+      <li><a href="{% url 'highscore_maxage' %}">Max Age</a></li>
+      <li><a href="{% url 'highscore_consumerate' %}">Consume Rate</a></li>
+    </ul>
+{% endblock %}
+
 {% block content %}
 
 <div class="panel">
     {% if usr %}
-        <h2>Your score</h2>
+        <h2>Your {{title}}</h2>
         <table class="highscore-table ui celled selectable inverted table" cellspacing="0" style="margin-bottom:5em">
             <tr>
                 <td class="two wide">{{usr.position}}</td>
@@ -20,13 +28,13 @@
         </table>
     {% endif %}
 
-    <h2>Highscores</h2>
+    <h2>Best {{title}}s</h2>
     <table class="highscore-table ui celled selectable inverted table" cellspacing="0" style="margin-bottom:5em">
         <thead>
             <tr>
                 <th class="two wide">Position</th>
                 <th class="nine wide">User</th>
-                <th class="five wide right aligned">Score</th>
+                <th class="five wide right aligned">Value</th>
             </tr>
         </thead>
         <tbody>
@@ -40,4 +48,14 @@
         </tbody>
     </table>
 </div>
+{% endblock %}
+
+{% block js %}
+{% if rotate %}
+<script>
+    setTimeout(function(){
+        document.location.href = "{% url rotate %}?rotate=rotate";
+    }, 3000);
+</script>
+{% endif %}
 {% endblock %}
