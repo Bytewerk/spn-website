@@ -113,8 +113,11 @@ Game.prototype.HandleMessage = function(event)
             let victim = this.vis.snakes[data.victim_id];
             if (killer && victim)
             {
-                let msg = killer.GetName() + " killed " + victim.GetName();
-                this.SendGameEvent("kill", msg);
+                if (data.killer_id != data.victim_id)
+                {
+                    let msg = killer.GetName() + " 🐍 " + victim.GetName();
+                    this.SendGameEvent("kill", msg);
+                }
             }
             return this.vis.HandleBotKilledMessage(data.killer_id, data.victim_id);
 
