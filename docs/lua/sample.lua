@@ -97,7 +97,7 @@ end
 -- @param max_distance all food within the distance is included
 -- @param minimum_food_value all lower food values are filtered (min: 0, max: unknown)
 -- @usage local food = findFood(max_distance, 0.8)
--- for i, item in food:pairs() do
+-- for i, item in pairs(food) do
 --   item.d    -- angle in radian (-π to +π)
 --   item.dist -- distance
 --   item.v    -- food value
@@ -112,7 +112,7 @@ end
 -- @param max_distance all segements within that distance are included
 -- @param include_own If true, your snake segments are included. Otherwise you get only enemy segments
 -- @usage local segments = findSegments(50.0, false)
--- for i, item in segments:pairs() do
+-- for i, item in pairs(segments) do
 --   item.d        -- angle in radian (-π to +π)
 --   item.r        -- radius of the item
 --   item.dist     -- distance
