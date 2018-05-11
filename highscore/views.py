@@ -38,6 +38,8 @@ def score(request):
     data = SnakeGame.objects.values('user__username').annotate(score=Max('final_mass')).order_by('-score')
     if request.user.is_authenticated:
         usr = SnakeGame.objects.filter(user=request.user).aggregate(score=Max('final_mass'))
+        if usr['score'] == None:
+            usr = False
     else:
         usr = False
     return table(request, data, usr, 'Highscore', 'highscore_maxage')
@@ -47,6 +49,8 @@ def maxage(request):
 
     if request.user.is_authenticated:
         usr = SnakeGame.objects.filter(user=request.user).aggregate(score=Max(F('end_frame')-F('start_frame')))
+        if usr['score'] == None:
+            usr = False
     else:
         usr = False
     return table(request, data, usr, 'Max Age', 'highscore_consumerate')
@@ -60,7 +64,11 @@ def consumerate(request):
     ).order_by('-score')
 
     if request.user.is_authenticated:
-        usr = data.filter(user__username=request.user.username)[0]
+        usr = data.filter(user__username=request.user.username)
+        if len(usr) == 0:
+            usr = False
+        else:
+            usr = usr[0]
     else:
         usr = False
     return table(request, data, usr, 'Consume Rate', 'highscore')
