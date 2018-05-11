@@ -6,9 +6,15 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from core.models import get_user_profile
 
+class MyUserCreationForm(UserCreationForm):
+    username = forms.CharField(
+        max_length=30,
+        help_text='Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.',
+    )
+
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = MyUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
@@ -17,7 +23,7 @@ def signup(request):
             login(request, user)
             return redirect('snake_create')
     else:
-        form = UserCreationForm()
+        form = MyUserCreationForm()
     return render(request, 'signup.html', {'form': form})
 
 
