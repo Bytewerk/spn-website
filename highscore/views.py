@@ -7,10 +7,13 @@ import pytz
 
 STATS_DT_FROM = datetime.datetime(2018, 5, 12, 16, 0, tzinfo=pytz.UTC)
 STATS_DT_TILL = datetime.datetime(2018, 5, 13, 10, 0, tzinfo=pytz.UTC)
+STATS_BLACKLIST = [
+    "M0wLaue",
+]
 
 
 def get_relevant_games():
-    return SnakeGame.objects.filter(end_date__gte=STATS_DT_FROM, end_date__lte=STATS_DT_TILL)
+    return SnakeGame.objects.filter(end_date__gte=STATS_DT_FROM, end_date__lte=STATS_DT_TILL).exclude(user__username__in=STATS_BLACKLIST)
 
 
 def sattr(obj, attr, val):
@@ -58,7 +61,7 @@ def score(request):
 
 
 def maxage(request):
-    data = get_relevant_games().values('user__username').annotate(score=Max(F('end_frame')-F('start_frame'))).order_by('-score')
+    data = get_relevant_games().values('user__username').annotate(score=Max(F('end_frame')-F('start_frame'))).exclude(user__username__in=STATS_BLACKLIST).order_by('-score')
 
     if request.user.is_authenticated:
         usr = get_relevant_games().filter(user=request.user).aggregate(score=Max(F('end_frame')-F('start_frame')))
