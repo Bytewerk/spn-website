@@ -4,6 +4,7 @@ from django.contrib.auth import views as auth_views
 from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 from core import views as core_views
+from rest_framework_swagger.views import get_swagger_view
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='core/index.html'), name='home'),
@@ -21,4 +22,5 @@ urlpatterns = [
     path('docs/', include('docs.urls')),
     path('api/v1/', include('api.urls')),
     path('api/v2/', include('apiv2.urls')),
+    path('api_docs/', get_swagger_view(title='Pastebin API')),
 ]
