@@ -17,9 +17,9 @@ class bot_api(object):
             key = request.META.get('HTTP_AUTHORIZATION', None) or request.GET.get('token', None) or None
 
             if key is not None:
-                request.user = ApiKey.objects.get(key=key)
+                request.user = ApiKey.objects.get(key=key).user
 
-            if request.user and (not isinstance(request.user, ApiKey) or not request.user.is_anonymous):
+            if request.user and not request.user.is_anonymous:
                 return self.f(request, *args, **kwargs)
             else:
                 raise ApiKey.DoesNotExist
