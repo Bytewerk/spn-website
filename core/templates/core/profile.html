@@ -8,10 +8,12 @@
   <form method="GET" action="{% url "change_password" %}">
     <button type="submit" class="ui small positive button">Change User Password</button>
   </form>
-  <h3>API Keys</h3>
+  <h3>APIv1 Keys</h3>
   <form method="GET" action="{% url "api_keys_list" %}">
     <button type="submit" class="ui small positive button">Manage API Keys</button>
   </form>
+  <h3>APIv2 Key</h3>
+  <p>{{token.key}}</p>
   <h3>Viewer Key</h3>
   Websocket Viewer Key: {{ profile.viewer_key }}
 </div>

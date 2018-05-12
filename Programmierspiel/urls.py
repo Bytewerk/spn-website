@@ -20,4 +20,5 @@ urlpatterns = [
     path('highscore/', include('highscore.urls')),
     path('docs/', include('docs.urls')),
     path('api/v1/', include('api.urls')),
+    path('api/v2/', include('apiv2.urls')),
 ]
