@@ -6,3 +6,4 @@ Programmierspiel/local_settings.py
 .vscode/tags
 .history
 .vscode/settings.json
+.vscode/launch.json
