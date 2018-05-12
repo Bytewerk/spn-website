@@ -2,12 +2,23 @@ from django.shortcuts import render
 from django.db.models import F, Max, ExpressionWrapper, FloatField
 from core.models import SnakeGame
 from django.db import models
+import datetime
+import pytz
+
+STATS_DT_FROM = datetime.datetime(2018, 5, 12, 16, 0, tzinfo=pytz.UTC)
+STATS_DT_TILL = datetime.datetime(2018, 5, 13, 10, 0, tzinfo=pytz.UTC)
+
+
+def get_relevant_games():
+    return SnakeGame.objects.filter(end_date__gte=STATS_DT_FROM, end_date__lte=STATS_DT_TILL)
+
 
 def sattr(obj, attr, val):
     if isinstance(obj, dict):
         obj[attr] = val
     else:
         setattr(obj, attr, val)
+
 
 def gattr(obj, attr):
     if type(obj) is dict:
@@ -34,29 +45,32 @@ def table(request, data, usr, title, rotate):
 
     return render(request, 'highscore/table.html', context=context)
 
+
 def score(request):
-    data = SnakeGame.objects.values('user__username').annotate(score=Max('final_mass')).order_by('-score')
+    data = get_relevant_games().values('user__username').annotate(score=Max('final_mass')).order_by('-score')
     if request.user.is_authenticated:
-        usr = SnakeGame.objects.filter(user=request.user).aggregate(score=Max('final_mass'))
+        usr = get_relevant_games().filter(user=request.user).aggregate(score=Max('final_mass'))
         if usr['score'] == None:
             usr = False
     else:
         usr = False
     return table(request, data, usr, 'Highscore', 'highscore_maxage')
 
+
 def maxage(request):
-    data = SnakeGame.objects.values('user__username').annotate(score=Max(F('end_frame')-F('start_frame'))).order_by('-score')
+    data = get_relevant_games().values('user__username').annotate(score=Max(F('end_frame')-F('start_frame'))).order_by('-score')
 
     if request.user.is_authenticated:
-        usr = SnakeGame.objects.filter(user=request.user).aggregate(score=Max(F('end_frame')-F('start_frame')))
+        usr = get_relevant_games().filter(user=request.user).aggregate(score=Max(F('end_frame')-F('start_frame')))
         if usr['score'] == None:
             usr = False
     else:
         usr = False
     return table(request, data, usr, 'Max Age', 'highscore_consumerate')
 
+
 def consumerate(request):
-    data = SnakeGame.objects.values('user__username').annotate(
+    data = get_relevant_games().values('user__username').annotate(
         score=Max(ExpressionWrapper(
             (F('natural_food_consumed') + F('carrison_food_consumed') + F('hunted_food_consumed'))
             / (F('end_frame') - F('start_frame')), output_field=models.FloatField())
