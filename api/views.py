@@ -19,8 +19,7 @@ class bot_api(object):
             if key is not None:
                 request.user = ApiKey.objects.get(key=key)
 
-            # raise(NotImplementedError(str(type(request.user))))
-            if request.user and not request.user.is_anonymous:
+            if request.user and (not isinstance(request.user, ApiKey) or not request.user.is_anonymous):
                 return self.f(request, *args, **kwargs)
             else:
                 raise ApiKey.DoesNotExist
