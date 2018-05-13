@@ -4,7 +4,8 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from core.models import SnakeVersion
+from rest_framework.decorators import action
+from core.models import SnakeVersion, UserProfile
 from .serializer import SnakeVersionSerializer
 
 class SnakeVersionViewSet(viewsets.ReadOnlyModelViewSet):
@@ -15,3 +16,9 @@ class SnakeVersionViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self, *args, **kwargs):
         return SnakeVersion.objects.all().filter(user=self.request.user)
+
+    @action(detail=False)
+    def active(self, request, *args, **kwargs):
+        snake_version = UserProfile.objects.all().filter(user=self.request.user).first().active_snake
+        serial = self.serializer_class(snake_version)
+        return Response(serial.data)

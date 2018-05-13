@@ -22,5 +22,5 @@ urlpatterns = [
     path('docs/', include('docs.urls')),
     path('api/v1/', include('api.urls')),
     path('api/v2/', include('apiv2.urls')),
-    path('api_docs/', get_swagger_view(title='Pastebin API')),
+    path('api/v2/docs/', get_swagger_view(title='Snake REST API')),
 ]
