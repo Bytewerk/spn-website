@@ -6,9 +6,9 @@ import datetime
 import pytz
 
 STATS_DT_FROM = datetime.datetime(2018, 5, 12, 16, 0, tzinfo=pytz.UTC)
-STATS_DT_TILL = datetime.datetime(2018, 5, 13, 10, 0, tzinfo=pytz.UTC)
+STATS_DT_TILL = datetime.datetime(2018, 5, 13, 12, 0, tzinfo=pytz.UTC)
 STATS_BLACKLIST = [
-    "M0wLaue",
+    "M0wLaue"
 ]
 
 
