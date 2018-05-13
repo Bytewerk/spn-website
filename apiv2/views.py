@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, mixins
+from rest_framework.request import Request
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -9,18 +10,23 @@ from rest_framework.serializers import BaseSerializer
 from core.models import SnakeVersion, UserProfile, ServerCommand
 from .serializer import SnakeVersionSerializer, UserProfileKeySerializer
 
-class SnakeVersionViewSet(viewsets.ReadOnlyModelViewSet):
+class SnakeVersionViewSet(mixins.CreateModelMixin,
+                          mixins.ListModelMixin,
+                          viewsets.GenericViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = SnakeVersionSerializer
     queryset = SnakeVersion.objects.none()  # Required for DjangoModelPermissions
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
+        if self.action == 'activate' and self.request.method == 'POST':
             return BaseSerializer
         return SnakeVersionSerializer
 
     def get_queryset(self, *args, **kwargs):
         return SnakeVersion.objects.all().filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
     @action(detail=False)
     def active(self, request, *args, **kwargs):

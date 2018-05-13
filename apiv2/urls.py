@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.routers import DefaultRouter
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from .viewsets import SnakeVersionViewSet, UserProfileKeyView
+from .views import SnakeVersionViewSet, UserProfileKeyView
 
 router = DefaultRouter()
 router.register(r'version', SnakeVersionViewSet)
