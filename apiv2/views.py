@@ -5,12 +5,19 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
+from rest_framework.serializers import BaseSerializer
 from core.models import SnakeVersion, UserProfile, ServerCommand
 from .serializer import SnakeVersionSerializer
 
 class SnakeVersionViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated,)
+
     serializer_class = SnakeVersionSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return BaseSerializer
+        return SnakeVersionSerializer
 
     queryset = SnakeVersion.objects.none()  # Required for DjangoModelPermissions
 
@@ -25,7 +32,7 @@ class SnakeVersionViewSet(viewsets.ReadOnlyModelViewSet):
 
     @action(detail=False, url_name='active/disable')
     def disable(self, request, *args, **kwargs):
-        up = UserProfile.objects.all().filter(user=self.request.user).first()
+        up, _ = UserProfile.objects.get_or_create(user=request.user)
         up.active_snake = None
         up.save()
         return Response({'result': 'ok'})
@@ -34,3 +41,12 @@ class SnakeVersionViewSet(viewsets.ReadOnlyModelViewSet):
     def kill(self, request, *args, **kwargs):
         ServerCommand(user=request.user, command='kill').save()
         return Response({'result': 'ok'})
+
+    @action(detail=True, methods=['post'])
+    def activate(self, request, pk=None):
+        v = get_object_or_404(SnakeVersion, user=request.user, id=pk)
+        up, _ = UserProfile.objects.get_or_create(user=request.user)
+        up.active_snake = v
+        up.save()
+        serial = self.serializer_class(v)
+        return Response(serial.data)
