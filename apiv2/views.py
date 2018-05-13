@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
-from core.models import SnakeVersion, UserProfile
+from core.models import SnakeVersion, UserProfile, ServerCommand
 from .serializer import SnakeVersionSerializer
 
 class SnakeVersionViewSet(viewsets.ReadOnlyModelViewSet):
@@ -28,4 +28,9 @@ class SnakeVersionViewSet(viewsets.ReadOnlyModelViewSet):
         up = UserProfile.objects.all().filter(user=self.request.user).first()
         up.active_snake = None
         up.save()
+        return Response({'result': 'ok'})
+
+    @action(detail=False, url_name='active/kill')
+    def kill(self, request, *args, **kwargs):
+        ServerCommand(user=request.user, command='kill').save()
         return Response({'result': 'ok'})
