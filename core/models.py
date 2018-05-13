@@ -54,6 +54,7 @@ class UserProfile(models.Model):
             self.viewer_key = random.getrandbits(63)
         super(UserProfile, self).save(*args, **kwargs)
 
+
 class SnakeGame(models.Model):
     snake_version = models.ForeignKey(SnakeVersion, on_delete=models.CASCADE)
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
@@ -83,6 +84,7 @@ class ServerCommand(models.Model):
 
 def create_key():
     return str(uuid.uuid4())
+
 
 class ApiKey(models.Model):
     MAX_KEYS_PER_USER = 20
