@@ -22,3 +22,10 @@ class SnakeVersionViewSet(viewsets.ReadOnlyModelViewSet):
         snake_version = UserProfile.objects.all().filter(user=self.request.user).first().active_snake
         serial = self.serializer_class(snake_version)
         return Response(serial.data)
+
+    @action(detail=False, url_name='active/disable')
+    def disable(self, request, *args, **kwargs):
+        up = UserProfile.objects.all().filter(user=self.request.user).first()
+        up.active_snake = None
+        up.save()
+        return Response({'result': 'ok'})
