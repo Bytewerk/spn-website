@@ -1,25 +1,23 @@
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.serializers import BaseSerializer
 from core.models import SnakeVersion, UserProfile, ServerCommand
-from .serializer import SnakeVersionSerializer
+from .serializer import SnakeVersionSerializer, UserProfileKeySerializer
 
 class SnakeVersionViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated,)
-
     serializer_class = SnakeVersionSerializer
+    queryset = SnakeVersion.objects.none()  # Required for DjangoModelPermissions
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return BaseSerializer
         return SnakeVersionSerializer
-
-    queryset = SnakeVersion.objects.none()  # Required for DjangoModelPermissions
 
     def get_queryset(self, *args, **kwargs):
         return SnakeVersion.objects.all().filter(user=self.request.user)
@@ -49,4 +47,13 @@ class SnakeVersionViewSet(viewsets.ReadOnlyModelViewSet):
         up.active_snake = v
         up.save()
         serial = self.serializer_class(v)
+        return Response(serial.data)
+
+class UserProfileKeyView(generics.RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UserProfileKeySerializer
+
+    def get(self, request, *args, **kwargs):
+        up = UserProfile.objects.filter(user=self.request.user).first()
+        serial = self.serializer_class(up)
         return Response(serial.data)
