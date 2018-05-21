@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import datetime
+import pytz
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -103,5 +105,9 @@ LOGIN_URL = '/login/'
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+HIGHSCORE_DT_FROM = datetime.datetime(1, 1, 1, 0, 0, tzinfo=pytz.UTC)
+HIGHSCORE_DT_TILL = datetime.datetime(9999, 12, 31, 23, 59, tzinfo=pytz.UTC)
+HIGHSCORE_BLACKLIST = []
 
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "local_settings.py")).read()) in globals()
